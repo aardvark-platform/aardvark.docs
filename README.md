@@ -1,4 +1,4 @@
-# Intro
+# Overview
 Aardvark is an open-source research platform for real-time graphics and visualization.
 
 * fully incremental rendering VM
