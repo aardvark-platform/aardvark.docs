@@ -1,12 +1,16 @@
-# Overview
-Aardvark is an open-source research platform for real-time graphics and visualization.
+# Introduction
+**Aardvark is an open-source research platform for real-time graphics and visualization.**
 
-* fully incremental rendering VM
-* semantic composition of language-integrated shaders
-* elm-style application development
+Being a research platform, Aardvark has a very strong emphasis on advancing the state-of-the-art in rendering and visualization systems and application development. Some unique features include
+* a fully incremental rendering VM,
+* semantic composition of language-integrated shaders, and
+* elm-style application development.
 
-# Research
-Many of Aardvark's core concepts have also been peer-reviewed and published at major conferences.
+Combined with a functional-first programming paradigm, Aardvark is one of the most efficient platforms in terms of rendering throughput and performance, as well as rapid prototyping of complex visualization applications.
+
+# Publications
+
+Many of Aardvark's core concepts have been peer-reviewed and published at major conferences.
 
 [[1]] Georg Haaser, Harald Steinlechner, Stefan Maierhofer, and Robert F. Tobler. 2015. **An incremental rendering VM**. In Proceedings of the 7th Conference on High-Performance Graphics (HPG '15), Stephen Spencer (Ed.). ACM, New York, NY, USA, 51-60.
 
