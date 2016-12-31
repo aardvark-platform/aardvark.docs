@@ -8,7 +8,7 @@ Being a research platform, Aardvark has a very strong emphasis on advancing the 
 
 Based on a functional-first programming paradigm, Aardvark is one of the most efficient platforms in terms of raw rendering performance,  throughput, resource consumption, and rapid prototyping of complex visualization applications.
 
-Aardvark is also used in industrial-scale real-world systems, where it routinely handles terabytes of data, integrates sophisticated computer vision, graphics, and data management algorithms, and drives complex workflows and user interfaces.
+Aardvark is also used in industrial-scale real-world systems. It routinely handles terabytes of data, integrates sophisticated computer vision, graphics, and data management algorithms, and drives complex workflows and user interfaces.
 
 # Publications
 
