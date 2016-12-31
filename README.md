@@ -12,7 +12,7 @@ Aardvark is also used in industrial-scale real-world systems, where it routinely
 
 # Publications
 
-Many of Aardvark's core concepts have been peer-reviewed and published at major conferences.
+Many of Aardvark's core concepts have been peer-reviewed by experts in their fields and published at major scientific conferences.
 
 [[1]] Georg Haaser, Harald Steinlechner, Stefan Maierhofer, and Robert F. Tobler. 2015. **An incremental rendering VM**. In Proceedings of the 7th Conference on High-Performance Graphics (HPG '15), Stephen Spencer (Ed.). ACM, New York, NY, USA, 51-60.
 
