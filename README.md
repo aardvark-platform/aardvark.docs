@@ -1,7 +1,7 @@
 # Introduction
 **Aardvark is an open-source research platform for real-time graphics and visualization.**
 
-Being a research platform, Aardvark has a very strong emphasis on advancing the state-of-the-art in rendering and visualization systems, as well as application development. Some unique features include
+Being a research platform, Aardvark has a very strong emphasis on advancing the state-of-the-art in rendering and visualization systems. Some unique features include
 * a fully incremental rendering VM,
 * semantic composition of language-integrated shaders, and
 * elm-style application development.
