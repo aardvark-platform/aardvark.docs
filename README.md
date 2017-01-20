@@ -15,13 +15,14 @@ Aardvark is also used in industrial-scale real-world systems. It routinely handl
 **incremental rendering pipeline**
 
 [aardvark.base](https://github.com/vrvis/aardvark.base)
+
 [aardvark.rendering](https://github.com/vrvis/aardvark.rendering)
 
 **language-integrated shaders**
 
 [fshade](https://github.com/krauthaufen/FShade)
 
-**[elm](http://elm-lang.org/)-style application development**
+**elm-style application development** [\*](http://elm-lang.org/)
 
 [fablish](https://github.com/vrvis/fablish)
 
