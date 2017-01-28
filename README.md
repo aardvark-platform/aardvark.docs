@@ -14,7 +14,7 @@ Based on a functional-first programming paradigm, Aardvark is one of the most ef
 
 Aardvark is also used in industrial-scale real-world systems. It routinely handles terabytes of data, integrates sophisticated computer vision, graphics, and data management algorithms, and drives complex workflows and user interfaces.
 
-# Projects
+# Repositories
 
 **incremental rendering pipeline**
 
