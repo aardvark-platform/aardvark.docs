@@ -1,3 +1,5 @@
+[Quickstart](https://github.com/aardvarkplatform/aardvark.docs/wiki/Quickstart-Windows)
+
 # Introduction
 **Aardvark is an open-source research platform for real-time graphics and visualization.**
 
