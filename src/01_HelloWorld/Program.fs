@@ -9,27 +9,31 @@ open Aardvark.Application.WinForms
 
 [<EntryPoint>]
 let main argv = 
+    // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 
+    // simple OpenGL window
     use app = new OpenGlApplication()
     let win = app.CreateSimpleRenderWindow()
     win.Text <- "Aardvark Docs - 01_HelloWorld"
 
-    let n = 5.0
-    let norm x = (x + n) / (2.0 * n)
+    // generate 11 x 11 x 11 colored boxes
+    let norm x = (x + 5.0) * 0.1
     let boxes = seq {
-        for x in -n..n do
-            for y in -n..n do
-                for z in -n..n do
+        for x in -5.0..5.0 do
+            for y in -5.0..5.0 do
+                for z in -5.0..5.0 do
                     let bounds = Box3d.FromCenterAndSize(V3d(x, y, z), V3d(0.5, 0.5, 0.5))
                     let color = C4b(norm x, norm y, norm z)
                     yield Sg.box' color bounds
     }
 
-    let initialView = CameraView.lookAt (V3d(n+2.0,-n-3.0,-n)) (V3d(n-1.0,-n,-n+1.5)) V3d.OOI
+    // view, projection and default camera controllers
+    let initialView = CameraView.lookAt (V3d(9.3, 9.9, 8.6)) V3d.Zero V3d.OOI
     let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
     let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
 
+    // define scene
     let sg =
         boxes
             |> Sg.group
@@ -41,10 +45,12 @@ let main argv =
             |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
             |> Sg.projTrafo (proj |> Mod.map Frustum.projTrafo)
 
+    // specify render task
     let task =
         app.Runtime.CompileRender(win.FramebufferSignature, sg)
             |> DefaultOverlays.withStatistics
 
+    // start
     win.RenderTask <- task
     win.Run()
     0
