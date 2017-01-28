@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/aardvarkplatform/aardvark.docs.svg?branch=master)](https://travis-ci.org/aardvarkplatform/aardvark.docs)
+
 [Quickstart](https://github.com/aardvarkplatform/aardvark.docs/wiki/Quickstart-Windows)
 
 # Introduction
