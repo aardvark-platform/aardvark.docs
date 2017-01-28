@@ -15,7 +15,7 @@ let main argv =
     // simple OpenGL window
     use app = new OpenGlApplication()
     let win = app.CreateSimpleRenderWindow()
-    win.Text <- "Aardvark Docs - 01_HelloWorld"
+    win.Text <- "HelloWorld (aardvark.docs)"
 
     // generate 11 x 11 x 11 colored boxes
     let norm x = (x + 5.0) * 0.1

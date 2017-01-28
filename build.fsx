@@ -10,10 +10,10 @@ do Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 
 DefaultSetup.install ["src/aardvark.docs.sln"]
 
-Target "Run_01_HelloWorld" (fun() ->
-    tracefn "exec: %d" (Shell.Exec "bin/Release/01_HelloWorld.exe")
+Target "Run_HelloWorld" (fun() ->
+    tracefn "exec: %d" (Shell.Exec "bin/Release/HelloWorld.exe")
 )
 
-"Default" ==> "Run_01_HelloWorld"
+"Default" ==> "Run_HelloWorld"
 
 entry()
