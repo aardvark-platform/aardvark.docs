@@ -13,7 +13,11 @@ DefaultSetup.install ["src/aardvark.docs.sln"]
 Target "Run_HelloWorld" (fun() ->
     tracefn "exec: %d" (Shell.Exec "bin/Release/HelloWorld.exe")
 )
-
 "Default" ==> "Run_HelloWorld"
+
+Target "Run_AdaptiveWorld" (fun() ->
+    tracefn "exec: %d" (Shell.Exec "bin/Release/AdaptiveWorld.exe")
+)
+"Default" ==> "Run_AdaptiveWorld"
 
 entry()
