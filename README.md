@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/aardvarkplatform/aardvark.docs.svg?branch=master)](https://travis-ci.org/aardvarkplatform/aardvark.docs)
 
-[Quickstart](https://github.com/aardvarkplatform/aardvark.docs/wiki/Quickstart-Windows)
+[Gallery](https://github.com/aardvarkplatform/aardvark.docs/wiki/Gallery) | 
+[Quickstart](https://github.com/aardvarkplatform/aardvark.docs/wiki/Quickstart-Windows) | 
+[Wiki](https://github.com/aardvarkplatform/aardvark.docs/wiki)
 
 # Introduction
 **Aardvark is an open-source research platform for real-time graphics and visualization.**
