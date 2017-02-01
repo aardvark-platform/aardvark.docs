@@ -20,4 +20,9 @@ Target "Run_AdaptiveWorld" (fun() ->
 )
 "Default" ==> "Run_AdaptiveWorld"
 
+Target "Run_AdaptiveGeometry" (fun() ->
+    tracefn "exec: %d" (Shell.Exec "bin/Release/AdaptiveGeometry.exe")
+)
+"Default" ==> "Run_AdaptiveGeometry"
+
 entry()
