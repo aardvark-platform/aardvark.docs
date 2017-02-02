@@ -6,6 +6,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HelloWorld", "HelloWorld\He
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AdaptiveWorld", "AdaptiveWorld\AdaptiveWorld.fsproj", "{59CFC593-C251-434B-876A-8105D73C6800}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Gravity", "Gravity\Gravity.fsproj", "{A04A78F8-FC4C-46CF-A431-1C4A81642193}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{59CFC593-C251-434B-876A-8105D73C6800}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59CFC593-C251-434B-876A-8105D73C6800}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59CFC593-C251-434B-876A-8105D73C6800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A04A78F8-FC4C-46CF-A431-1C4A81642193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A04A78F8-FC4C-46CF-A431-1C4A81642193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A04A78F8-FC4C-46CF-A431-1C4A81642193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A04A78F8-FC4C-46CF-A431-1C4A81642193}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
