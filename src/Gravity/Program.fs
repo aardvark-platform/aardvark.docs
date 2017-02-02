@@ -17,62 +17,61 @@ let main argv =
     // simple OpenGL window
     use app = new OpenGlApplication()
     let win = app.CreateSimpleRenderWindow()
-    win.Text <- "PointSprites (aardvark.docs)"
+    win.Text <- "Gravity (aardvark.docs)"
     
     // view, projection and default camera controllers
     let initialView = CameraView.lookAt (V3d(50.0, 50.0, 50.0)) V3d.Zero V3d.OOI
     let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
     let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
 
-    // generate points
-    let points =
+    // simulation
+    let n = 50          // number of particles
+    let r = Random()
 
-        let n = 50
+    
+    let cs = [| for i in 1..n do yield C4b(r.NextDouble(), r.NextDouble(), r.NextDouble()) |]
+    
 
-        let r = Random()
+    let positions = Mod.init (Array.create<V3f> n V3f.Zero)
+
+    let simulation = async {
+        let sw = Stopwatch()
+        sw.Start()
+
+        let g = 0.01f           // "gravitational constant"
+        let mutable t = 0.0     // time
         let mutable ps = [| for i in 1..n do yield 25.0f * (V3f(r.NextDouble(), r.NextDouble(), r.NextDouble()) - V3f(0.5, 0.5, 0.5)) |]
-        let vs = [| for i in 1..n do yield V3f(r.NextDouble() - 0.5, r.NextDouble() - 0.5, r.NextDouble() - 0.5) |]
-        let cs = [| for i in 1..n do yield C4b(r.NextDouble(), r.NextDouble(), r.NextDouble()) |]
-        let ms = [| for i in 1..n do yield float32(r.NextDouble()) |]
+        let vs = Array.create<V3f> n V3f.Zero                           // velocities
+        let ms = [| for i in 1..n do yield float32(r.NextDouble()) |]   // masses
 
+        while true do
+            for i in 0..ps.Length-1 do
+                let p = ps.[i]
+                for j in i+1..ps.Length-1 do
+                    let v = ps.[j] - p
+                    let f = g / v.LengthSquared
+                    vs.[i] <- vs.[i] + v * ms.[j] * f
+                    vs.[j] <- vs.[j] - v * ms.[i] * f
+                
+            let dt = sw.Elapsed.TotalSeconds - t
+            t <- sw.Elapsed.TotalSeconds
+
+            ps <- ps |> Array.mapi (fun i p -> p + vs.[i] * float32(dt))
+            transact (fun () -> Mod.change positions ps)
+    }
+    
+    // define scene
+    let points =
         let drawCall = 
             DrawCallInfo(
-                FaceVertexCount = ps.Length,
+                FaceVertexCount = n,
                 InstanceCount = 1
             )
-
-        let positions = Mod.init ps
-
-        async {
-            let g = 0.2f
-            let sw = Stopwatch()
-            sw.Start()
-            let mutable t = 0.0
-
-            while true do
-                //do! Async.Sleep 10
-                ps <- ps |> Array.mapi (fun i p ->
-                    let mutable f = V3f.Zero
-                    for j in 0..ps.Length-1 do
-                        if i <> j then
-                            let d = ps.[j] - ps.[i]
-                            f <- f + g * d * ms.[i] * ms.[j] / d.LengthSquared
-                    vs.[i] <- vs.[i] + f
-
-                    let dt = sw.Elapsed.TotalSeconds - t
-                    t <- sw.Elapsed.TotalSeconds
-                    ps.[i] + vs.[i] * float32(dt)
-                )
-                transact (fun () -> Mod.change positions ps)
-        }
-        |> Async.Start
-
         drawCall
             |> Sg.render IndexedGeometryMode.PointList 
             |> Sg.vertexAttribute DefaultSemantic.Positions positions
             |> Sg.vertexAttribute DefaultSemantic.Colors (Mod.constant cs)
 
-    // define scene
     let sg =
         points
             |> Sg.effect [
@@ -80,7 +79,7 @@ let main argv =
                 DefaultSurfaces.vertexColor |> toEffect
                 DefaultSurfaces.pointSprite |> toEffect
                ]
-            |> Sg.uniform "PointSize" (Mod.constant 10.0)
+            |> Sg.uniform "PointSize" (Mod.constant 8.0)
             |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
             |> Sg.projTrafo (proj |> Mod.map Frustum.projTrafo)
 
@@ -91,5 +90,6 @@ let main argv =
 
     // start
     win.RenderTask <- task
+    simulation |> Async.Start
     win.Run()
     0

@@ -7,12 +7,12 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a04a78f8-fc4c-46cf-a431-1c4a81642193</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>AdaptiveGeometry</RootNamespace>
-    <AssemblyName>AdaptiveGeometry</AssemblyName>
+    <RootNamespace>Gravity</RootNamespace>
+    <AssemblyName>Gravity</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
-    <Name>AdaptiveGeometry</Name>
+    <Name>Gravity</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>..\..\bin\Debug\AdaptiveGeometry.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\Gravity.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -34,7 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>..\..\bin\Release\AdaptiveGeometry.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Release\Gravity.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
