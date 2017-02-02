@@ -47,21 +47,21 @@ let main argv =
             let g = 0.2f
             let sw = Stopwatch()
             sw.Start()
-            let mutable t = 0.0f
+            let mutable t = 0.0
 
             while true do
                 //do! Async.Sleep 10
                 ps <- ps |> Array.mapi (fun i p ->
                     let mutable f = V3f.Zero
-                    for j in 1..ps.Length-1 do
+                    for j in 0..ps.Length-1 do
                         if i <> j then
                             let d = ps.[j] - ps.[i]
                             f <- f + g * d * ms.[i] * ms.[j] / d.LengthSquared
                     vs.[i] <- vs.[i] + f
 
-                    let dt = float32 sw.Elapsed.TotalSeconds - t
-                    t <- t + dt
-                    ps.[i] + vs.[i] * dt
+                    let dt = sw.Elapsed.TotalSeconds - t
+                    t <- sw.Elapsed.TotalSeconds
+                    ps.[i] + vs.[i] * float32(dt)
                 )
                 transact (fun () -> Mod.change positions ps)
         }
