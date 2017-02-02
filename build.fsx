@@ -25,4 +25,9 @@ Target "Run_Gravity" (fun() ->
 )
 "Default" ==> "Run_Gravity"
 
+Target "Run_SierpinskiTetrahedron" (fun() ->
+    tracefn "exec: %d" (Shell.Exec "bin/Release/SierpinskiTetrahedron.exe")
+)
+"Default" ==> "Run_SierpinskiTetrahedron"
+
 entry()
