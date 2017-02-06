@@ -8,15 +8,21 @@ open Aardvark.Application
 open Aardvark.Application.WinForms
 
 [<EntryPoint>]
-let main argv = 
+let main argv =
+
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 
-    // simple OpenGL window
+    // create simple render window
     use app = new OpenGlApplication()
     let win = app.CreateSimpleRenderWindow()
-    win.Text <- "HelloWorld (aardvark.docs)"
+    win.Text <- "Hello World (aardvark.docs)"
 
+    // view, projection and default camera controllers
+    let initialView = CameraView.lookAt (V3d(9.3, 9.9, 8.6)) V3d.Zero V3d.OOI
+    let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
+    let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
+    
     // generate 11 x 11 x 11 colored boxes
     let norm x = (x + 5.0) * 0.1
     let boxes = seq {
@@ -27,11 +33,6 @@ let main argv =
                     let color = C4b(norm x, norm y, norm z)
                     yield Sg.box' color bounds
     }
-
-    // view, projection and default camera controllers
-    let initialView = CameraView.lookAt (V3d(9.3, 9.9, 8.6)) V3d.Zero V3d.OOI
-    let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
-    let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
 
     // define scene
     let sg =
