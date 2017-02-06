@@ -40,7 +40,7 @@ let main argv =
 
         let g = 0.01f           // "gravitational constant"
         let mutable t = 0.0     // time
-        let mutable ps = [| for i in 1..n do yield 25.0f * (V3f(r.NextDouble(), r.NextDouble(), r.NextDouble()) - V3f(0.5, 0.5, 0.5)) |]
+        let mutable ps = [| for i in 1..n do yield 35.0f * (V3f(r.NextDouble(), r.NextDouble(), r.NextDouble()) - V3f(0.5, 0.5, 0.5)) |]
         let mutable ps' = Array.create<V3f> (n*2) V3f.Zero
         let mutable cs = [| for i in 1..n do yield C4b(r.NextDouble(), r.NextDouble(), r.NextDouble()) |]
         let mutable cs' = cs |> Array.collect (fun c -> [| c; C4b.Black |])
@@ -48,6 +48,7 @@ let main argv =
         let vs = Array.create<V3f> n V3f.Zero                           // velocities
         let ms = [| for i in 1..n do yield float32(r.NextDouble()) |]   // masses
 
+        do! Async.Sleep 5000
         while true do
             for i in 0..ps.Length-1 do
                 let p = ps.[i]
@@ -106,29 +107,61 @@ let main argv =
                ]
             |> Sg.uniform "LineWidth" (Mod.constant 3.0)
 
+    
+    let gridSize = 256.0
     let grid =
-        let lines = [| for i in -100.0..100.0 do
-                        yield Line3d(V3d(i, -100.0, 0.0), V3d(i, +100.0, 0.0))
-                        yield Line3d(V3d(-100.0, i, 0.0), V3d(+100.0, i, 0.0))
+        let lines = [| for i in -gridSize..gridSize do
+                        yield Line3d(V3d(i, -gridSize, 0.01), V3d(i, +gridSize, 0.01))
+                        yield Line3d(V3d(-gridSize, i, 0.01), V3d(+gridSize, i, 0.01))
                     |]
-        Sg.lines (Mod.constant C4b.Gray) (Mod.constant lines)
+        Sg.lines (Mod.constant C4b.Black) (Mod.constant lines)
         |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
                 DefaultSurfaces.constantColor C4f.Gray10 |> toEffect
                 DefaultSurfaces.thickLine |> toEffect
                ]
-            |> Sg.uniform "LineWidth" (Mod.constant 2.0)
+        |> Sg.uniform "LineWidth" (Mod.constant 1.0)
 
+
+    let transparentPlaneRenderPass = RenderPass.after "transparent" RenderPassOrder.Arbitrary RenderPass.main
+    let transparentPlane =
+        let drawCall = 
+            DrawCallInfo(
+                FaceVertexCount = 4,
+                InstanceCount = 1
+            )
+        drawCall
+            |> Sg.render IndexedGeometryMode.QuadList 
+            |> Sg.vertexAttribute DefaultSemantic.Positions (Mod.constant [| V3f(-gridSize, -gridSize, 0.0); V3f(gridSize, -gridSize, 0.0); V3f(gridSize, gridSize, 0.0); V3f(-gridSize, gridSize, 0.0) |])
+            |> Sg.vertexAttribute DefaultSemantic.Colors (Mod.constant (Array.create 4 (C4b(0, 0, 0, 192))))
+            |> Sg.effect [
+                DefaultSurfaces.trafo |> toEffect
+                DefaultSurfaces.vertexColor |> toEffect
+               ]
+            |> Sg.blendMode (Mod.constant BlendMode.Blend)
+            |> Sg.pass (transparentPlaneRenderPass)
+
+    
+
+    
     let sg =
-        [points; lines]
+        [ 
+          points
+          lines
+          grid
+          transparentPlane
+        ]
         |> Sg.group
         |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
         |> Sg.projTrafo (proj |> Mod.map Frustum.projTrafo)
 
     // specify render task
-    let task =
-        app.Runtime.CompileRender(win.FramebufferSignature, sg)
-            |> DefaultOverlays.withStatistics
+    let task = 
+        RenderTask.ofList [
+            //app.Runtime.CompileClear(win.FramebufferSignature, Mod.constant C4f.White)
+            app.Runtime.CompileRender(win.FramebufferSignature, sg)
+        ]
+        |> DefaultOverlays.withStatistics
 
     // start
     win.RenderTask <- task
