@@ -15,6 +15,11 @@ Target "Run_HelloWorld" (fun() ->
 )
 "Default" ==> "Run_HelloWorld"
 
+Target "Run_BackgroundColor" (fun() ->
+    tracefn "exec: %d" (Shell.Exec "bin/Release/BackgroundColor.exe")
+)
+"Default" ==> "Run_BackgroundColor"
+
 Target "Run_AdaptiveWorld" (fun() ->
     tracefn "exec: %d" (Shell.Exec "bin/Release/AdaptiveWorld.exe")
 )
