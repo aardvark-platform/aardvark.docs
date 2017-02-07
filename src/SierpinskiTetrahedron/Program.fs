@@ -31,7 +31,7 @@ let main argv =
     let ft = FoldingTetrahedron ()
 
     let sg =
-        ft.GetSg()
+        ft.GetSg2()
             |> Sg.effect 
             [
                 DefaultSurfaces.trafo |> toEffect

@@ -22,10 +22,14 @@ type FoldingTetrahedron () =
     let axis34 = (v3-v4).Normalized
     let axis45 = (v4-v5).Normalized
     let axis53 = (v5-v3).Normalized
+    let axis02 = (v0-v2).Normalized
+    let axis12 = (v1-v2).Normalized
+    let axis42 = (v4-v2).Normalized
 
     let oneThird = 1.0 / 3.0
     let angleMax = Math.PI - acos oneThird
     let rotPointAxis (p : V3d) (axis : V3d) (angle : float) = M44d.Translation(p) * M44d.Rotation(axis, angle) * M44d.Translation(-p)
+    let rotPointAxis' (p : V3d) (axis : V3d) (angle : float) = Trafo3d.Translation(-p) * Trafo3d.Rotation(axis, angle) * Trafo3d.Translation(p)
     let fold0 = rotPointAxis v3 axis34
     let fold1 = rotPointAxis v4 axis45
     let fold2 = rotPointAxis v5 axis53
@@ -52,10 +56,9 @@ type FoldingTetrahedron () =
         let s2 = (fold2 angle).TransformPos s
         let ps = [| s0;v3;v4; s1;v4;v5; s2;v5;v3; v0;v4;v3; v1;v5;v4; v2;v3;v5 |]
 
-        let n0 = V3d.OON
-        let n1 = (fold0 angle).TransformDir V3d.OOI
-        let n2 = (fold1 angle).TransformDir V3d.OOI
-        let n3 = (fold2 angle).TransformDir V3d.OOI
+        let n0 = (fold0 angle).TransformDir V3d.OOI
+        let n1 = (fold1 angle).TransformDir V3d.OOI
+        let n2 = (fold2 angle).TransformDir V3d.OOI
         let ns = [| n0;n0;n0; n1;n1;n1; n2;n2;n2; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI;|]
         (ps, ns)
 
@@ -87,3 +90,13 @@ type FoldingTetrahedron () =
             |> Sg.vertexAttribute DefaultSemantic.Colors (Mod.constant cs)
             |> Sg.vertexAttribute DefaultSemantic.Normals normals
             
+    member x.GetSg2 () =
+        let t = x.GetSg ()
+        [
+            t |> Sg.transform (Trafo3d.Rotation(V3d.XAxis, (acos oneThird)))
+            t |> Sg.transform (rotPointAxis' v0 axis02 (acos oneThird))
+            t |> Sg.transform (rotPointAxis' v1 axis12 -(acos oneThird))
+            t |> Sg.transform (rotPointAxis' v4 axis42 Math.PI)
+        ]
+        |> Sg.group
+        
