@@ -11,6 +11,7 @@ type FoldingTetrahedron () =
 
     // define folding tetrahedron
     let h = 0.5 * sqrt 3.0  // height of triangle
+    let hTetrahedron = (sqrt 6.0) / 3.0 // height of tetrahedron
     let v0 = V3d(0, 0, 0)
     let v1 = V3d(1, 0, 0)
     let v2 = V3d(0.5, h, 0.0)
@@ -80,6 +81,7 @@ type FoldingTetrahedron () =
             x.UpdatePositionsAndNormals angleMax
         }
 
+        
     member x.GetSg () =
         DrawCallInfo(
             FaceVertexCount = 18,
@@ -98,5 +100,18 @@ type FoldingTetrahedron () =
             t |> Sg.transform (rotPointAxis' v1 axis12 -(acos oneThird))
             t |> Sg.transform (rotPointAxis' v4 axis42 Math.PI)
         ]
-        |> Sg.group
+        |> Sg.ofSeq 
+
+    member x.GetSg3 n sg =
+        match n with
+        | 0 -> sg 
+        | _ -> 
+            let s =  x.GetSg3 (n-1) sg |>  Sg.transform (Trafo3d.Scale(0.5))
+            [
+                s 
+                s |> Sg.transform (Trafo3d.Translation(0.5, 0.0, 0.0))
+                s |> Sg.transform (Trafo3d.Translation(0.25, h / 2.0, 0.0))
+                s |> Sg.transform (Trafo3d.Translation(0.25, h / 6.0, hTetrahedron / 2.0))
+            ]
+            |> Sg.ofSeq 
         

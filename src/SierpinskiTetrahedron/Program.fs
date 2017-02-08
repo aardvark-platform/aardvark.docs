@@ -25,13 +25,18 @@ let main argv =
     let h = 0.5 * sqrt 3.0  // height of triangle
     let initialView = CameraView.lookAt (V3d(0.6, -1.0, 0.7)) (V3d(0.5, h / 3.0, h / 3.0)) V3d.ZAxis
     //let initialView = CameraView.lookAt (V3d(0.5, h / 3.0, 2.0)) (V3d(0.5, h / 3.0, 0.0)) V3d.OIO
-    let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
+    let view = 
+        Mod.integrate initialView win.Time [
+                DefaultCameraController.controlPan win.Mouse
+                DefaultCameraController.controlOrbitAround win.Mouse (V3d(0.5, h / 2.0, h / 2.0) |> Mod.constant)
+        ]
     let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
 
     let ft = FoldingTetrahedron ()
 
     let sg =
-        ft.GetSg2()
+        ft.GetSg2 ()
+            |> ft.GetSg3 5
             |> Sg.effect 
             [
                 DefaultSurfaces.trafo |> toEffect
@@ -45,7 +50,7 @@ let main argv =
     let task = 
         RenderTask.ofList 
             [
-                app.Runtime.CompileClear(win.FramebufferSignature, Mod.constant C4f.White)
+                app.Runtime.CompileClear(win.FramebufferSignature, Mod.constant C4f.Gray70)
                 app.Runtime.CompileRender(win.FramebufferSignature, sg)
             ]
         |> DefaultOverlays.withStatistics
