@@ -6,10 +6,10 @@ nuget Aardvark.Base.Incremental            ~> 2.4.8
 nuget Aardvark.Base.FSharp                 ~> 2.4.8
 nuget Aardvark.Base.Essentials             ~> 2.4.8
                                            
-nuget Aardvark.Base.Rendering              ~> 2.7.5
-nuget Aardvark.Application.WinForms.GL     ~> 2.7.5
-nuget Aardvark.SceneGraph                  ~> 2.7.5
-nuget Aardvark.Rendering.NanoVg            ~> 2.7.5
+nuget Aardvark.Base.Rendering              ~> 3.0.0
+nuget Aardvark.Application.WinForms.GL     ~> 3.0.0
+nuget Aardvark.SceneGraph                  ~> 3.0.0
+nuget Aardvark.Rendering.NanoVg            ~> 3.0.0
 
 
 group Build
