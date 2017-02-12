@@ -30,6 +30,11 @@ Target "Run_Gravity" (fun() ->
 )
 "Default" ==> "Run_Gravity"
 
+Target "Run_OrthoCamera" (fun() ->
+    tracefn "exec: %d" (Shell.Exec "bin/Release/OrthoCamera.exe")
+)
+"Default" ==> "Run_OrthoCamera"
+
 Target "Run_SierpinskiTetrahedron" (fun() ->
     tracefn "exec: %d" (Shell.Exec "bin/Release/SierpinskiTetrahedron.exe")
 )

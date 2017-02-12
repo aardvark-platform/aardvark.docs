@@ -10,6 +10,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AdaptiveWorld", "AdaptiveWo
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Gravity", "Gravity\Gravity.fsproj", "{A04A78F8-FC4C-46CF-A431-1C4A81642193}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OrthoCamera", "OrthoCamera\OrthoCamera.fsproj", "{0ee6c8a0-62f5-412d-9107-6166919df7c7}"
+EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SierpinskiTetrahedron", "SierpinskiTetrahedron\SierpinskiTetrahedron.fsproj", "{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}"
 EndProject
 Global
@@ -38,6 +40,10 @@ Global
 		{d6d6bc61-b0e5-4328-a528-d2921afea50b}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d6d6bc61-b0e5-4328-a528-d2921afea50b}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{d6d6bc61-b0e5-4328-a528-d2921afea50b}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ee6c8a0-62f5-412d-9107-6166919df7c7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ee6c8a0-62f5-412d-9107-6166919df7c7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ee6c8a0-62f5-412d-9107-6166919df7c7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ee6c8a0-62f5-412d-9107-6166919df7c7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

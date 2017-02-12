@@ -107,7 +107,6 @@ let main argv =
                ]
             |> Sg.uniform "LineWidth" (Mod.constant 3.0)
 
-    
     let gridSize = 256.0
     let grid =
         let lines = [| for i in -gridSize..gridSize do
