@@ -18,7 +18,7 @@ let main argv =
     let win = app.CreateSimpleRenderWindow()
     win.Text <- "Ortho Camera (aardvark.docs)"
 
-    // view, projection and default camera controllers
+    let bounds = Box2d(V2d(-10.0, -10.0), V2d(+10.0, +10.0))
 
     let controlPan (renderControl : IRenderControl) (frustum : IMod<Frustum>)=
         let down = renderControl.Mouse.IsDown(MouseButtons.Middle)
@@ -62,15 +62,13 @@ let main argv =
         Mod.integrate cam renderControl.Time [
             controlPan renderControl frustum
         ]
-
-    let bounds = Box2d.FromMinAndSize(V2d(-10.0, -10.0), V2d(+10.0, +10.0))
+        
     let ortho = win.Sizes |> Mod.map (fun s ->
         let a = float s.X / float s.Y;
         let frustum = Box3d(V3d(bounds.Min, 0.1), V3d(bounds.Max, 2.0))
         Frustum.ortho frustum
         )
-
-    let initialView = CameraView.lookAt (V3d(0,0,1)) V3d.Zero V3d.OIO   
+    let initialView = CameraView.lookAt V3d.OOI V3d.OOO V3d.OIO   
     let view = initialView |> control win ortho
     
     
@@ -79,24 +77,24 @@ let main argv =
     // define scene
     let backgroundColor = Mod.init C4f.White
 
-    let grid color =
+    let grid (bounds : Box2d) color =
         let lines =
             [
-                [| for x in bounds.Min.X..0.1..bounds.Max.X do yield Line3d(V3d(x, bounds.Min.Y, 0.0), V3d(x, bounds.Max.Y, 0.0)) |]
-                [| for y in bounds.Min.Y..0.1..bounds.Max.Y do yield Line3d(V3d(bounds.Min.X, y, 0.0), V3d(bounds.Max.X, y, 0.0)) |]
+                [| for x in bounds.Min.X..0.5..bounds.Max.X do yield Line3d(V3d(x, bounds.Min.Y, 0.0), V3d(x, bounds.Max.Y, 0.0)) |]
+                [| for y in bounds.Min.Y..0.5..bounds.Max.Y do yield Line3d(V3d(bounds.Min.X, y, 0.0), V3d(bounds.Max.X, y, 0.0)) |]
             ]
             |> Array.concat
-
-        Sg.lines (Mod.constant color) (Mod.constant lines)
+        Sg.lines (Mod.constant C4b.Black) (Mod.constant lines)
         |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
-                DefaultSurfaces.vertexColor |> toEffect
+                DefaultSurfaces.constantColor C4f.Gray50 |> toEffect
                 DefaultSurfaces.thickLine |> toEffect
                ]
         |> Sg.uniform "LineWidth" (Mod.constant 1.0)
+        
     
-    let points n =
-        let r = Random()
+    let r = Random()
+    let points n pointsize (bounds : Box2d) =
         let positions = Mod.constant [| for x in 1..n do yield bounds.Min.XYO + bounds.Size.XYO * V3d(r.NextDouble(), r.NextDouble(), 0.0) |]
         let colors = Mod.constant [| for x in 1..n do yield C4b(r.Next(256), r.Next(256), r.Next(256)) |]
         DrawCallInfo(FaceVertexCount = n, InstanceCount = 1)
@@ -108,16 +106,22 @@ let main argv =
                 DefaultSurfaces.vertexColor |> toEffect
                 DefaultSurfaces.pointSprite |> toEffect
                ]
-            |> Sg.uniform "PointSize" (Mod.constant 5.0);
+            |> Sg.uniform "PointSize" (Mod.constant pointsize)
+
+    
+    //let initialView = CameraView.lookAt (V3d(20.0, -10.0, 15.0)) V3d.Zero V3d.OOI
+    //let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
+    //let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
 
     let sg =
         [
-            grid C4b.Gray
-            points 10000
+            grid bounds C4b.Black
+            points 1000 5 bounds
         ]
-        |> Sg.group
+        |> Sg.ofSeq
         |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
-        |> Sg.projTrafo (ortho |> Mod.map Frustum.projTrafo)
+        |> Sg.projTrafo (ortho |> Mod.map Frustum.orthoTrafo)
+        //|> Sg.projTrafo (proj |> Mod.map Frustum.projTrafo)
 
     // specify render task(s)
     let task =

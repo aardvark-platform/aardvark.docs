@@ -120,8 +120,7 @@ let main argv =
                 DefaultSurfaces.thickLine |> toEffect
                ]
         |> Sg.uniform "LineWidth" (Mod.constant 1.0)
-
-
+        
     let transparentPlaneRenderPass = RenderPass.after "transparent" RenderPassOrder.Arbitrary RenderPass.main
     let transparentPlane =
         let drawCall = 
