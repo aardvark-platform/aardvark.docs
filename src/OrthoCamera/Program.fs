@@ -87,10 +87,10 @@ let main argv =
         Sg.lines (Mod.constant C4b.Black) (Mod.constant lines)
         |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
-                DefaultSurfaces.constantColor C4f.Gray50 |> toEffect
-                DefaultSurfaces.thickLine |> toEffect
+                //DefaultSurfaces.constantColor C4f.Gray50 |> toEffect
+                //DefaultSurfaces.thickLine |> toEffect
                ]
-        |> Sg.uniform "LineWidth" (Mod.constant 1.0)
+        //|> Sg.uniform "LineWidth" (Mod.constant 1.0)
         
     
     let r = Random()
@@ -109,19 +109,14 @@ let main argv =
             |> Sg.uniform "PointSize" (Mod.constant pointsize)
 
     
-    //let initialView = CameraView.lookAt (V3d(20.0, -10.0, 15.0)) V3d.Zero V3d.OOI
-    //let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
-    //let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
-
     let sg =
         [
-            grid bounds C4b.Black
-            points 1000 5 bounds
+            //grid bounds C4b.Black
+            points 10000 5 bounds
         ]
         |> Sg.ofSeq
         |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
         |> Sg.projTrafo (ortho |> Mod.map Frustum.orthoTrafo)
-        //|> Sg.projTrafo (proj |> Mod.map Frustum.projTrafo)
 
     // specify render task(s)
     let task =
