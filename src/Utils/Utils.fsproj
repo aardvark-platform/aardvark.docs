@@ -5,14 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>0ee6c8a0-62f5-412d-9107-6166919df7c7</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>OrthoCamera</RootNamespace>
-    <AssemblyName>OrthoCamera</AssemblyName>
+    <ProjectGuid>ef2fa5f1-f4c9-4be1-91a4-5bf3b2acbf23</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Utils</RootNamespace>
+    <AssemblyName>Aardvark.Docs.Utils</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
-    <Name>OrthoCamera</Name>
+    <Name>Utils</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>..\..\bin\Debug\OrthoCamera.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\Utils.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -34,7 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>..\..\bin\Release\OrthoCamera.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Release\Utils.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
@@ -61,7 +61,8 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="Program.fs" />
+    <Compile Include="ThickLine.fs" />
+    <Compile Include="Geometry.fs" />
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
@@ -72,13 +73,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Utils\Utils.fsproj">
-      <Name>Utils</Name>
-      <Project>{ef2fa5f1-f4c9-4be1-91a4-5bf3b2acbf23}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">

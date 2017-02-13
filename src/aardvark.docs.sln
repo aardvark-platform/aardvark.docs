@@ -2,6 +2,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.25914.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Utils", "Utils\Utils.fsproj", "{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}"
+EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HelloWorld", "HelloWorld\HelloWorld.fsproj", "{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BackgroundColor", "BackgroundColor\BackgroundColor.fsproj", "{D6D6BC61-B0E5-4328-A528-D2921AFEA50B}"
@@ -20,6 +22,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}.Release|Any CPU.ActiveCfg = Release|Any CPU

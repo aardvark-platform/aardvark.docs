@@ -1,11 +1,11 @@
 ﻿open System
-open Aardvark.Base
-open Aardvark.Base.Rendering
-open Aardvark.Base.Incremental
-open Aardvark.Rendering.NanoVg
-open Aardvark.SceneGraph
 open Aardvark.Application
 open Aardvark.Application.WinForms
+open Aardvark.Base
+open Aardvark.Base.Incremental
+open Aardvark.Base.Rendering
+open Aardvark.Rendering.NanoVg
+open Aardvark.SceneGraph
 
 [<EntryPoint>]
 let main argv =
@@ -65,7 +65,7 @@ let main argv =
         
     let ortho = win.Sizes |> Mod.map (fun s ->
         let a = float s.X / float s.Y;
-        let frustum = Box3d(V3d(bounds.Min, 0.1), V3d(bounds.Max, 2.0))
+        let frustum = Box3d(V3d(bounds.Min.X * a, bounds.Min.Y, 0.1), V3d(bounds.Max.X * a, bounds.Max.Y, 2.0))
         Frustum.ortho frustum
         )
     let initialView = CameraView.lookAt V3d.OOI V3d.OOO V3d.OIO   
@@ -76,43 +76,11 @@ let main argv =
 
     // define scene
     let backgroundColor = Mod.init C4f.White
-
-    let grid (bounds : Box2d) color =
-        let lines =
-            [
-                [| for x in bounds.Min.X..0.5..bounds.Max.X do yield Line3d(V3d(x, bounds.Min.Y, 0.0), V3d(x, bounds.Max.Y, 0.0)) |]
-                [| for y in bounds.Min.Y..0.5..bounds.Max.Y do yield Line3d(V3d(bounds.Min.X, y, 0.0), V3d(bounds.Max.X, y, 0.0)) |]
-            ]
-            |> Array.concat
-        Sg.lines (Mod.constant C4b.Black) (Mod.constant lines)
-        |> Sg.effect [
-                DefaultSurfaces.trafo |> toEffect
-                //DefaultSurfaces.constantColor C4f.Gray50 |> toEffect
-                //DefaultSurfaces.thickLine |> toEffect
-               ]
-        //|> Sg.uniform "LineWidth" (Mod.constant 1.0)
-        
-    
-    let r = Random()
-    let points n pointsize (bounds : Box2d) =
-        let positions = Mod.constant [| for x in 1..n do yield bounds.Min.XYO + bounds.Size.XYO * V3d(r.NextDouble(), r.NextDouble(), 0.0) |]
-        let colors = Mod.constant [| for x in 1..n do yield C4b(r.Next(256), r.Next(256), r.Next(256)) |]
-        DrawCallInfo(FaceVertexCount = n, InstanceCount = 1)
-            |> Sg.render IndexedGeometryMode.PointList 
-            |> Sg.vertexAttribute DefaultSemantic.Positions positions
-            |> Sg.vertexAttribute DefaultSemantic.Colors colors
-            |> Sg.effect [
-                DefaultSurfaces.trafo |> toEffect
-                DefaultSurfaces.vertexColor |> toEffect
-                DefaultSurfaces.pointSprite |> toEffect
-               ]
-            |> Sg.uniform "PointSize" (Mod.constant pointsize)
-
     
     let sg =
         [
-            //grid bounds C4b.Black
-            points 10000 5 bounds
+            Aardvark.Docs.Utils.Geometry.grid bounds C4b.Black
+            Aardvark.Docs.Utils.Geometry.points 10000 8 bounds
         ]
         |> Sg.ofSeq
         |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
