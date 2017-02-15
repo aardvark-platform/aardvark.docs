@@ -10,6 +10,7 @@ open Aardvark.SceneGraph
 open Aardvark.Application
 open Aardvark.Application.WinForms
 
+
 type Episode = { Start : float; Stop : float; GenerateSg : (IMod<float> -> ISg) }
 
 [<EntryPoint>]
@@ -39,14 +40,6 @@ let main argv =
     let t = Mod.map2 (fun (t0 : DateTime) (t : DateTime) -> (t - t0).TotalSeconds) t0 Mod.time
     let t = Mod.map2 ( (*) ) t speed
 
-    let foo (a : float) b = 
-        Mod.map(fun x ->
-            match x with
-            | x when x < a -> 0.0
-            | x when x > b -> 1.0
-            | _ -> (x - a) / (b - a)
-        )
-
     let episodes n = 
         let phase0 t = (FoldingTriangle t).SceneGraph
         let episode0 = { Start = 1.0; Stop = 2.0; GenerateSg = phase0 }
@@ -60,7 +53,7 @@ let main argv =
 
     let series t (episodes : seq<Episode>) =
         let episodes = episodes |> Array.ofSeq
-        let sgs = episodes |> Array.map (fun e -> e.GenerateSg (t |> foo e.Start e.Stop))
+        let sgs = episodes |> Array.map (fun e -> e.GenerateSg (t |> Story.mapRangeToUnit (e.Start, e.Stop)))
         t |> Mod.map (fun x ->
                 [ 
                     for i in 0..episodes.Length-1 do

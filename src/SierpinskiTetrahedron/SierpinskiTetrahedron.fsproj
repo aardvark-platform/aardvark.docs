@@ -54,6 +54,7 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
+    <Compile Include="Story.fs" />
     <Compile Include="FoldingTriangle.fs" />
     <Compile Include="FoldingTetrahedron.fs" />
     <Compile Include="Program.fs" />
