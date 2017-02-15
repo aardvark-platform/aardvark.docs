@@ -7,7 +7,7 @@ open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.SceneGraph
 
-type FoldingTetrahedron () =
+type FoldingTetrahedron (t : IMod<double>) =
 
     // define folding tetrahedron
     let h = 0.5 * sqrt 3.0  // height of triangle
@@ -48,51 +48,39 @@ type FoldingTetrahedron () =
             C4b.Blue; C4b.Blue; C4b.Blue; 
         |]
 
-    let positions = Mod.init ps
-    let normals = Mod.init ns
-
-    member x.ComputePositionsAndNormals angle =
+    member x.ComputePositions angle =
         let s0 = (fold0 angle).TransformPos s
         let s1 = (fold1 angle).TransformPos s
         let s2 = (fold2 angle).TransformPos s
-        let ps = [| s0;v3;v4; s1;v4;v5; s2;v5;v3; v0;v4;v3; v1;v5;v4; v2;v3;v5 |]
+        [| s0;v3;v4; s1;v4;v5; s2;v5;v3; v0;v4;v3; v1;v5;v4; v2;v3;v5 |]
 
+     member x.ComputeNormals angle =   
         let n0 = (fold0 angle).TransformDir V3d.OOI
         let n1 = (fold1 angle).TransformDir V3d.OOI
         let n2 = (fold2 angle).TransformDir V3d.OOI
-        let ns = [| n0;n0;n0; n1;n1;n1; n2;n2;n2; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI;|]
-        (ps, ns)
+        [| n0;n0;n0; n1;n1;n1; n2;n2;n2; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI;|]
 
-    member x.UpdatePositionsAndNormals angle = 
-        let (ps, ns) = x.ComputePositionsAndNormals angle
-        transact (fun () -> 
-            Mod.change positions ps
-            Mod.change normals ns
+    member private x.Positions = t |> Mod.map (fun t ->
+        let angle = t * angleMax
+        x.ComputePositions angle
         )
 
-    member x.Animation () = 
-        async {
-            do! Async.Sleep 5000
-            let sw = Stopwatch()
-            sw.Start()
-            while sw.Elapsed.TotalSeconds <= 10.0 do
-                let angle = sw.Elapsed.TotalSeconds / 10.0 * angleMax
-                x.UpdatePositionsAndNormals angle
-            x.UpdatePositionsAndNormals angleMax
-        }
+    member private x.Normals = t |> Mod.map (fun t ->
+        let angle = t * angleMax
+        x.ComputeNormals angle
+        )
 
-        
-    member x.GetSg () =
+    member private x.GetSg () =
         DrawCallInfo(
             FaceVertexCount = 18,
             InstanceCount = 1
             )
             |> Sg.render IndexedGeometryMode.TriangleList 
-            |> Sg.vertexAttribute DefaultSemantic.Positions positions
+            |> Sg.vertexAttribute DefaultSemantic.Positions x.Positions
             |> Sg.vertexAttribute DefaultSemantic.Colors (Mod.constant cs)
-            |> Sg.vertexAttribute DefaultSemantic.Normals normals
+            |> Sg.vertexAttribute DefaultSemantic.Normals x.Normals
             
-    member x.GetSg2 () =
+    member private x.GetSg2 () =
         let t = x.GetSg ()
         [
             t |> Sg.transform (Trafo3d.Rotation(V3d.XAxis, (acos oneThird)))
@@ -102,7 +90,7 @@ type FoldingTetrahedron () =
         ]
         |> Sg.ofSeq 
 
-    member x.GetSg3 n sg =
+    member private x.GetSg3 n sg =
         match n with
         | 0 -> sg 
         | _ -> 
@@ -115,3 +103,4 @@ type FoldingTetrahedron () =
             ]
             |> Sg.ofSeq 
         
+    member x.SceneGraph n = x.GetSg3 n (x.GetSg2()) 

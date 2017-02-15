@@ -7,7 +7,7 @@ open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.SceneGraph
 
-type FoldingTriangle () = 
+type FoldingTriangle (t : IMod<double>) = 
     // define folding tetrahedron
     let h = 0.5 * sqrt 3.0  // height of triangle
     let v0 = V3d(0, 0, 0)
@@ -32,46 +32,36 @@ type FoldingTriangle () =
     let ns = Array.create<V3d> 12 V3d.OON
     let cs = [| C4b.White;C4b.White;C4b.White; C4b.Red;C4b.Red;C4b.Red; C4b.Green;C4b.Green;C4b.Green; C4b.Blue;C4b.Blue;C4b.Blue |]
 
-    let positions = Mod.init ps
-    let normals = Mod.init ns
-
-    member x.ComputePositionsAndNormals angle =
+    member x.ComputePositions angle =
         let v0' = (fold0 angle).TransformPos v0
         let v1' = (fold1 angle).TransformPos v1
         let v2' = (fold2 angle).TransformPos v2
-        let ps = [| v3;v5;v4; v0';v3;v4; v1';v4;v5; v2';v5;v3 |]
-
+        [| v3;v5;v4; v0';v3;v4; v1';v4;v5; v2';v5;v3 |]
+        
+    member x.ComputeNormals angle =
         let n0 = V3d.OON
         let n1 = (fold0 angle).TransformDir V3d.OON
         let n2 = (fold1 angle).TransformDir V3d.OON
         let n3 = (fold2 angle).TransformDir V3d.OON
-        let ns = [| n0;n0;n0; n1;n1;n1; n2;n2;n2; n3;n3;n3 |]
-        (ps, ns)
+        [| n0;n0;n0; n1;n1;n1; n2;n2;n2; n3;n3;n3 |]
 
-    member x.UpdatePositionsAndNormals angle = 
-        let (ps, ns) = x.ComputePositionsAndNormals angle
-        transact (fun () -> 
-            Mod.change positions ps
-            Mod.change normals ns
+    member private x.Positions = t |> Mod.map (fun t ->
+        let angle = t * angleMax
+        x.ComputePositions angle
         )
 
-    member x.Animation () = 
-        async {
-            do! Async.Sleep 5000
-            let sw = Stopwatch()
-            sw.Start()
-            while sw.Elapsed.TotalSeconds <= 10.0 do
-                let angle = sw.Elapsed.TotalSeconds / 10.0 * angleMax
-                x.UpdatePositionsAndNormals angle
-            x.UpdatePositionsAndNormals angleMax
-        }
+    member private x.Normals = t |> Mod.map (fun t ->
+        let angle = t * angleMax
+        x.ComputeNormals angle
+        )
 
-    member x.GetSg () =
+    member x.SceneGraph =
         DrawCallInfo(
             FaceVertexCount = 12,
             InstanceCount = 1
             )
             |> Sg.render IndexedGeometryMode.TriangleList 
-            |> Sg.vertexAttribute DefaultSemantic.Positions positions
+            |> Sg.vertexAttribute DefaultSemantic.Positions x.Positions
             |> Sg.vertexAttribute DefaultSemantic.Colors (Mod.constant cs)
-            |> Sg.vertexAttribute DefaultSemantic.Normals normals
+            |> Sg.vertexAttribute DefaultSemantic.Normals x.Normals
+            |> Sg.scale 2.0
