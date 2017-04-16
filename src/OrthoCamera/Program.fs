@@ -1,9 +1,10 @@
-﻿open System
-open Aardvark.Application
-open Aardvark.Application.WinForms
+﻿
+open System
 open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.Base.Rendering
+open Aardvark.Application
+open Aardvark.Application.WinForms
 open Aardvark.Rendering.NanoVg
 open Aardvark.SceneGraph
 
@@ -11,7 +12,8 @@ open Aardvark.SceneGraph
 let main argv =
 
     // initialize runtime system
-    Ag.initialize(); Aardvark.Init()
+    Ag.initialize();
+    Aardvark.Init()
 
     // create simple render window
     use app = new OpenGlApplication()
@@ -39,6 +41,7 @@ let main argv =
             else
                 return AdaptiveFunc.Identity
         }
+
     let controlZoom (renderControl : IRenderControl) (frustum : IMod<Frustum>)=
         let down = renderControl.Mouse.IsDown(MouseButtons.Right)
         let location = renderControl.Mouse.Position |> Mod.map (fun pp -> pp.Position)
@@ -57,10 +60,12 @@ let main argv =
                 )
             else
                 return AdaptiveFunc.Identity
-        } 
+        }
+
     let control (renderControl : IRenderControl) (frustum : IMod<Frustum>) (cam : CameraView) : IMod<CameraView> =
         Mod.integrate cam renderControl.Time [
             controlPan renderControl frustum
+            controlZoom renderControl frustum
         ]
         
     let ortho = win.Sizes |> Mod.map (fun s ->
