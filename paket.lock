@@ -1,3 +1,4 @@
+FRAMEWORK: NET45
 NUGET
   remote: https://vrvis.myget.org/F/aardvark_public
   specs:
@@ -94,180 +95,18 @@ NUGET
     DevILSharp (0.0.13)
     FSharp.Quotations.Evaluator (1.0.7)
     Microsoft.NETCore.Platforms (2.0.0)
-    Microsoft.NETCore.Targets (2.0.0)
-    Microsoft.Win32.Primitives (4.3.0) - framework: net46
     NETStandard.Library (2.0.0)
       Microsoft.NETCore.Platforms (>= 1.1.0)
-      Microsoft.Win32.Primitives (>= 4.3.0) - framework: net46
-      System.AppContext (>= 4.3.0) - framework: net46
-      System.Collections (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Collections.Concurrent (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Console (>= 4.3.0) - framework: net46
-      System.Diagnostics.Debug (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Diagnostics.Tools (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Diagnostics.Tracing (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Globalization (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Globalization.Calendars (>= 4.3.0) - framework: net46
-      System.IO (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.IO.Compression (>= 4.3.0) - framework: net46
-      System.IO.Compression.ZipFile (>= 4.3.0) - framework: net46
-      System.IO.FileSystem (>= 4.3.0) - framework: net46
-      System.IO.FileSystem.Primitives (>= 4.3.0) - framework: net46
-      System.Linq (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Linq.Expressions (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Net.Http (>= 4.3.2) - framework: net46
-      System.Net.Primitives (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Net.Sockets (>= 4.3.0) - framework: net46
-      System.ObjectModel (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Extensions (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Primitives (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime.Handles (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime.InteropServices (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime.InteropServices.RuntimeInformation (>= 4.3.0) - framework: net45, net451, net46, portable45-net45+win8+wpa81, portable46-net451+win81+wpa81
-      System.Runtime.Numerics (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Security.Cryptography.Algorithms (>= 4.3.0) - framework: net46
-      System.Security.Cryptography.Encoding (>= 4.3.0) - framework: net46
-      System.Security.Cryptography.Primitives (>= 4.3.0) - framework: net46
-      System.Security.Cryptography.X509Certificates (>= 4.3.0) - framework: net46
-      System.Text.Encoding (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Text.Encoding.Extensions (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Text.RegularExpressions (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading.Tasks (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading.Timer (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Xml.ReaderWriter (>= 4.3.0) - framework: net46
-      System.Xml.XDocument (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    runtime.native.System (4.3.0)
-      Microsoft.NETCore.Platforms (>= 1.1.0)
-      Microsoft.NETCore.Targets (>= 1.1.0)
-    System.AppContext (4.3.0) - framework: net46
-    System.Collections (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Collections.Concurrent (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
+      System.Runtime.InteropServices.RuntimeInformation (>= 4.3.0)
     System.Collections.Immutable (1.4.0)
       NETStandard.Library (>= 1.6.1)
-    System.ComponentModel (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Console (4.3.0) - framework: net46
-    System.Diagnostics.Debug (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Diagnostics.Tools (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Diagnostics.Tracing (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Dynamic.Runtime (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Emit (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Emit.ILGeneration (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Primitives (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Globalization (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Globalization.Calendars (4.3.0) - framework: net46
-    System.IO (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.IO.Compression (4.3.0) - framework: net46
-    System.IO.Compression.ZipFile (4.3.0) - framework: net46
-    System.IO.FileSystem (4.3.0) - framework: net46
-      System.IO.FileSystem.Primitives (>= 4.3.0) - framework: >= net46
-    System.IO.FileSystem.Primitives (4.3.0) - framework: net46
-    System.Linq (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Linq.Expressions (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.ObjectModel (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Emit (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Net.Http (4.3.2) - framework: net46
-      System.Security.Cryptography.X509Certificates (>= 4.3.0) - framework: >= net46, dnxcore50
-    System.Net.Primitives (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Net.Sockets (4.3.0) - framework: net46
-    System.ObjectModel (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
     System.Reactive.Core (3.0.0)
-      System.Collections (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Collections.Concurrent (>= 4.0.12) - framework: net10, net11, net20, net35, net40, net40-full
-      System.ComponentModel (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Diagnostics.Debug (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Diagnostics.Tools (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Dynamic.Runtime (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Globalization (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Linq (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
       System.Reactive.Interfaces (>= 3.0.0)
-      System.Reflection (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Resources.ResourceManager (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime.Extensions (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading.Tasks (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading.Thread (>= 4.0.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading.ThreadPool (>= 4.0.10) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading.Timer (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
     System.Reactive.Interfaces (3.0.0)
-      System.Linq.Expressions (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Resources.ResourceManager (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
     System.Reactive.Linq (3.0.0)
-      System.Collections (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Collections.Concurrent (>= 4.0.12) - framework: net10, net11, net20, net35, net40, net40-full
-      System.ComponentModel (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Diagnostics.Debug (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Diagnostics.Tools (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Globalization (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Linq (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
       System.Reactive.Core (>= 3.0.0)
       System.Reactive.Interfaces (>= 3.0.0)
-      System.Reflection (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Resources.ResourceManager (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime.Extensions (>= 4.1.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime.InteropServices.WindowsRuntime (>= 4.0.1) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading.Tasks (>= 4.0.11) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Reflection (4.3.0)
-    System.Reflection.Emit (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.IO (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Emit.ILGeneration (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Primitives (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Reflection.Emit.ILGeneration (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection.Primitives (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Reflection.Extensions (4.3.0)
-    System.Reflection.Primitives (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Resources.ResourceManager (4.3.0)
-    System.Runtime (4.3.0)
-    System.Runtime.Extensions (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Runtime.Handles (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net35, net40, net40-full, net45, net451, net452, net453
-      Microsoft.NETCore.Targets (>= 1.1.0) - framework: net10, net11, net20, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full, net45, net451, net452, net453
-    System.Runtime.InteropServices (4.3.0)
-    System.Runtime.InteropServices.RuntimeInformation (4.3.0) - framework: net45, net451, net46, portable45-net45+win8+wpa81, portable46-net451+win81+wpa81
-      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: dnxcore50
-      runtime.native.System (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Reflection (>= 4.3.0) - framework: dnxcore50
-      System.Reflection.Extensions (>= 4.3.0) - framework: dnxcore50
-      System.Resources.ResourceManager (>= 4.3.0) - framework: dnxcore50
-      System.Runtime (>= 4.3.0) - framework: dnxcore50
-      System.Runtime.InteropServices (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Threading (>= 4.3.0) - framework: dnxcore50
-    System.Runtime.InteropServices.WindowsRuntime (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Runtime.Numerics (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Security.Cryptography.Algorithms (4.3.0) - framework: net46
-      System.Security.Cryptography.Primitives (>= 4.3.0) - framework: >= net46, dnxcore50
-    System.Security.Cryptography.Encoding (4.3.0) - framework: net46
-    System.Security.Cryptography.Primitives (4.3.0) - framework: net46
-    System.Security.Cryptography.X509Certificates (4.3.0) - framework: net46
-      System.Security.Cryptography.Algorithms (>= 4.3.0) - framework: >= net46, dnxcore50
-      System.Security.Cryptography.Encoding (>= 4.3.0) - framework: >= net46, dnxcore50
-    System.Text.Encoding (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Text.Encoding.Extensions (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Text.RegularExpressions (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Threading (4.3.0)
-    System.Threading.Tasks (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Threading.Thread (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full, net45, net451, net452, net453
-    System.Threading.ThreadPool (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime.Handles (>= 4.3.0) - framework: net10, net11, net20, net35, net40, net40-full, net45, net451, net452, net453
-    System.Threading.Timer (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
-    System.Xml.ReaderWriter (4.3.0) - framework: net46
-    System.Xml.XDocument (4.3.0) - framework: net10, net11, net20, net35, net40, net40-full
+    System.Runtime.InteropServices.RuntimeInformation (4.3.0)
 
 GROUP Build
 CONTENT: NONE
@@ -278,7 +117,7 @@ NUGET
       FSharp.Core
       FSharp.Core (>= 4.0.1.7-alpha)
       NETStandard.Library (>= 1.6.0)
-    FAKE (4.17.1) - content: none
+    FAKE (4.52.0) - content: none
     FSharp.Core (4.2.3) - content: none
       System.Collections (>= 4.0.11) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Console (>= 4.0.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
@@ -303,22 +142,40 @@ NUGET
       System.Threading.Thread (>= 4.0.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Threading.ThreadPool (>= 4.0.10) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Threading.Timer (>= 4.0.1) - framework: net10, net11, net20, net30, net35, net40, net40-full
-    Microsoft.CSharp (4.4.0) - content: none, framework: net10, net11
     Microsoft.NETCore.Platforms (2.0.0) - content: none
-    Microsoft.NETCore.Targets (2.0.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    Mono.Cecil (0.9.5.4) - content: none
+    Microsoft.NETCore.Targets (2.0.0) - content: none
+    Microsoft.Win32.Primitives (4.3.0) - content: none, framework: net46
+    Mono.Cecil (0.10.0-beta6) - content: none
+      System.Collections (>= 4.0.11) - framework: net10, net11, net20, net30
+      System.IO.FileSystem (>= 4.0.1) - framework: net10, net11, net20, net30
+      System.IO.FileSystem.Primitives (>= 4.0.1) - framework: net10, net11, net20, net30
+      System.Reflection (>= 4.1.0) - framework: net10, net11, net20, net30
+      System.Runtime.Extensions (>= 4.1.0) - framework: net10, net11, net20, net30
+      System.Security.Cryptography.Algorithms (>= 4.2.0) - framework: net10, net11, net20, net30
+      System.Security.Cryptography.Csp (>= 4.0.0) - framework: net10, net11, net20, net30
+      System.Threading (>= 4.0.11) - framework: net10, net11, net20, net30
     NETStandard.Library (2.0.0) - content: none
       Microsoft.NETCore.Platforms (>= 1.1.0)
+      Microsoft.Win32.Primitives (>= 4.3.0) - framework: net46
+      System.AppContext (>= 4.3.0) - framework: net46
       System.Collections (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Collections.Concurrent (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Console (>= 4.3.0) - framework: net46
       System.Diagnostics.Debug (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Diagnostics.Tools (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Diagnostics.Tracing (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Globalization (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Globalization.Calendars (>= 4.3.0) - framework: net46
       System.IO (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.IO.Compression (>= 4.3.0) - framework: net46
+      System.IO.Compression.ZipFile (>= 4.3.0) - framework: net46
+      System.IO.FileSystem (>= 4.3.0) - framework: net46
+      System.IO.FileSystem.Primitives (>= 4.3.0) - framework: net46
       System.Linq (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Linq.Expressions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Net.Http (>= 4.3.2) - framework: net46
       System.Net.Primitives (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Net.Sockets (>= 4.3.0) - framework: net46
       System.ObjectModel (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Reflection.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
@@ -328,84 +185,84 @@ NUGET
       System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Runtime.Handles (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Runtime.InteropServices (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Runtime.InteropServices.RuntimeInformation (>= 4.3.0) - framework: net45, net451, net46, portable45-net45+win8+wpa81, portable46-net451+win81+wpa81, wpv8.1
       System.Runtime.Numerics (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Security.Cryptography.Algorithms (>= 4.3.0) - framework: net46
+      System.Security.Cryptography.Encoding (>= 4.3.0) - framework: net46
+      System.Security.Cryptography.Primitives (>= 4.3.0) - framework: net46
+      System.Security.Cryptography.X509Certificates (>= 4.3.0) - framework: net46
       System.Text.Encoding (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Text.Encoding.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Text.RegularExpressions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Threading (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Threading.Tasks (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Threading.Timer (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Xml.ReaderWriter (>= 4.3.0) - framework: net46
       System.Xml.XDocument (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-    Newtonsoft.Json (10.0.3) - content: none
-      Microsoft.CSharp (>= 4.3.0) - framework: net10, net11
-      NETStandard.Library (>= 1.6.1) - framework: net10, net11
-      System.ComponentModel.TypeConverter (>= 4.3.0) - framework: net10, net11
-      System.Runtime.Serialization.Formatters (>= 4.3.0) - framework: net10, net11
-      System.Runtime.Serialization.Primitives (>= 4.3.0) - framework: net10, net11
-      System.Xml.XmlDocument (>= 4.3.0) - framework: net10, net11
+    runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.native.System (4.3.0) - content: none
+      Microsoft.NETCore.Platforms (>= 1.1.0)
+      Microsoft.NETCore.Targets (>= 1.1.0)
+    runtime.native.System.Security.Cryptography.Apple (4.3.0) - content: none, framework: net10, net11, net20, net30
+      runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple (>= 4.3.0)
+    runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+      runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+      runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.1)
+    runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple (4.3.0) - content: none, framework: net10, net11, net20, net30
+    runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
+    runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl (4.3.1) - content: none, framework: net10, net11, net20, net30
     SourceLink.Fake (1.1.0) - content: none
+    System.AppContext (4.3.0) - content: none, framework: net46
     System.Collections (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Collections.Concurrent (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Collections.NonGeneric (4.3.0) - content: none, framework: net10, net11
-      System.Diagnostics.Debug (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Globalization (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Threading (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-    System.Collections.Specialized (4.3.0) - content: none, framework: net10, net11
-      System.Collections.NonGeneric (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Globalization (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Globalization.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Threading (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-    System.ComponentModel (4.3.0) - content: none, framework: net10, net11
-    System.ComponentModel.TypeConverter (4.3.0) - content: none, framework: net10, net11
-      System.Collections (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Collections.NonGeneric (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Collections.Specialized (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.ComponentModel (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Globalization (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Linq (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Reflection.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Reflection.Primitives (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Reflection.TypeExtensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      System.Threading (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Console (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      Microsoft.NETCore.Targets (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.IO (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Text.Encoding (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+    System.Console (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full, net46
     System.Diagnostics.Debug (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Diagnostics.Tools (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Diagnostics.Tracing (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Globalization (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Globalization.Extensions (4.3.0) - content: none, framework: net10, net11
-      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Globalization (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime.InteropServices (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+    System.Globalization.Calendars (4.3.0) - content: none, framework: net46
     System.IO (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.IO.Compression (4.3.0) - content: none, framework: net46
+    System.IO.Compression.ZipFile (4.3.0) - content: none, framework: net46
+    System.IO.FileSystem (4.3.0) - content: none, framework: net10, net11, net20, net30, net46
+      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      Microsoft.NETCore.Targets (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.IO (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime.Handles (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Text.Encoding (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Threading.Tasks (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+    System.IO.FileSystem.Primitives (4.3.0) - content: none, framework: net10, net11, net20, net30, net46
+      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
     System.Linq (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Linq.Expressions (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
       System.ObjectModel (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Reflection.Emit (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Linq.Queryable (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.Net.Http (4.3.2) - content: none, framework: net46
+      System.Security.Cryptography.X509Certificates (>= 4.3.0) - framework: >= net46, dnxcore50
     System.Net.Primitives (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Net.Requests (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
       Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.Net.Sockets (4.3.0) - content: none, framework: net46
     System.ObjectModel (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Reflection (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.Reflection (4.3.0) - content: none
     System.Reflection.Emit (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
       System.IO (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
@@ -416,28 +273,64 @@ NUGET
       System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Reflection.Primitives (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
       System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Reflection.Extensions (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.Reflection.Extensions (4.3.0) - content: none
     System.Reflection.Primitives (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Reflection.TypeExtensions (4.4.0) - content: none, framework: net10, net11
-    System.Resources.ResourceManager (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Runtime (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.Resources.ResourceManager (4.3.0) - content: none
+    System.Runtime (4.3.0) - content: none
     System.Runtime.Extensions (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Runtime.Handles (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
       Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
       Microsoft.NETCore.Targets (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
       System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-    System.Runtime.InteropServices (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.Runtime.InteropServices (4.3.0) - content: none
+    System.Runtime.InteropServices.RuntimeInformation (4.3.0) - content: none, framework: net45, net451, net46, portable45-net45+win8+wpa81, portable46-net451+win81+wpa81, wpv8.1
+      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: dnxcore50
+      runtime.native.System (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Reflection (>= 4.3.0) - framework: dnxcore50
+      System.Reflection.Extensions (>= 4.3.0) - framework: dnxcore50
+      System.Resources.ResourceManager (>= 4.3.0) - framework: dnxcore50
+      System.Runtime (>= 4.3.0) - framework: dnxcore50
+      System.Runtime.InteropServices (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full
+      System.Threading (>= 4.3.0) - framework: dnxcore50
     System.Runtime.Numerics (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Runtime.Serialization.Formatters (4.3.0) - content: none, framework: net10, net11
+    System.Security.Cryptography.Algorithms (4.3.0) - content: none, framework: net10, net11, net20, net30, net46
+      runtime.native.System.Security.Cryptography.Apple (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
       System.Collections (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime.Numerics (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+    System.Security.Cryptography.Csp (4.3.0) - content: none, framework: net10, net11, net20, net30
+      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.IO (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
       System.Reflection (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
       System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
       System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-    System.Runtime.Serialization.Primitives (4.3.0) - content: none, framework: net10, net11
+      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime.Handles (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime.InteropServices (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Security.Cryptography.Encoding (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Text.Encoding (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Threading (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+    System.Security.Cryptography.Encoding (4.3.0) - content: none, framework: net10, net11, net20, net30, net46
+      Microsoft.NETCore.Platforms (>= 1.1.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      runtime.native.System.Security.Cryptography.OpenSsl (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Collections (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Collections.Concurrent (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Linq (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime.Handles (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Runtime.InteropServices (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Security.Cryptography.Primitives (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+      System.Text.Encoding (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
+    System.Security.Cryptography.Primitives (4.3.0) - content: none, framework: net10, net11, net20, net30, net46
+    System.Security.Cryptography.X509Certificates (4.3.0) - content: none, framework: net46
+      System.Security.Cryptography.Algorithms (>= 4.3.0) - framework: >= net46, dnxcore50
+      System.Security.Cryptography.Encoding (>= 4.3.0) - framework: >= net46, dnxcore50
     System.Text.Encoding (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Text.Encoding.Extensions (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Text.RegularExpressions (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Threading (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
+    System.Threading (4.3.0) - content: none
     System.Threading.Tasks (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Threading.Tasks.Parallel (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
     System.Threading.Thread (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
@@ -446,30 +339,13 @@ NUGET
       System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
       System.Runtime.Handles (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
     System.Threading.Timer (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Xml.ReaderWriter (4.3.0) - content: none, framework: net10, net11
+    System.Xml.ReaderWriter (4.3.0) - content: none, framework: net46
     System.Xml.XDocument (4.3.0) - content: none, framework: net10, net11, net20, net30, net35, net40, net40-full
-    System.Xml.XmlDocument (4.3.0) - content: none, framework: net10, net11
-      System.Collections (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Diagnostics.Debug (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Globalization (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.IO (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Resources.ResourceManager (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Runtime.Extensions (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Text.Encoding (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Threading (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-      System.Xml.ReaderWriter (>= 4.3.0) - framework: net10, net11, net20, net30, net35, net40, net40-full, net45, net451, net452, net453
-  remote: https://vrvis.myget.org/F/aardvark_public
-  specs:
-    Paket.Core.Temp (2.52.16) - content: none
-      Chessie
-      FSharp.Core
-      Newtonsoft.Json
 GITHUB
   remote: vrvis/Aardvark.Fake
   specs:
     FULLPROJECT (eb782182b4f3b4f468ca18a7dc79239912de012a)
-      FAKE (>= 4.17.0 < 4.18.0)
-      Mono.Cecil (>= 0.9.5.4 < 0.9.6.0)
-      Paket.Core.Temp (>= 2.52.10 < 2.53.0)
+      Chessie (>= 0.6.0 < 0.7.0)
+      FAKE (>= 4.52.0 < 4.53.0)
+      Mono.Cecil (>= 0.10.0-beta6 < 0.11.0)
       SourceLink.Fake (>= 1.1.0 < 1.2.0)

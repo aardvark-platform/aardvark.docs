@@ -9,7 +9,7 @@ if errorlevel 1 (
 )
 
 ECHO restoring packages ...
-.paket\paket.exe restore group Build
+.paket\paket.exe restore --group Build
 if errorlevel 1 (
   exit /b %errorlevel%
 )
