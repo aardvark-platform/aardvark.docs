@@ -10,6 +10,8 @@ open Aardvark.SceneGraph
 open Aardvark.Application
 open Aardvark.Application.WinForms
 
+type Episode = { Start : float; Stop : float; GenerateSg : (IMod<float> -> ISg) }
+
 [<EntryPoint>]
 let main argv = 
 
@@ -32,11 +34,48 @@ let main argv =
         ]
     let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
 
-    let ft = FoldingTetrahedron ()
+    let t0 = Mod.init DateTime.Now
+    let speed = Mod.init 0.5
+    let t = Mod.map2 (fun (t0 : DateTime) (t : DateTime) -> (t - t0).TotalSeconds) t0 Mod.time
+    let t = Mod.map2 ( (*) ) t speed
+
+    let foo (a : float) b = 
+        Mod.map(fun x ->
+            match x with
+            | x when x < a -> 0.0
+            | x when x > b -> 1.0
+            | _ -> (x - a) / (b - a)
+        )
+
+    let episodes n = 
+        let phase0 t = (FoldingTriangle t).SceneGraph
+        let episode0 = { Start = 1.0; Stop = 2.0; GenerateSg = phase0 }
+        episode0 ::
+        [
+            for i in 0 .. n do
+                let phase t = (FoldingTetrahedron t).SceneGraph i
+                let episode = { Start = (float)i + 2.0; Stop = (float)i + 3.0; GenerateSg = phase }
+                yield episode
+        ]
+
+    let series t (episodes : seq<Episode>) =
+        let episodes = episodes |> Array.ofSeq
+        let sgs = episodes |> Array.map (fun e -> e.GenerateSg (t |> foo e.Start e.Stop))
+        t |> Mod.map (fun x ->
+                [ 
+                    for i in 0..episodes.Length-1 do
+                        let e = episodes.[i]
+                        if x >= e.Start && x <= e.Stop then
+                            yield sgs.[i]
+                ] 
+                |> Sg.ofList
+            )
+            |> Sg.dynamic
+
+    let test = series t (episodes 4)
 
     let sg =
-        ft.GetSg2 ()
-            |> ft.GetSg3 5
+        test
             |> Sg.effect 
             [
                 DefaultSurfaces.trafo |> toEffect
@@ -57,6 +96,6 @@ let main argv =
 
     // start
     win.RenderTask <- task
-    ft.Animation () |> Async.Start
+    //ft.Animation () |> Async.Start
     win.Run()
     0
