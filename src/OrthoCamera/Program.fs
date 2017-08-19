@@ -7,6 +7,7 @@ open Aardvark.Application
 open Aardvark.Application.WinForms
 open Aardvark.Rendering.NanoVg
 open Aardvark.SceneGraph
+open Aardvark.SceneGraph.SgFSharp.Sg
 
 [<EntryPoint>]
 let main argv =
@@ -20,9 +21,16 @@ let main argv =
     let win = app.CreateSimpleRenderWindow()
     win.Text <- "Ortho Camera (aardvark.docs)"
 
-    let bounds = Box2d(V2d(-10.0, -10.0), V2d(+10.0, +10.0))
+    
+    let initialView = CameraView.lookAt V3d.OOI V3d.OOO V3d.OIO
+    let initialBounds =
+        let a = float win.Size.X / float win.Size.Y
+        Box3d(V3d(-10.0 * a, -10.0, 0.1), V3d(10.0 * a, 10.0, 2.0))
 
-    let controlPan (renderControl : IRenderControl) (frustum : IMod<Frustum>)=
+    let aspectRatio = win.Sizes |> Mod.map (fun size -> float size.X / float size.Y)
+    let bounds = aspectRatio |> Mod.map (fun a -> Box3d(V3d(-10.0 * a, -10.0, 0.1), V3d(10.0 * a, 10.0, 2.0)))
+
+    let controlPan (renderControl : IRenderControl) (frustum : IMod<Frustum>) : IMod<AdaptiveFunc<CameraView>> =
         let down = renderControl.Mouse.IsDown(MouseButtons.Middle)
         let location = renderControl.Mouse.Position |> Mod.map (fun pp -> pp.Position)
 
@@ -32,7 +40,7 @@ let main argv =
             let! frustum = frustum
 
             if d then
-                return location |> Mod.step (fun p delta (cam : CameraView) ->
+                return location |> Mod.step (fun _ delta (cam : CameraView) ->
                     let dx = ((frustum.right - frustum.left) / float targetSizeInPixels.X) * float delta.X
                     let dy = -((frustum.top - frustum.bottom) / float targetSizeInPixels.Y) * float delta.Y
                     let d = cam.Right * dx + cam.Up * dy
@@ -42,21 +50,28 @@ let main argv =
                 return AdaptiveFunc.Identity
         }
 
-    let controlZoom (renderControl : IRenderControl) (frustum : IMod<Frustum>)=
+    let controlZoom (renderControl : IRenderControl) (bounds : Box3d) : IMod<AdaptiveFunc<Box3d>> =
         let down = renderControl.Mouse.IsDown(MouseButtons.Right)
         let location = renderControl.Mouse.Position |> Mod.map (fun pp -> pp.Position)
 
         adaptive {
-            let! targetSizeInPixels = renderControl.Sizes
             let! d = down
-            let! frustum = frustum
-
             if d then
-                return location |> Mod.step (fun p delta (cam : CameraView) ->
-                    let dx = ((frustum.right - frustum.left) / float targetSizeInPixels.X) * float delta.X
-                    let dy = -((frustum.top - frustum.bottom) / float targetSizeInPixels.Y) * float delta.Y
-                    let d = cam.Right * dx + cam.Up * dy
-                    cam.WithLocation(cam.Location - d)
+                let! winSizeInPixels = renderControl.Sizes
+                let winSize = V2d(winSizeInPixels)
+                return location |> Mod.step (fun p d (bb : Box3d) ->
+                    let bb = bounds.XY
+                    let p = bb.Min + V2d(p) / winSize
+                    let d = bb.Size / winSize * V2d(d)
+                    let scale = 1.0 + d.Y
+                    printfn "p    : %A" p
+                    printfn "scale: %f" scale
+                    let min = (bb.Min - p) * scale + p
+                    let max = (bb.Max - p) * scale + p
+                    let result = Box3d(V3d(min, bounds.Min.Z), V3d(max, bounds.Max.Z))
+                    printfn "bounds <= %A" bounds
+                    printfn "bounds => %A" result
+                    result
                 )
             else
                 return AdaptiveFunc.Identity
@@ -65,15 +80,14 @@ let main argv =
     let control (renderControl : IRenderControl) (frustum : IMod<Frustum>) (cam : CameraView) : IMod<CameraView> =
         Mod.integrate cam renderControl.Time [
             controlPan renderControl frustum
-            controlZoom renderControl frustum
+        ]
+
+    let control2 (renderControl : IRenderControl) (bounds : Box3d) : IMod<Box3d> =
+        Mod.integrate bounds renderControl.Time [
+            controlZoom renderControl bounds
         ]
         
-    let ortho = win.Sizes |> Mod.map (fun s ->
-        let a = float s.X / float s.Y;
-        let frustum = Box3d(V3d(bounds.Min.X * a, bounds.Min.Y, 0.1), V3d(bounds.Max.X * a, bounds.Max.Y, 2.0))
-        Frustum.ortho frustum
-        )
-    let initialView = CameraView.lookAt V3d.OOI V3d.OOO V3d.OIO   
+    let ortho = initialBounds |> control2 win |> Mod.map Frustum.ortho   
     let view = initialView |> control win ortho
     
     
@@ -81,12 +95,13 @@ let main argv =
 
     // define scene
     let backgroundColor = Mod.init C4f.White
+
+    let bounds2d = bounds |> Mod.map (fun b -> b.XY)
+    let grid = bounds2d |> Mod.map (fun bb -> Aardvark.Docs.Utils.Geometry.grid bb C4b.Black) |> Sg.dynamic
+    let points = bounds2d |> Mod.map (fun bb -> Aardvark.Docs.Utils.Geometry.points 10000 8 bb) |> Sg.dynamic
     
     let sg =
-        [
-            Aardvark.Docs.Utils.Geometry.grid bounds C4b.Black
-            Aardvark.Docs.Utils.Geometry.points 10000 8 bounds
-        ]
+        [ grid; points ]
         |> Sg.ofSeq
         |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
         |> Sg.projTrafo (ortho |> Mod.map Frustum.orthoTrafo)
