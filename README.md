@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/atfxw731hk4bt4xd?svg=true)](https://ci.appveyor.com/project/stefanmaierhofer/aardvark-docs)
 [![Build Status](https://travis-ci.org/aardvarkplatform/aardvark.docs.svg?branch=master)](https://travis-ci.org/aardvarkplatform/aardvark.docs)
 
 [Gallery](https://github.com/aardvarkplatform/aardvark.docs/wiki/Gallery) | 
