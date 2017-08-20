@@ -7,5 +7,7 @@ before_install:
   - sudo apt-get update -qq > /dev/null
   - sudo apt-get install -qq mono-devel > /dev/null
   - mozroots --import --sync
+  - sudo apt-get install fsharp
+  - sudo apt-get install msbuild
   - sh ./build.sh
 dist: trusty
