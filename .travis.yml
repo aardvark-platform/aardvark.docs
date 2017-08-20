@@ -1,7 +1,6 @@
 language: csharp
 solution: src/aardvark.docs.sln
 before_install:
-before_install:
   # Make sure mono is installed,
   # pipe stdout to dev/null because qq is still too chatty
   - sudo apt-get update -qq > /dev/null
@@ -9,5 +8,6 @@ before_install:
   - mozroots --import --sync
   - sudo apt-get install fsharp
   - sudo apt-get install msbuild
+script:
   - sh ./build.sh
 dist: trusty
