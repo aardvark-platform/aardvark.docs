@@ -9,3 +9,4 @@ before_install:
   - mozroots --import --sync
   - sudo apt-get install msbuild
   - sh ./build.sh
+dist: trusty
