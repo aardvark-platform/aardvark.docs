@@ -21,7 +21,6 @@ let main argv =
     let win = app.CreateSimpleRenderWindow()
     win.Text <- "Ortho Camera (aardvark.docs)"
 
-    
     let initialView = CameraView.lookAt V3d.OOI V3d.OOO V3d.OIO
     let initialBounds =
         let a = float win.Size.X / float win.Size.Y
@@ -113,7 +112,7 @@ let main argv =
             app.Runtime.CompileRender(win.FramebufferSignature, sg)
         ]
         |> RenderTask.ofList
-        |> DefaultOverlays.withStatistics
+        //|> DefaultOverlays.withStatistics
 
     // start
     win.RenderTask <- task

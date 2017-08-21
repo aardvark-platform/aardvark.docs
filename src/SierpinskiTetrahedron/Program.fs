@@ -92,7 +92,7 @@ let main argv =
                 app.Runtime.CompileClear(win.FramebufferSignature, Mod.constant C4f.Gray70)
                 app.Runtime.CompileRender(win.FramebufferSignature, sg)
             ]
-        |> DefaultOverlays.withStatistics
+        //|> DefaultOverlays.withStatistics
 
     // start
     win.RenderTask <- task

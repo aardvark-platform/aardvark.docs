@@ -56,7 +56,7 @@ let main argv =
             app.Runtime.CompileRender(win.FramebufferSignature, sg)
         ]
         |> RenderTask.ofList
-        |> DefaultOverlays.withStatistics
+        //|> DefaultOverlays.withStatistics
 
     // start
     win.RenderTask <- task

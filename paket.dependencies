@@ -13,7 +13,6 @@ nuget Aardvark.Application.WinForms.GL     ~> 3.3.0
 nuget Aardvark.SceneGraph                  ~> 3.3.0
 nuget Aardvark.Rendering.NanoVg            ~> 3.3.0
 
-
 group Build
 content: none
 framework:net45
