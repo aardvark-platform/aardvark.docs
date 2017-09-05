@@ -130,16 +130,12 @@ CONTENT: NONE
 RESTRICTION: == net45
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    Chessie (0.6) - content: none
-      FSharp.Core
-    FAKE (4.52) - content: none
-    FSharp.Core (4.2.3) - content: none
+    FAKE (4.63) - content: none
     Mono.Cecil (0.10.0-beta6) - content: none
     SourceLink.Fake (1.1) - content: none
 GITHUB
-  remote: vrvis/Aardvark.Fake
-    FULLPROJECT (8f81d75291e08657ef1b2bea451be9478e79348a)
-      Chessie (>= 0.6 < 0.7)
-      FAKE (>= 4.52 < 4.53)
+  remote: aardvark-platform/Aardvark.Fake
+    FULLPROJECT (850598ad8e27cef9d14cb0d4b88ba542c02a8a0d)
+      FAKE (>= 4.63 < 4.64)
       Mono.Cecil (>= 0.10.0-beta6 < 0.11)
       SourceLink.Fake (>= 1.1 < 1.2)
