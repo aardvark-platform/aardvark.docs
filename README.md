@@ -26,9 +26,7 @@ Aardvark is also used in industrial-scale real-world systems. It routinely handl
 
 [fshade](https://github.com/krauthaufen/FShade) (language-integrated shaders)
 
-[fablish](https://github.com/vrvis/fablish) (elm-style application development [\*](http://elm-lang.org/))
-
-[aardvark.media](https://github.com/vrvis/aardvark.media) (extensions such as cef wrappers, video players etc)
+[aardvark.media](https://github.com/vrvis/fablish) (elm-style application development [\*](http://elm-lang.org/))
 
 # Publications
 
