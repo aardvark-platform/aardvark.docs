@@ -3,7 +3,8 @@
 
 [Gallery](https://github.com/aardvarkplatform/aardvark.docs/wiki/Gallery) | 
 [Quickstart](https://github.com/aardvarkplatform/aardvark.docs/wiki/Quickstart-Windows) | 
-[Wiki](https://github.com/aardvarkplatform/aardvark.docs/wiki)
+[Wiki](https://github.com/aardvarkplatform/aardvark.docs/wiki) | 
+[Status](https://github.com/aardvarkplatform/aardvark.docs/wiki/Status)
 
 # Introduction
 **Aardvark is an open-source platform for visual computing, real-time graphics and visualization.**
