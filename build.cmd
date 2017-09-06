@@ -12,10 +12,5 @@ if errorlevel 1 (
   exit /b %errorlevel%
 )
 
-.paket\paket.exe install
-if errorlevel 1 (
-  exit /b %errorlevel%
-)
-
 SET FSI_PATH=packages\build\FAKE\tools\Fake.exe
 "%FSI_PATH%" "build.fsx" Dummy --fsiargs build.fsx --shadowcopyreferences+ %* 
