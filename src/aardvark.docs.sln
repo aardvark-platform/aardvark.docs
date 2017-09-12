@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.25914.0
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Utils", "Utils\Utils.fsproj", "{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}"
 EndProject
@@ -15,6 +15,8 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OrthoCamera", "OrthoCamera\OrthoCamera.fsproj", "{0EE6C8A0-62F5-412D-9107-6166919DF7C7}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SierpinskiTetrahedron", "SierpinskiTetrahedron\SierpinskiTetrahedron.fsproj", "{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ModelUpdateView", "ModelUpdateView\ModelUpdateView.fsproj", "{33C4A7C3-7DBE-43A8-B204-20627A1083B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,8 +52,15 @@ Global
 		{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33C4A7C3-7DBE-43A8-B204-20627A1083B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33C4A7C3-7DBE-43A8-B204-20627A1083B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33C4A7C3-7DBE-43A8-B204-20627A1083B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33C4A7C3-7DBE-43A8-B204-20627A1083B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A534AE71-A288-4825-A816-A6991B8EABE6}
 	EndGlobalSection
 EndGlobal
