@@ -20,4 +20,4 @@ framework: net45
 content: none
 source https://api.nuget.org/v3/index.json
 source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
-github aardvark-platform/Aardvark.Fake:standalone
+github aardvark-platform/aardvark.fake:standalone
