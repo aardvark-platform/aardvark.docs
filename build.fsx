@@ -42,4 +42,9 @@ Target "Run_SierpinskiTetrahedron" (fun() ->
 )
 "Default" ==> "Run_SierpinskiTetrahedron"
 
+Target "Run_ModelUpdateView" (fun() ->
+    tracefn "exec: %d" (Shell.Exec "bin/Release/ModelUpdateView.exe")
+)
+"Default" ==> "Run_ModelUpdateView"
+
 entry()
