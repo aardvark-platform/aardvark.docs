@@ -1,15 +1,15 @@
-﻿module Step1
+﻿module NumericControl_Empty
 
 open Aardvark.Base             // math stuff such as V3d, Trafo3d
 open Aardvark.UI            // the base infrastructure for elm style aardvark applications
 
-open Step1Model
+open NumericControl
 
 type Action = Increment | Decrement    
 
-let update (m : Model) (a : Action) = m
+let update (m : NumericModel) (a : Action) = m
 
-let view (m : MModel) =
+let view (m : MNumericModel) =
     require Html.semui ( 
         body [] (        
             [

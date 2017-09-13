@@ -66,6 +66,8 @@
     <Compile Include="Step1Model.fs" />
     <Compile Include="Step1App.fs" />
     <Compile Include="Step1Done.fs" />
+    <Compile Include="Step2Model.fs" />
+    <Compile Include="Step2App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,7 @@ let startMedia argv =
     let runtime = app.Runtime
     use form = new Form(Width = 1024, Height = 768)
 
-    let app = Step1Done.app
+    let app = NumericControl.app
 
     let instance = 
         app |> App.start
