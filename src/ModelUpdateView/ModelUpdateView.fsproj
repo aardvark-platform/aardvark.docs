@@ -63,11 +63,11 @@
   -->
   <ItemGroup>
     <None Include="paket.references" />
-    <Compile Include="Step1Model.fs" />
-    <Compile Include="Step1App.fs" />
-    <Compile Include="Step1Done.fs" />
-    <Compile Include="Step2Model.fs" />
-    <Compile Include="Step2App.fs" />
+    <Compile Include="NumericControlModel.fs" />
+    <Compile Include="NumericControl_Empty.fs" />
+    <Compile Include="NumericControl.fs" />
+    <Compile Include="VectorControlModel.fs" />
+    <Compile Include="VectorControl_empty.fs" />
     <Compile Include="VectorControl.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

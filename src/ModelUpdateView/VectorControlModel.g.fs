@@ -1,41 +1,41 @@
-namespace VectorControl
+namespace VectorControlNs
 
 open System
 open Aardvark.Base
 open Aardvark.Base.Incremental
-open VectorControl
+open VectorControlNs
 
 [<AutoOpen>]
 module Mutable =
 
     
     
-    type MVectorModel(__initial : VectorControl.VectorModel) =
+    type MVectorModel(__initial : VectorControlNs.VectorModel) =
         inherit obj()
         let mutable __current = __initial
-        let _x = NumericControl.Mutable.MNumericModel.Create(__initial.x)
-        let _y = NumericControl.Mutable.MNumericModel.Create(__initial.y)
-        let _z = NumericControl.Mutable.MNumericModel.Create(__initial.z)
+        let _x = NumericControlNs.Mutable.MNumericModel.Create(__initial.x)
+        let _y = NumericControlNs.Mutable.MNumericModel.Create(__initial.y)
+        let _z = NumericControlNs.Mutable.MNumericModel.Create(__initial.z)
         
         member x.x = _x
         member x.y = _y
         member x.z = _z
         
-        member x.Update(v : VectorControl.VectorModel) =
+        member x.Update(v : VectorControlNs.VectorModel) =
             if not (System.Object.ReferenceEquals(__current, v)) then
                 __current <- v
                 
-                NumericControl.Mutable.MNumericModel.Update(_x, v.x)
-                NumericControl.Mutable.MNumericModel.Update(_y, v.y)
-                NumericControl.Mutable.MNumericModel.Update(_z, v.z)
+                NumericControlNs.Mutable.MNumericModel.Update(_x, v.x)
+                NumericControlNs.Mutable.MNumericModel.Update(_y, v.y)
+                NumericControlNs.Mutable.MNumericModel.Update(_z, v.z)
                 
         
-        static member Create(__initial : VectorControl.VectorModel) : MVectorModel = MVectorModel(__initial)
-        static member Update(m : MVectorModel, v : VectorControl.VectorModel) = m.Update(v)
+        static member Create(__initial : VectorControlNs.VectorModel) : MVectorModel = MVectorModel(__initial)
+        static member Update(m : MVectorModel, v : VectorControlNs.VectorModel) = m.Update(v)
         
         override x.ToString() = __current.ToString()
         member x.AsString = sprintf "%A" __current
-        interface IUpdatable<VectorControl.VectorModel> with
+        interface IUpdatable<VectorControlNs.VectorModel> with
             member x.Update v = x.Update v
     
     
@@ -45,19 +45,19 @@ module Mutable =
         [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
         module Lens =
             let x =
-                { new Lens<VectorControl.VectorModel, NumericControl.NumericModel>() with
+                { new Lens<VectorControlNs.VectorModel, NumericControlNs.NumericModel>() with
                     override x.Get(r) = r.x
                     override x.Set(r,v) = { r with x = v }
                     override x.Update(r,f) = { r with x = f r.x }
                 }
             let y =
-                { new Lens<VectorControl.VectorModel, NumericControl.NumericModel>() with
+                { new Lens<VectorControlNs.VectorModel, NumericControlNs.NumericModel>() with
                     override x.Get(r) = r.y
                     override x.Set(r,v) = { r with y = v }
                     override x.Update(r,f) = { r with y = f r.y }
                 }
             let z =
-                { new Lens<VectorControl.VectorModel, NumericControl.NumericModel>() with
+                { new Lens<VectorControlNs.VectorModel, NumericControlNs.NumericModel>() with
                     override x.Get(r) = r.z
                     override x.Set(r,v) = { r with z = v }
                     override x.Update(r,f) = { r with z = f r.z }

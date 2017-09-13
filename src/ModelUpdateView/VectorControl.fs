@@ -3,7 +3,7 @@
 open Aardvark.Base             // math stuff such as V3d, Trafo3d
 open Aardvark.UI            // the base infrastructure for elm style aardvark applications
 
-open VectorControl
+open VectorControlNs
 
 type Action = 
     | SetX of NumericControl.Action
@@ -21,9 +21,11 @@ let view (m : MVectorModel) =
     require Html.semui ( 
         body [] (        
             [
-                div [] [text "numeric control x"]
-                div [] [text "numeric control y"]
-                div [] [text "numeric control z"]
+                table [] [
+                    tr[][NumericControl.view' m.x |> UI.map SetX]
+                    tr[][NumericControl.view' m.y |> UI.map SetY]                    
+                    tr[][NumericControl.view' m.z |> UI.map SetZ]                    
+                ]
             ]
         )
     )
