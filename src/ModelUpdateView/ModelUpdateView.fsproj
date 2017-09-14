@@ -70,6 +70,7 @@
     <Compile Include="VectorControl_empty.fs" />
     <Compile Include="VectorControl.fs" />
     <Compile Include="SimpleScaleModel.fs" />
+    <Compile Include="SimpleScaleApp_empty.fs" />
     <Compile Include="SimpleScaleApp.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

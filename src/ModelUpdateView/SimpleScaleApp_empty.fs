@@ -1,4 +1,4 @@
-﻿module SimpleScaleApp_empty
+﻿module SimpleScaleApp
 
 open SimpleScaleModel
 open Aardvark.UI
@@ -16,7 +16,7 @@ type Action =
 let update (model : Model) (act : Action) : Model =
         match act with
         | CameraMessage a   -> { model with camera = ArcBallController.update model.camera a}
-        | ChangeScale a     -> model //update scale via vector control
+        | ChangeScale a     -> { model with scale = VectorControl.update model.scale a }
 
 let view (model : MModel) =
     
@@ -29,19 +29,39 @@ let view (model : MModel) =
                     attribute "style" "width:65%; height: 100%; float: left;"
                 ])
                 (
-                    //make sg list
+                    let boxGeometry = Box3d(-V3d.III, V3d.III)
+                    let box = Mod.constant (boxGeometry)   
 
-                    []  |> Sg.ofList
+                    let localScaleTrafo = 
+                        adaptive {
+                            let! x = model.scale.x.value
+                            let! y = model.scale.y.value
+                            let! z = model.scale.z.value
+                            return Trafo3d.Scale(V3d(x,y,z))
+                        }
+
+                    let b = 
+                        Sg.box (Mod.constant C4b.Blue) box
+
+                    let s = 
+                        Sg.sphere 5 (Mod.constant C4b.Red) (Mod.constant 2.0)
+                            |> Sg.trafo localScaleTrafo
+
+                    [b; s]  
+                        |> Sg.ofList
                         |> Sg.shader {
                                 do! DefaultSurfaces.trafo
                                 do! DefaultSurfaces.vertexColor
                                 do! DefaultSurfaces.simpleLighting
-                            }                        
+                            }
+                        |> Sg.fillMode (Mod.constant FillMode.Fill)
+                        |> Sg.cullMode (Mod.constant CullMode.None)
+                        |> Sg.noEvents
                 )
 
             div [style "width:35%; height: 100%; float:right; background-color: #1B1C1E"] [
                 div [] [                      
-                    text "add vector control to scale sgs"
+                    yield VectorControl.view model.scale |> UI.map ChangeScale
                 ]
             ]
         ]
