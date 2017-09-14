@@ -10,6 +10,7 @@ type NumericModel = {
     value : int
 }
 
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module NumericalModel =
     let initial = { value = 0 }
 

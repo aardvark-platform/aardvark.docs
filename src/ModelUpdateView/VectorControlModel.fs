@@ -13,6 +13,7 @@ type VectorModel = {
     z : NumericModel
 }
 
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module VectorModel = 
     let initial = { x = NumericalModel.initial; y = NumericalModel.initial; z = NumericalModel.initial }
 
