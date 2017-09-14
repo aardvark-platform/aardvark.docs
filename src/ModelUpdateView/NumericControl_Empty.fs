@@ -22,7 +22,7 @@ let app =
     {
         unpersist = Unpersist.instance
         threads = fun _ -> ThreadPool.empty
-        initial = { value = 0 }
+        initial = { value = 0.0 }
         update = update
         view = view
     }

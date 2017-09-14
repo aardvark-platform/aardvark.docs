@@ -16,13 +16,25 @@ let update (m : VectorModel) (a : Action) =
     match a with
         | _ -> m
 
+// uses a table to show the individual numeric controls
 let view (m : MVectorModel) =
     require Html.semui ( 
         body [] (        
             [
-                div [] [text "numeric control x"]
-                div [] [text "numeric control y"]
-                div [] [text "numeric control z"]
+                table [] [
+                    tr[][
+                        td[][text "X:"]
+                        td[][]
+                    ]
+                    tr[][
+                        td[][text "Y:"]
+                        td[][]
+                    ]
+                    tr[][
+                        td[][text "Z:"]
+                        td[][]
+                    ]
+                ]
             ]
         )
     )

@@ -7,9 +7,9 @@ open Aardvark.UI.Primitives    // for primitives such as camera controller state
 
 [<DomainType>] // records can be marked as domaintypes
 type NumericModel = { 
-    value : int
+    value : float
 }
 
-module NumericalModel =
-    let initial = { value = 0 }
+module NumericModel =
+    let initial = { value = 1.0 }
 

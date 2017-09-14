@@ -14,6 +14,6 @@ type VectorModel = {
 }
 
 module VectorModel = 
-    let initial = { x = NumericalModel.initial; y = NumericalModel.initial; z = NumericalModel.initial }
+    let initial = { x = NumericModel.initial; y = NumericModel.initial; z = NumericModel.initial }
 
 

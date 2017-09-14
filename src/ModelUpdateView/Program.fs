@@ -34,6 +34,7 @@ let startMedia argv =
     ctrl.Dock <- DockStyle.Fill
     form.Controls.Add ctrl
     ctrl.StartUrl <- "http://localhost:4321/"
+    ctrl.ShowDevTools()
 
     Application.Run form
     System.Environment.Exit 0
