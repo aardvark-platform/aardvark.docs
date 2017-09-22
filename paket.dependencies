@@ -4,25 +4,24 @@ source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
 
 nuget FSharp.Core ~> 4.0.0
 
-nuget Aardvark.Base                        ~> 3.0.35
-nuget Aardvark.Base.Essentials             ~> 3.0.35
-nuget Aardvark.Base.FSharp                 ~> 3.0.35
-nuget Aardvark.Base.Incremental            ~> 3.0.35
+nuget Aardvark.Base                        ~> 3.0.37
+nuget Aardvark.Base.Essentials             ~> 3.0.37
+nuget Aardvark.Base.FSharp                 ~> 3.0.37
+nuget Aardvark.Base.Incremental            ~> 3.0.37
 
-nuget Aardvark.Application                 ~> 3.3.6
-nuget Aardvark.Application.WinForms.GL     ~> 3.3.6
-nuget Aardvark.Base.Rendering              ~> 3.3.6
-nuget Aardvark.Rendering.NanoVg            ~> 3.3.6
-nuget Aardvark.SceneGraph                  ~> 3.3.6
-nuget Aardvark.SceneGraph.IO               ~> 3.3.6
+nuget Aardvark.Cef                         ~> 3.3.36
+nuget Aardvark.Cef.WinForms                ~> 3.3.36
+nuget Aardvark.Service                     ~> 3.3.36
+nuget Aardvark.UI                          ~> 3.3.36             
+nuget Aardvark.UI.Primitives               ~> 3.3.36
 
-nuget Aardvark.Compiler.DomainTypes         ~> 0.2.6
-nuget Aardvark.Compiler.DomainTypes.MSBuild ~> 0.2.6
-nuget Aardvark.UI            ~> 3.3.33             
-nuget Aardvark.UI.Primitives ~> 3.3.33
-nuget Aardvark.Service       ~> 3.3.33
-nuget Aardvark.Cef.WinForms  ~> 3.3.33
-nuget Aardvark.Cef           ~> 3.3.33
+nuget Aardvark.Application                 ~> 3.3.8
+nuget Aardvark.Application.WinForms.GL     ~> 3.3.8
+nuget Aardvark.Base.Rendering              ~> 3.3.8
+nuget Aardvark.Rendering.NanoVg            ~> 3.3.8
+nuget Aardvark.SceneGraph                  ~> 3.3.8
+nuget Aardvark.SceneGraph.IO               ~> 3.3.8
+
 
 group Build
 framework: net45
