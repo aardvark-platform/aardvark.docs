@@ -71,6 +71,9 @@
     <Compile Include="VectorControl.fs" />
     <Compile Include="SimpleScaleModel.fs" />
     <Compile Include="SimpleScaleApp.fs" />
+    <Compile Include="BoxSelectionModel.fs" />
+    <Compile Include="BoxSelectionDemo_Empty.fs" />
+    <Compile Include="BoxSelectionDemo_1.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

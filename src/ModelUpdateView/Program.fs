@@ -20,7 +20,7 @@ let startMedia argv =
     let runtime = app.Runtime
     use form = new Form(Width = 1024, Height = 768)
 
-    let app = SimpleScaleApp.app
+    let app = BoxSelectionDemo.BoxSelectionDemo_1.app
 
     let instance = 
         app |> App.start
