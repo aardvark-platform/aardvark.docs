@@ -70,14 +70,12 @@ module Mutable =
         let _camera = Aardvark.UI.Primitives.Mutable.MCameraControllerState.Create(__initial.camera)
         let _boxes = MList.Create(__initial.boxes, (fun v -> MVisibleBox.Create(v)), (fun (m,v) -> MVisibleBox.Update(m, v)), (fun v -> v))
         let _boxesSet = MSet.Create((fun (v : BoxSelectionModel.VisibleBox) -> v.id :> obj), __initial.boxesSet, (fun v -> MVisibleBox.Create(v)), (fun (m,v) -> MVisibleBox.Update(m, v)), (fun v -> v))
-        let _boxesMap = MMap.Create(__initial.boxesMap, (fun v -> MVisibleBox.Create(v)), (fun (m,v) -> MVisibleBox.Update(m, v)), (fun v -> v))
         let _boxHovered = MOption.Create(__initial.boxHovered)
         let _selectedBoxes = MSet.Create(__initial.selectedBoxes)
         
         member x.camera = _camera
         member x.boxes = _boxes :> alist<_>
         member x.boxesSet = _boxesSet :> aset<_>
-        member x.boxesMap = _boxesMap :> amap<_,_>
         member x.boxHovered = _boxHovered :> IMod<_>
         member x.selectedBoxes = _selectedBoxes :> aset<_>
         
@@ -88,7 +86,6 @@ module Mutable =
                 Aardvark.UI.Primitives.Mutable.MCameraControllerState.Update(_camera, v.camera)
                 MList.Update(_boxes, v.boxes)
                 MSet.Update(_boxesSet, v.boxesSet)
-                MMap.Update(_boxesMap, v.boxesMap)
                 MOption.Update(_boxHovered, v.boxHovered)
                 MSet.Update(_selectedBoxes, v.selectedBoxes)
                 
@@ -124,12 +121,6 @@ module Mutable =
                     override x.Get(r) = r.boxesSet
                     override x.Set(r,v) = { r with boxesSet = v }
                     override x.Update(r,f) = { r with boxesSet = f r.boxesSet }
-                }
-            let boxesMap =
-                { new Lens<BoxSelectionModel.BoxSelectionDemoModel, Aardvark.Base.hmap<Microsoft.FSharp.Core.string,BoxSelectionModel.VisibleBox>>() with
-                    override x.Get(r) = r.boxesMap
-                    override x.Set(r,v) = { r with boxesMap = v }
-                    override x.Update(r,f) = { r with boxesMap = f r.boxesMap }
                 }
             let boxHovered =
                 { new Lens<BoxSelectionModel.BoxSelectionDemoModel, Microsoft.FSharp.Core.option<Microsoft.FSharp.Core.string>>() with

@@ -75,6 +75,9 @@
     <Compile Include="BoxSelectionModel.fs" />
     <Compile Include="BoxSelectionDemo_Empty.fs" />
     <Compile Include="BoxSelectionDemo_1.fs" />
+    <Compile Include="BoxSelectionDemo_2Utils.fs" />
+    <Compile Include="BoxSelectionDemo_2.fs" />
+    <Compile Include="BoxSelectionDemo_Finished.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

@@ -19,8 +19,7 @@ type BoxSelectionDemoModel = {
     //rendering : RenderingParameters
 
     boxes : plist<VisibleBox>
-    boxesSet : hset<VisibleBox>
-    boxesMap : hmap<string,VisibleBox>
+    boxesSet : hset<VisibleBox>    
 
     boxHovered : option<string>
     selectedBoxes : hset<string>

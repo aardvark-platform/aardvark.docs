@@ -81,7 +81,6 @@ module BoxSelectionDemo_Empty =
             boxes           = plist.Empty // Primitives.mkBoxes 3 |> List.mapi (fun i k -> Primitives.mkVisibleBox Primitives.colors.[i % 5] k) |> PList.ofList
             selectedBoxes   = HSet.empty         
             boxesSet        = HSet.empty
-            boxesMap        = HMap.empty
         }
 
     let app : App<BoxSelectionDemoModel,MBoxSelectionDemoModel,Action> =

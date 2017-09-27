@@ -9,7 +9,7 @@ open Aardvark.Base.Incremental
 open Aardvark.Base
 open Aardvark.SceneGraph.``Sg Picking Extensions``
 
-module BoxSelectionDemo_1 =
+module BoxSelectionDemo_2 =
 
     let mkVisibleBox (color : C4b) (box : Box3d) : VisibleBox = 
         {
@@ -72,35 +72,42 @@ module BoxSelectionDemo_1 =
                                 | Some k -> if k = "box" then C4b.Blue else C4b.Gray
                                 | None -> C4b.Gray)
 
-        //require (Html.semui) (
-        div [clazz "ui"; style "background: #1B1C1E"] [
-            CameraController.controlledControl model.camera CameraMessage frustum
-                (AttributeMap.ofList [
-                    attribute "style" "width:65%; height: 100%; float: left;"
-                ])
-                (
-                    Sg.box color (Mod.constant Box3d.Unit)
-                        |> Sg.shader {
-                            do! DefaultSurfaces.trafo
-                            do! DefaultSurfaces.vertexColor
-                            do! DefaultSurfaces.simpleLighting
-                            }                
-                        |> Sg.requirePicking
-                        |> Sg.noEvents
-                        |> Sg.withEvents [
-                            Sg.onClick (fun _  -> Select ("box"))
-                            Sg.onEnter (fun _  -> HoverIn ("box"))
-                            Sg.onLeave (fun () -> HoverOut)
-                        ]
-                )
-        ]
-        //)
+        require (Html.semui) (
+            div [clazz "ui"; style "background: #1B1C1E"] [
+                CameraController.controlledControl model.camera CameraMessage frustum
+                    (AttributeMap.ofList [
+                        attribute "style" "width:65%; height: 100%; float: left;"
+                    ])
+                    (
+                        Sg.box color (Mod.constant Box3d.Unit)
+                            |> Sg.shader {
+                                do! DefaultSurfaces.trafo
+                                do! DefaultSurfaces.vertexColor
+                                do! DefaultSurfaces.simpleLighting
+                                }                
+                            |> Sg.requirePicking
+                            |> Sg.noEvents
+                            |> Sg.withEvents [
+                                Sg.onClick (fun _  -> Select ("box"))
+                                Sg.onEnter (fun _  -> HoverIn ("box"))
+                                Sg.onLeave (fun () -> HoverOut)
+                            ]
+                    )
+                div [style "width:35%; height: 100%; float:right"] [
+                    div [clazz "ui buttons"] [
+                        button [clazz "ui button"; onMouseClick (fun _ -> AddBox)] [text "Add Box"]
+                        button [clazz "ui button"; onMouseClick (fun _ -> RemoveBox)] [text "Remove Box"]
+                        button [clazz "ui button"; onMouseClick (fun _ -> ClearSelection)] [text "Clear Selection"]
+                    ]
+                ]
+            ]
+        )
 
     let initial =
         {
             camera          = CameraController.initial
             boxHovered      = None
-            boxes           = plist.Empty // Primitives.mkBoxes 3 |> List.mapi (fun i k -> Primitives.mkVisibleBox Primitives.colors.[i % 5] k) |> PList.ofList
+            boxes           = Primitives.mkBoxes 3 |> List.mapi (fun i k -> Primitives.mkVisibleBox Primitives.colors.[i % 5] k) |> PList.ofList
             selectedBoxes   = HSet.empty         
             boxesSet        = HSet.empty            
         }
