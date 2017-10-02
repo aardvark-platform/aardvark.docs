@@ -3,7 +3,6 @@ open System.Diagnostics
 open Aardvark.Base
 open Aardvark.Base.Rendering
 open Aardvark.Base.Incremental
-open Aardvark.Rendering.NanoVg
 open Aardvark.SceneGraph
 open Aardvark.Application
 open Aardvark.Application.WinForms
