@@ -78,6 +78,8 @@
     <Compile Include="BoxSelectionDemo_2Utils.fs" />
     <Compile Include="BoxSelectionDemo_2.fs" />
     <Compile Include="BoxSelectionDemo_Finished.fs" />
+    <Compile Include="BoxSelection2Model.fs" />
+    <Compile Include="BoxSelection2.fs" />
     <Compile Include="LensesModel.fs" />
     <Compile Include="Lenses.fs" />
     <Compile Include="Program.fs" />

@@ -20,6 +20,12 @@ type A = {
   b : B
 }
 
+module A =
+    let initial = { 
+        b = { 
+            c = { 
+                value = "initial" }}}
+
 
 
 
