@@ -10,6 +10,7 @@ open Aardvark.Base
 open Aardvark.SceneGraph.``Sg Picking Extensions``
 
 module Primitives =
+    open Boxes
     
     let hoverColor = C4b.Blue
     let selectionColor = C4b.Red

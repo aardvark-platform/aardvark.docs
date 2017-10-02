@@ -10,6 +10,7 @@ open Aardvark.Base
 open Aardvark.SceneGraph.``Sg Picking Extensions``
 
 module BoxSelectionDemo_2 =
+    open Boxes
 
     let mkVisibleBox (color : C4b) (box : Box3d) : VisibleBox = 
         {

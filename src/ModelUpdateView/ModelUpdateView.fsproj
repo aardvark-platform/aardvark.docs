@@ -72,6 +72,7 @@
     <Compile Include="SimpleScaleModel.fs" />
     <Compile Include="SimpleScaleApp_empty.fs" />
     <Compile Include="SimpleScaleApp.fs" />
+    <Compile Include="BoxesModel.fs" />
     <Compile Include="BoxSelectionModel.fs" />
     <Compile Include="BoxSelectionDemo_Empty.fs" />
     <Compile Include="BoxSelectionDemo_1.fs" />

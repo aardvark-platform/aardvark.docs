@@ -10,6 +10,7 @@ open Aardvark.Base
 open Aardvark.SceneGraph.``Sg Picking Extensions``
 
 module BoxSelectionDemo_Finished =
+    open Boxes
 
     let mkVisibleBox (color : C4b) (box : Box3d) : VisibleBox = 
         {
@@ -31,8 +32,7 @@ module BoxSelectionDemo_Finished =
                 { model with selectedBoxes = selection } 
             | HoverIn id -> { model with boxHovered = Some id }            
             | HoverOut   -> { model with boxHovered = None }
-            | AddBox -> 
-                
+            | AddBox ->                 
                 let i = model.boxes.Count                
                 let box = Primitives.mkNthBox i (i+1) |> Primitives.mkVisibleBox Primitives.colors.[i % 5]
                                          

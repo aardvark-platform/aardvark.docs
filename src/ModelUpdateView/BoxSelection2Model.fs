@@ -1,32 +1,32 @@
-﻿namespace BoxSelection2Model
+﻿namespace ActionLiftingModel
 
 open Aardvark.Base
 open Aardvark.Base.Incremental
 open Aardvark.UI.Primitives
-open BoxSelectionModel
+open Boxes
 
 [<DomainType>]
-type Boxes = {
+type BoxesModel = {
     boxes : plist<VisibleBox>
     boxesSet : hset<VisibleBox>    
-}
-
-[<DomainType>]
-type BoxSelection2Model = {
-    camera : CameraControllerState        
-    boxes : Boxes
-
-    boxHovered : option<string>
-    selectedBoxes : hset<string>
 }
 
 type BoxesAction =
     | AddBox
     | RemoveBox
 
+[<DomainType>]
+type ActionLiftingModel = {
+    camera : CameraControllerState        
+    boxes : BoxesModel
+
+    boxHovered : option<string>
+    selectedBoxes : hset<string>
+}
+
 type Action =
     | CameraMessage    of CameraControllerMessage
-    | BoxesMessage      of BoxesAction
+    | BoxesMessage     of BoxesAction
     | Select           of string                          
    
 

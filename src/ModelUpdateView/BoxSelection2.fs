@@ -1,7 +1,6 @@
-﻿namespace BoxSelection2
+﻿namespace ActionLifting
 
 open System
-open BoxSelection2Model
 open Aardvark.UI.Primitives
 open Aardvark.UI
 open Aardvark.Base.Rendering
@@ -9,10 +8,13 @@ open Aardvark.Base.Incremental
 open Aardvark.Base
 open Aardvark.SceneGraph.``Sg Picking Extensions``
 
-module BoxSelection2App =    
+open ActionLiftingModel
+
+module ActionLifting =        
+    open Boxes
     open BoxSelectionDemo
 
-    let update (model : BoxSelection2Model) (act : BoxSelection2Model.Action) =
+    let update (model : ActionLiftingModel) (act : Action) =
         match act with
             | CameraMessage m -> 
                 { model with camera = CameraController.update model.camera m }
@@ -25,12 +27,15 @@ module BoxSelection2App =
                     then HSet.remove id model.selectedBoxes 
                     else HSet.add id model.selectedBoxes
 
-                { model with selectedBoxes = selection }                    
-            | _ -> model   
-       
-    //let viewAnnotationsInGroup (path:list<Index>) (model:MDrawingModel)(select : MAnnotation -> 'outer)(lift : AnnotationGroups.Action -> 'outer) (annotations: alist<MAnnotation>) : alist<DomNode<'outer>> =
+                { model with selectedBoxes = selection }
+          
+    let mkColor (model : MActionLiftingModel) (box : MVisibleBox) =  
+        let id = box.id |> Mod.force
+        model.selectedBoxes 
+            |> ASet.contains id
+            |> Mod.bind (function x -> if x then Mod.constant Primitives.selectionColor else box.color)       
 
-    let viewBoxesUI (model:MBoxes) =
+    let viewBoxesUI (model : MBoxesModel) =
         [
             div [clazz "ui buttons"] [
                button [clazz "ui button"; onMouseClick (fun _ -> AddBox)] [text "Add Box"]
@@ -53,7 +58,23 @@ module BoxSelection2App =
             )
         ]
 
-    let view (model : MBoxSelection2Model) =
+    let mkISg (model : MActionLiftingModel) (box : MVisibleBox) =
+                
+        let color = mkColor model box
+
+        Sg.box color box.geometry
+                |> Sg.shader {
+                    do! DefaultSurfaces.trafo
+                    do! DefaultSurfaces.vertexColor
+                    do! DefaultSurfaces.simpleLighting
+                    }                
+                |> Sg.requirePicking
+                |> Sg.noEvents
+                |> Sg.withEvents [
+                    Sg.onClick (fun _  -> Select (box.id |> Mod.force))                    
+                ]
+
+    let view (model : MActionLiftingModel) =
                                    
         let frustum = Mod.constant (Frustum.perspective 60.0 0.1 100.0 1.0)                  
 
@@ -64,8 +85,11 @@ module BoxSelection2App =
                         attribute "style" "width:65%; height: 100%; float: left;"
                     ])
                     (
-                        // Boxes.view
-                        Sg.box (Mod.constant C4b.Gray) (Mod.constant Box3d.Unit)
+                         model.boxes.boxes 
+                            |> AList.toASet 
+                            |> ASet.map (function b -> mkISg model b)
+                            |> Sg.set                          
+                            |> Sg.noEvents
                     )
                 div [style "width:35%; height: 100%; float:right"] (
                     viewBoxesUI model.boxes |> List.map (fun x -> UI.map BoxesMessage x)
