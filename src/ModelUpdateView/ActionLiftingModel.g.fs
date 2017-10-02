@@ -62,11 +62,13 @@ module Mutable =
         let _boxes = MBoxesModel.Create(__initial.boxes)
         let _boxHovered = MOption.Create(__initial.boxHovered)
         let _selectedBoxes = MSet.Create(__initial.selectedBoxes)
+        let _colors = ResetMod.Create(__initial.colors)
         
         member x.camera = _camera
         member x.boxes = _boxes
         member x.boxHovered = _boxHovered :> IMod<_>
         member x.selectedBoxes = _selectedBoxes :> aset<_>
+        member x.colors = _colors :> IMod<_>
         
         member x.Update(v : ActionLiftingModel.ActionLiftingModel) =
             if not (System.Object.ReferenceEquals(__current, v)) then
@@ -76,6 +78,7 @@ module Mutable =
                 MBoxesModel.Update(_boxes, v.boxes)
                 MOption.Update(_boxHovered, v.boxHovered)
                 MSet.Update(_selectedBoxes, v.selectedBoxes)
+                ResetMod.Update(_colors,v.colors)
                 
         
         static member Create(__initial : ActionLiftingModel.ActionLiftingModel) : MActionLiftingModel = MActionLiftingModel(__initial)
@@ -115,4 +118,10 @@ module Mutable =
                     override x.Get(r) = r.selectedBoxes
                     override x.Set(r,v) = { r with selectedBoxes = v }
                     override x.Update(r,f) = { r with selectedBoxes = f r.selectedBoxes }
+                }
+            let colors =
+                { new Lens<ActionLiftingModel.ActionLiftingModel, Microsoft.FSharp.Collections.list<Aardvark.Base.C4b>>() with
+                    override x.Get(r) = r.colors
+                    override x.Set(r,v) = { r with colors = v }
+                    override x.Update(r,f) = { r with colors = f r.colors }
                 }

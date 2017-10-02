@@ -22,6 +22,8 @@ type ActionLiftingModel = {
 
     boxHovered : option<string>
     selectedBoxes : hset<string>
+
+    colors : list<C4b>
 }
 
 type Action =

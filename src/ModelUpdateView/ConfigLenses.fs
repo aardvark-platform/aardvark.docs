@@ -1,4 +1,4 @@
-﻿namespace ActionLifting
+﻿namespace ConfigLenses
 
 open System
 open Aardvark.UI.Primitives
@@ -10,16 +10,18 @@ open Aardvark.SceneGraph.``Sg Picking Extensions``
 
 open ActionLiftingModel
 
-module ActionLifting =        
+module ConfigLenses =        
     open Boxes
     open BoxSelectionDemo
+
+    let innerConfig : BoxesApp.InnerConfig<ActionLiftingModel> = { colors = ActionLiftingModel.Lens.colors }
 
     let update (model : ActionLiftingModel) (act : Action) =
         match act with
             | CameraMessage m -> 
                 { model with camera = CameraController.update model.camera m }
-            | BoxesMessage m ->
-                { model with boxes = BoxesApp.update model.boxes m }
+            | BoxesMessage m ->                
+                { model with boxes = BoxesApp.update model innerConfig model.boxes m  }
             | Select id-> 
                 let selection = 
                     if HSet.contains id model.selectedBoxes 
@@ -47,7 +49,7 @@ module ActionLifting =
             |> Sg.requirePicking
             |> Sg.noEvents
             |> Sg.withEvents [
-                Sg.onClick (fun _  -> Select (box.id |> Mod.force))                    
+                Sg.onClick (fun _  -> Select (box.id |> Mod.force))
             ]
 
     let view (model : MActionLiftingModel) : DomNode<Action>=
@@ -82,8 +84,8 @@ module ActionLifting =
         camera          = CameraController.initial
         boxHovered      = None
         boxes           = { boxes = Primitives.mkBoxes 3 |> List.mapi (fun i k -> Primitives.mkVisibleBox Primitives.colors.[i % 5] k) |> PList.ofList; boxesSet = HSet.empty }
-        selectedBoxes   = HSet.empty  
-        colors          = []
+        selectedBoxes   = HSet.empty
+        colors          = Primitives.colorsBlue
     }
 
     let app = {

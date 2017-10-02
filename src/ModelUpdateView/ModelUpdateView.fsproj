@@ -84,6 +84,8 @@
     <Compile Include="ActionLifting.fs" />
     <Compile Include="LensesModel.fs" />
     <Compile Include="Lenses.fs" />
+    <Compile Include="BoxesApp2.fs" />
+    <Compile Include="ConfigLenses.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
