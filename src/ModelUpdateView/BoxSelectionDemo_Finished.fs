@@ -42,8 +42,7 @@ module BoxSelectionDemo_Finished =
                 let boxes = PList.removeAt i model.boxes
 
                 {model with boxes = boxes}
-            | ClearSelection -> { model with selectedBoxes = HSet.empty}
-            | _ -> model   
+            | ClearSelection -> { model with selectedBoxes = HSet.empty}            
 
     let mkColor (model : MBoxSelectionDemoModel) (box : MVisibleBox) =
         let id = box.id |> Mod.force

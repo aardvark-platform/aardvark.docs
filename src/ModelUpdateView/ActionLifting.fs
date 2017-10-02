@@ -19,8 +19,7 @@ module ActionLifting =
             | CameraMessage m -> 
                 { model with camera = CameraController.update model.camera m }
             | BoxesMessage m ->
-                //{ model with boxes = CameraController.update model.camera m }
-                model
+                { model with boxes = BoxesApp.update model.boxes m }
             | Select id-> 
                 let selection = 
                     if HSet.contains id model.selectedBoxes 
@@ -35,48 +34,29 @@ module ActionLifting =
             |> ASet.contains id
             |> Mod.bind (function x -> if x then Mod.constant Primitives.selectionColor else box.color)       
 
-    let viewBoxesUI (model : MBoxesModel) =
-        [
-            div [clazz "ui buttons"] [
-               button [clazz "ui button"; onMouseClick (fun _ -> AddBox)] [text "Add Box"]
-               button [clazz "ui button"; onMouseClick (fun _ -> RemoveBox)] [text "Remove Box"]                
-            ]
-
-            Incremental.div (AttributeMap.ofList [clazz "ui divided list"]) (            
-                alist {                                
-                    for b in model.boxes do
-                        let! c = Mod.constant C4b.Red //mkColor model b
-
-                        let bgc = sprintf "background: %s" (Html.ofC4b c)
-                                    
-
-                        //onClick(fun _ -> Select (b.id |> Mod.force))
-                        yield div [clazz "item"; style bgc][
-                            i [clazz "medium File Outline middle aligned icon"][]
-                        ]                                                                    
-                }
-            )
-        ]
-
     let mkISg (model : MActionLiftingModel) (box : MVisibleBox) =
                 
         let color = mkColor model box
 
         Sg.box color box.geometry
-                |> Sg.shader {
-                    do! DefaultSurfaces.trafo
-                    do! DefaultSurfaces.vertexColor
-                    do! DefaultSurfaces.simpleLighting
-                    }                
-                |> Sg.requirePicking
-                |> Sg.noEvents
-                |> Sg.withEvents [
-                    Sg.onClick (fun _  -> Select (box.id |> Mod.force))                    
-                ]
+            |> Sg.shader {
+                do! DefaultSurfaces.trafo
+                do! DefaultSurfaces.vertexColor
+                do! DefaultSurfaces.simpleLighting
+                }                
+            |> Sg.requirePicking
+            |> Sg.noEvents
+            |> Sg.withEvents [
+                Sg.onClick (fun _  -> Select (box.id |> Mod.force))                    
+            ]
 
-    let view (model : MActionLiftingModel) =
+    let view (model : MActionLiftingModel) : DomNode<Action>=
                                    
-        let frustum = Mod.constant (Frustum.perspective 60.0 0.1 100.0 1.0)                  
+        let frustum = 
+            Mod.constant (Frustum.perspective 60.0 0.1 100.0 1.0)
+
+        let mkColor = 
+            fun box -> mkColor model box
 
         require (Html.semui) (
             div [clazz "ui"; style "background: #1B1C1E"] [
@@ -91,9 +71,10 @@ module ActionLifting =
                             |> Sg.set                          
                             |> Sg.noEvents
                     )
-                div [style "width:35%; height: 100%; float:right"] (
-                    viewBoxesUI model.boxes |> List.map (fun x -> UI.map BoxesMessage x)
-                )                
+                div [style "width:35%; height: 100%; float:right"] [
+                    BoxesApp.view model.boxes mkColor |> UI.map BoxesMessage
+                    //BoxesApp.view' model.boxes mkColor (fun b -> Select (b.id |> Mod.force)) (fun a -> BoxesMessage a)
+                ]
             ]
         )
 
