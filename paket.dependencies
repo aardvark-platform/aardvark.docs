@@ -22,6 +22,8 @@ nuget Aardvark.Rendering.NanoVg            ~> 3.3.9
 nuget Aardvark.SceneGraph                  ~> 3.3.9
 nuget Aardvark.SceneGraph.IO               ~> 3.3.9
 
+nuget FShade                               =  3.2.7
+
 
 group Build
 framework: net45
