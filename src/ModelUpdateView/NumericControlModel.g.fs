@@ -12,14 +12,15 @@ module Mutable =
     
     type MNumericModel(__initial : NumericControlNs.NumericModel) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<NumericControlNs.NumericModel> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _value = ResetMod.Create(__initial.value)
         
         member x.value = _value :> IMod<_>
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : NumericControlNs.NumericModel) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 ResetMod.Update(_value,v.value)
                 
@@ -27,8 +28,8 @@ module Mutable =
         static member Create(__initial : NumericControlNs.NumericModel) : MNumericModel = MNumericModel(__initial)
         static member Update(m : MNumericModel, v : NumericControlNs.NumericModel) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<NumericControlNs.NumericModel> with
             member x.Update v = x.Update v
     

@@ -12,7 +12,7 @@ module Mutable =
     
     type MBoxSelectionDemoModel(__initial : BoxSelectionModel.BoxSelectionDemoModel) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<BoxSelectionModel.BoxSelectionDemoModel> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _camera = Aardvark.UI.Primitives.Mutable.MCameraControllerState.Create(__initial.camera)
         let _boxes = MList.Create(__initial.boxes, (fun v -> Boxes.Mutable.MVisibleBox.Create(v)), (fun (m,v) -> Boxes.Mutable.MVisibleBox.Update(m, v)), (fun v -> v))
         let _boxesSet = MSet.Create((fun (v : Boxes.VisibleBox) -> v.id :> obj), __initial.boxesSet, (fun v -> Boxes.Mutable.MVisibleBox.Create(v)), (fun (m,v) -> Boxes.Mutable.MVisibleBox.Update(m, v)), (fun v -> v))
@@ -25,9 +25,10 @@ module Mutable =
         member x.boxHovered = _boxHovered :> IMod<_>
         member x.selectedBoxes = _selectedBoxes :> aset<_>
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : BoxSelectionModel.BoxSelectionDemoModel) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 Aardvark.UI.Primitives.Mutable.MCameraControllerState.Update(_camera, v.camera)
                 MList.Update(_boxes, v.boxes)
@@ -39,8 +40,8 @@ module Mutable =
         static member Create(__initial : BoxSelectionModel.BoxSelectionDemoModel) : MBoxSelectionDemoModel = MBoxSelectionDemoModel(__initial)
         static member Update(m : MBoxSelectionDemoModel, v : BoxSelectionModel.BoxSelectionDemoModel) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<BoxSelectionModel.BoxSelectionDemoModel> with
             member x.Update v = x.Update v
     

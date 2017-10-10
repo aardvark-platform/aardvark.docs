@@ -12,14 +12,15 @@ module Mutable =
     
     type MC(__initial : LensesModel.C) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<LensesModel.C> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _value = ResetMod.Create(__initial.value)
         
         member x.value = _value :> IMod<_>
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : LensesModel.C) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 ResetMod.Update(_value,v.value)
                 
@@ -27,8 +28,8 @@ module Mutable =
         static member Create(__initial : LensesModel.C) : MC = MC(__initial)
         static member Update(m : MC, v : LensesModel.C) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<LensesModel.C> with
             member x.Update v = x.Update v
     
@@ -48,14 +49,15 @@ module Mutable =
     
     type MB(__initial : LensesModel.B) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<LensesModel.B> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _c = MC.Create(__initial.c)
         
         member x.c = _c
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : LensesModel.B) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 MC.Update(_c, v.c)
                 
@@ -63,8 +65,8 @@ module Mutable =
         static member Create(__initial : LensesModel.B) : MB = MB(__initial)
         static member Update(m : MB, v : LensesModel.B) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<LensesModel.B> with
             member x.Update v = x.Update v
     
@@ -84,14 +86,15 @@ module Mutable =
     
     type MA(__initial : LensesModel.A) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<LensesModel.A> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _b = MB.Create(__initial.b)
         
         member x.b = _b
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : LensesModel.A) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 MB.Update(_b, v.b)
                 
@@ -99,8 +102,8 @@ module Mutable =
         static member Create(__initial : LensesModel.A) : MA = MA(__initial)
         static member Update(m : MA, v : LensesModel.A) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<LensesModel.A> with
             member x.Update v = x.Update v
     

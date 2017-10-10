@@ -12,7 +12,7 @@ module Mutable =
     
     type MVisibleBox(__initial : Boxes.VisibleBox) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<Boxes.VisibleBox> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _geometry = ResetMod.Create(__initial.geometry)
         let _color = ResetMod.Create(__initial.color)
         let _id = ResetMod.Create(__initial.id)
@@ -21,9 +21,10 @@ module Mutable =
         member x.color = _color :> IMod<_>
         member x.id = _id :> IMod<_>
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : Boxes.VisibleBox) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 ResetMod.Update(_geometry,v.geometry)
                 ResetMod.Update(_color,v.color)
@@ -33,8 +34,8 @@ module Mutable =
         static member Create(__initial : Boxes.VisibleBox) : MVisibleBox = MVisibleBox(__initial)
         static member Update(m : MVisibleBox, v : Boxes.VisibleBox) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<Boxes.VisibleBox> with
             member x.Update v = x.Update v
     
