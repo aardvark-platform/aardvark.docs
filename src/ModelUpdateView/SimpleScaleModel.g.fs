@@ -12,16 +12,17 @@ module Mutable =
     
     type MModel(__initial : SimpleScaleModel.Model) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<SimpleScaleModel.Model> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _camera = Aardvark.UI.Primitives.Mutable.MCameraControllerState.Create(__initial.camera)
         let _scale = VectorControlNs.Mutable.MVectorModel.Create(__initial.scale)
         
         member x.camera = _camera
         member x.scale = _scale
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : SimpleScaleModel.Model) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 Aardvark.UI.Primitives.Mutable.MCameraControllerState.Update(_camera, v.camera)
                 VectorControlNs.Mutable.MVectorModel.Update(_scale, v.scale)
@@ -30,8 +31,8 @@ module Mutable =
         static member Create(__initial : SimpleScaleModel.Model) : MModel = MModel(__initial)
         static member Update(m : MModel, v : SimpleScaleModel.Model) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<SimpleScaleModel.Model> with
             member x.Update v = x.Update v
     

@@ -12,7 +12,7 @@ module Mutable =
     
     type MVectorModel(__initial : VectorControlNs.VectorModel) =
         inherit obj()
-        let mutable __current = __initial
+        let mutable __current : Aardvark.Base.Incremental.ModRef<VectorControlNs.VectorModel> = Aardvark.Base.Incremental.Mod.init(__initial)
         let _x = NumericControlNs.Mutable.MNumericModel.Create(__initial.x)
         let _y = NumericControlNs.Mutable.MNumericModel.Create(__initial.y)
         let _z = NumericControlNs.Mutable.MNumericModel.Create(__initial.z)
@@ -21,9 +21,10 @@ module Mutable =
         member x.y = _y
         member x.z = _z
         
+        member x.Current = __current :> IMod<_>
         member x.Update(v : VectorControlNs.VectorModel) =
-            if not (System.Object.ReferenceEquals(__current, v)) then
-                __current <- v
+            if not (System.Object.ReferenceEquals(__current.Value, v)) then
+                __current.Value <- v
                 
                 NumericControlNs.Mutable.MNumericModel.Update(_x, v.x)
                 NumericControlNs.Mutable.MNumericModel.Update(_y, v.y)
@@ -33,8 +34,8 @@ module Mutable =
         static member Create(__initial : VectorControlNs.VectorModel) : MVectorModel = MVectorModel(__initial)
         static member Update(m : MVectorModel, v : VectorControlNs.VectorModel) = m.Update(v)
         
-        override x.ToString() = __current.ToString()
-        member x.AsString = sprintf "%A" __current
+        override x.ToString() = __current.Value.ToString()
+        member x.AsString = sprintf "%A" __current.Value
         interface IUpdatable<VectorControlNs.VectorModel> with
             member x.Update v = x.Update v
     
