@@ -20,7 +20,7 @@ type A = {
   b : B
 }
 
-module A =
+module A1 =
     let initial = { 
         b = { 
             c = { 

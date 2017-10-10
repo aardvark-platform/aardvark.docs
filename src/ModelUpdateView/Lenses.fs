@@ -25,7 +25,7 @@ module LensesStuff =
 
 
     let run =
-        let init = A.initial
+        let init = A1.initial
         
         let a' = 
             { init with b = { init.b with c = { init.b.c with value = "hello world1" }}}
