@@ -13,14 +13,36 @@ type Action =
 
 // call update logic of indiviual numeric controls
 let update (m : VectorModel) (a : Action) =
-    match a with
+    match a with        
         | _ -> m
 
 // uses a table to show the individual numeric controls
 let view (m : MVectorModel) =
     require Html.semui ( 
         body [] [        
-            div[][]
+            div[][
+                table [] [
+                    tr[][
+                        td[][a [clazz "ui label circular Big"][text "X:"]]
+                        td[][]
+                    ]
+                    tr[][
+                        td[][a [clazz "ui label circular Big"][text "Y:"]]
+                        td[][]
+                    ]
+                    tr[][
+                        td[][a [clazz "ui label circular Big"][text "Z:"]]
+                        td[][]
+                    ]              
+                    tr[][
+                        td[attribute "colspan" "2"][
+                            div[clazz "ui buttons small"][
+                                text "Normalize and ResetButton"
+                            ]
+                        ]
+                    ]
+                ]               
+        ]
         ]
     )
 

@@ -2,6 +2,7 @@
 
 open Aardvark.Base             // math stuff such as V3d, Trafo3d
 open Aardvark.UI            // the base infrastructure for elm style aardvark applications
+open Aardvark.Base.Incremental
 
 open NumericControlNs
 
