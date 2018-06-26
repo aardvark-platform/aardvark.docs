@@ -12,7 +12,7 @@ module Mutable =
     
     type MVisibleBox(__initial : Boxes.VisibleBox) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<Boxes.VisibleBox> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<Boxes.VisibleBox> = Aardvark.Base.Incremental.EqModRef<Boxes.VisibleBox>(__initial) :> Aardvark.Base.Incremental.IModRef<Boxes.VisibleBox>
         let _geometry = ResetMod.Create(__initial.geometry)
         let _color = ResetMod.Create(__initial.color)
         let _id = ResetMod.Create(__initial.id)
@@ -58,7 +58,7 @@ module Mutable =
                     override x.Update(r,f) = { r with color = f r.color }
                 }
             let id =
-                { new Lens<Boxes.VisibleBox, Microsoft.FSharp.Core.string>() with
+                { new Lens<Boxes.VisibleBox, System.String>() with
                     override x.Get(r) = r.id
                     override x.Set(r,v) = { r with id = v }
                     override x.Update(r,f) = { r with id = f r.id }

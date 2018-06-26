@@ -12,7 +12,7 @@ module Mutable =
     
     type MBoxesModel(__initial : ActionLiftingModel.BoxesModel) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<ActionLiftingModel.BoxesModel> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<ActionLiftingModel.BoxesModel> = Aardvark.Base.Incremental.EqModRef<ActionLiftingModel.BoxesModel>(__initial) :> Aardvark.Base.Incremental.IModRef<ActionLiftingModel.BoxesModel>
         let _boxes = MList.Create(__initial.boxes, (fun v -> Boxes.Mutable.MVisibleBox.Create(v)), (fun (m,v) -> Boxes.Mutable.MVisibleBox.Update(m, v)), (fun v -> v))
         let _boxesSet = MSet.Create((fun (v : Boxes.VisibleBox) -> v.id :> obj), __initial.boxesSet, (fun v -> Boxes.Mutable.MVisibleBox.Create(v)), (fun (m,v) -> Boxes.Mutable.MVisibleBox.Update(m, v)), (fun v -> v))
         
@@ -58,7 +58,7 @@ module Mutable =
     
     type MActionLiftingModel(__initial : ActionLiftingModel.ActionLiftingModel) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<ActionLiftingModel.ActionLiftingModel> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<ActionLiftingModel.ActionLiftingModel> = Aardvark.Base.Incremental.EqModRef<ActionLiftingModel.ActionLiftingModel>(__initial) :> Aardvark.Base.Incremental.IModRef<ActionLiftingModel.ActionLiftingModel>
         let _camera = Aardvark.UI.Primitives.Mutable.MCameraControllerState.Create(__initial.camera)
         let _boxes = MBoxesModel.Create(__initial.boxes)
         let _boxHovered = MOption.Create(__initial.boxHovered)
@@ -110,19 +110,19 @@ module Mutable =
                     override x.Update(r,f) = { r with boxes = f r.boxes }
                 }
             let boxHovered =
-                { new Lens<ActionLiftingModel.ActionLiftingModel, Microsoft.FSharp.Core.option<Microsoft.FSharp.Core.string>>() with
+                { new Lens<ActionLiftingModel.ActionLiftingModel, Microsoft.FSharp.Core.Option<System.String>>() with
                     override x.Get(r) = r.boxHovered
                     override x.Set(r,v) = { r with boxHovered = v }
                     override x.Update(r,f) = { r with boxHovered = f r.boxHovered }
                 }
             let selectedBoxes =
-                { new Lens<ActionLiftingModel.ActionLiftingModel, Aardvark.Base.hset<Microsoft.FSharp.Core.string>>() with
+                { new Lens<ActionLiftingModel.ActionLiftingModel, Aardvark.Base.hset<System.String>>() with
                     override x.Get(r) = r.selectedBoxes
                     override x.Set(r,v) = { r with selectedBoxes = v }
                     override x.Update(r,f) = { r with selectedBoxes = f r.selectedBoxes }
                 }
             let colors =
-                { new Lens<ActionLiftingModel.ActionLiftingModel, Microsoft.FSharp.Collections.list<Aardvark.Base.C4b>>() with
+                { new Lens<ActionLiftingModel.ActionLiftingModel, Microsoft.FSharp.Collections.List<Aardvark.Base.C4b>>() with
                     override x.Get(r) = r.colors
                     override x.Set(r,v) = { r with colors = v }
                     override x.Update(r,f) = { r with colors = f r.colors }

@@ -1,27 +1,27 @@
-framework: net45
+framework: netstandard2.0, net471, netcoreapp2.0
 source https://api.nuget.org/v3/index.json
 source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
 
-nuget FSharp.Core                           ~> 4.0.0
+nuget FSharp.Core                           ~> 4.3.0
 
-nuget Aardvark.Base                         ~> 3.0.39
-nuget Aardvark.Base.Essentials              ~> 3.0.39
-nuget Aardvark.Base.FSharp                  ~> 3.0.39
-nuget Aardvark.Base.Incremental             ~> 3.0.39
+nuget Aardvark.Base                         ~> 4.0.16
+nuget Aardvark.Base.Essentials              ~> 4.0.16
+nuget Aardvark.Base.FSharp                  ~> 4.0.16
+nuget Aardvark.Base.Incremental             ~> 4.0.16
 
-nuget Aardvark.Cef                          ~> 3.3.38
-nuget Aardvark.Cef.WinForms                 ~> 3.3.38
-nuget Aardvark.Service                      ~> 3.3.38
-nuget Aardvark.UI                           ~> 3.3.38             
-nuget Aardvark.UI.Primitives                ~> 3.3.38
+nuget Aardvark.Cef                          ~> 4.0.15
+nuget Aardvark.Cef.WinForms                 ~> 4.0.15
+nuget Aardvark.Service                      ~> 4.0.15
+nuget Aardvark.UI                           ~> 4.0.15             
+nuget Aardvark.UI.Primitives                ~> 4.0.15
 
-nuget Aardvark.Application                  ~> 3.4.0
-nuget Aardvark.Application.WinForms.GL      ~> 3.4.0
-nuget Aardvark.Base.Rendering               ~> 3.4.0
-nuget Aardvark.SceneGraph                   ~> 3.4.0
-nuget Aardvark.SceneGraph.IO                ~> 3.4.0
+nuget Aardvark.Application                  ~> 4.2.0
+nuget Aardvark.Application.WinForms.GL      ~> 4.2.0
+nuget Aardvark.Base.Rendering               ~> 4.2.0
+nuget Aardvark.SceneGraph                   ~> 4.2.0
+nuget Aardvark.SceneGraph.IO                ~> 4.2.0
 
-nuget FShade                                ~> 3.2.11
+nuget FShade                                ~> 4.0.10
 
 
 
@@ -30,4 +30,4 @@ framework: net45
 content: none
 source https://api.nuget.org/v3/index.json
 source https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
-github aardvark-platform/aardvark.fake:standalone
+github aardvark-platform/aardvark.fake:v4

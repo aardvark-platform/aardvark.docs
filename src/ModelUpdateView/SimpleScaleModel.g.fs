@@ -12,7 +12,7 @@ module Mutable =
     
     type MModel(__initial : SimpleScaleModel.Model) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<SimpleScaleModel.Model> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<SimpleScaleModel.Model> = Aardvark.Base.Incremental.EqModRef<SimpleScaleModel.Model>(__initial) :> Aardvark.Base.Incremental.IModRef<SimpleScaleModel.Model>
         let _camera = Aardvark.UI.Primitives.Mutable.MCameraControllerState.Create(__initial.camera)
         let _scale = VectorControlNs.Mutable.MVectorModel.Create(__initial.scale)
         

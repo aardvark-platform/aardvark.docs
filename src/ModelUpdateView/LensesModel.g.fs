@@ -12,7 +12,7 @@ module Mutable =
     
     type MC(__initial : LensesModel.C) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<LensesModel.C> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<LensesModel.C> = Aardvark.Base.Incremental.EqModRef<LensesModel.C>(__initial) :> Aardvark.Base.Incremental.IModRef<LensesModel.C>
         let _value = ResetMod.Create(__initial.value)
         
         member x.value = _value :> IMod<_>
@@ -40,7 +40,7 @@ module Mutable =
         [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
         module Lens =
             let value =
-                { new Lens<LensesModel.C, Microsoft.FSharp.Core.string>() with
+                { new Lens<LensesModel.C, System.String>() with
                     override x.Get(r) = r.value
                     override x.Set(r,v) = { r with value = v }
                     override x.Update(r,f) = { r with value = f r.value }
@@ -49,7 +49,7 @@ module Mutable =
     
     type MB(__initial : LensesModel.B) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<LensesModel.B> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<LensesModel.B> = Aardvark.Base.Incremental.EqModRef<LensesModel.B>(__initial) :> Aardvark.Base.Incremental.IModRef<LensesModel.B>
         let _c = MC.Create(__initial.c)
         
         member x.c = _c
@@ -86,7 +86,7 @@ module Mutable =
     
     type MA(__initial : LensesModel.A) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<LensesModel.A> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<LensesModel.A> = Aardvark.Base.Incremental.EqModRef<LensesModel.A>(__initial) :> Aardvark.Base.Incremental.IModRef<LensesModel.A>
         let _b = MB.Create(__initial.b)
         
         member x.b = _b

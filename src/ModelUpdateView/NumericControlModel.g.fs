@@ -12,7 +12,7 @@ module Mutable =
     
     type MNumericModel(__initial : NumericControlNs.NumericModel) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<NumericControlNs.NumericModel> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<NumericControlNs.NumericModel> = Aardvark.Base.Incremental.EqModRef<NumericControlNs.NumericModel>(__initial) :> Aardvark.Base.Incremental.IModRef<NumericControlNs.NumericModel>
         let _value = ResetMod.Create(__initial.value)
         
         member x.value = _value :> IMod<_>
@@ -40,7 +40,7 @@ module Mutable =
         [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
         module Lens =
             let value =
-                { new Lens<NumericControlNs.NumericModel, Microsoft.FSharp.Core.float>() with
+                { new Lens<NumericControlNs.NumericModel, System.Double>() with
                     override x.Get(r) = r.value
                     override x.Set(r,v) = { r with value = v }
                     override x.Update(r,f) = { r with value = f r.value }

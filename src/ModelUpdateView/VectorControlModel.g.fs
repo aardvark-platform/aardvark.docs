@@ -12,7 +12,7 @@ module Mutable =
     
     type MVectorModel(__initial : VectorControlNs.VectorModel) =
         inherit obj()
-        let mutable __current : Aardvark.Base.Incremental.ModRef<VectorControlNs.VectorModel> = Aardvark.Base.Incremental.Mod.init(__initial)
+        let mutable __current : Aardvark.Base.Incremental.IModRef<VectorControlNs.VectorModel> = Aardvark.Base.Incremental.EqModRef<VectorControlNs.VectorModel>(__initial) :> Aardvark.Base.Incremental.IModRef<VectorControlNs.VectorModel>
         let _x = NumericControlNs.Mutable.MNumericModel.Create(__initial.x)
         let _y = NumericControlNs.Mutable.MNumericModel.Create(__initial.y)
         let _z = NumericControlNs.Mutable.MNumericModel.Create(__initial.z)
