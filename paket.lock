@@ -741,7 +741,6 @@ NUGET
       System.Threading (>= 4.3) - restriction: || (&& (== net471) (>= dnxcore50)) (&& (== net471) (< net45)) (== netcoreapp2.0) (== netstandard2.0)
       System.Xml.ReaderWriter (>= 4.3) - restriction: || (&& (== net471) (>= dnxcore50)) (&& (== net471) (< net45)) (== netcoreapp2.0) (== netstandard2.0)
       System.Xml.XmlDocument (>= 4.3) - restriction: || (&& (== net471) (>= dnxcore50)) (&& (== net471) (< net45)) (== netcoreapp2.0) (== netstandard2.0)
-  remote: https://vrvis.myget.org/F/aardvark_public/api/v3/index.json
     Aardvark.Compiler.DomainTypes (4.0.10)
       Aardvark.Base.Incremental (>= 4.0 < 4.1)
       FSharp.Core (>= 4.3 < 4.4)
@@ -796,7 +795,7 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: aardvark-platform/aardvark.fake
-    FULLPROJECT (850598ad8e27cef9d14cb0d4b88ba542c02a8a0d)
+    FULLPROJECT (7bebbfdb07cbf4ec6426be3f813dc367a0614e6a)
       FAKE (>= 4.63 < 4.64)
       Mono.Cecil (>= 0.10.0-beta6 < 0.11)
       SourceLink.Fake (>= 1.1 < 1.2)
