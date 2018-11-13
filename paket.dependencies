@@ -3,24 +3,24 @@ source https://api.nuget.org/v3/index.json
 
 nuget FSharp.Core                           ~> 4.3.0
 
-nuget Aardvark.Base                         ~> 4.2.2
-nuget Aardvark.Base.Essentials              ~> 4.2.2
-nuget Aardvark.Base.FSharp                  ~> 4.2.2
-nuget Aardvark.Base.Incremental             ~> 4.2.2
+nuget Aardvark.Base                         ~> 4.3.1
+nuget Aardvark.Base.Essentials              ~> 4.3.1
+nuget Aardvark.Base.FSharp                  ~> 4.3.1
+nuget Aardvark.Base.Incremental             ~> 4.3.1
 
-nuget Aardvark.Cef                          ~> 4.3.5
-nuget Aardvark.Cef.WinForms                 ~> 4.3.5
-nuget Aardvark.Service                      ~> 4.3.5
-nuget Aardvark.UI                           ~> 4.3.5             
-nuget Aardvark.UI.Primitives                ~> 4.3.5
+nuget Aardvark.Cef                          ~> 4.4.4
+nuget Aardvark.Cef.WinForms                 ~> 4.4.4
+nuget Aardvark.Service                      ~> 4.4.4
+nuget Aardvark.UI                           ~> 4.4.4             
+nuget Aardvark.UI.Primitives                ~> 4.4.4
 
-nuget Aardvark.Application                  ~> 4.4.2
-nuget Aardvark.Application.WinForms.GL      ~> 4.4.2
-nuget Aardvark.Base.Rendering               ~> 4.4.2
-nuget Aardvark.SceneGraph                   ~> 4.4.2
-nuget Aardvark.SceneGraph.IO                ~> 4.4.2
+nuget Aardvark.Application                  ~> 4.6.1
+nuget Aardvark.Application.WinForms.GL      ~> 4.6.1
+nuget Aardvark.Base.Rendering               ~> 4.6.1
+nuget Aardvark.SceneGraph                   ~> 4.6.1
+nuget Aardvark.SceneGraph.IO                ~> 4.6.1
 
-nuget FShade                                ~> 4.2.22
+nuget FShade                                ~> 4.2.25
 
 
 

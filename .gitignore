@@ -13,3 +13,5 @@ bin/Debug
 /.paket/paket.exe
 /Aardvark.log
 /.vs
+/.paket/Paket.Restore.targets
+/src/ModelUpdateView/.domaincache
