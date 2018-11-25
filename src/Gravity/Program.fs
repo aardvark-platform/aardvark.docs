@@ -119,6 +119,8 @@ let main argv =
                 DefaultSurfaces.thickLine |> toEffect
                ]
         |> Sg.uniform "LineWidth" (Mod.constant 1.0)
+
+    let aardvark = Aardvark.Docs.Utils.Geometry.aardvark C4b.White 3.0
         
     let transparentPlaneRenderPass = RenderPass.after "transparent" RenderPassOrder.Arbitrary RenderPass.main
     let transparentPlane =
@@ -145,6 +147,7 @@ let main argv =
         [ 
           points
           lines
+          aardvark
           grid
           transparentPlane
         ]
