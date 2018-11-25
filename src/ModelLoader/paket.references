@@ -2,6 +2,8 @@ Aardvark.Base
 Aardvark.Base.FSharp
 Aardvark.Base.Incremental
 Aardvark.Base.Rendering
-Aardvark.Application.WinForms.GL
+Aardvark.Application.Slim
+Aardvark.Application.Slim.GL
+Aardvark.Application.Slim.Vulkan
 Aardvark.SceneGraph
 Aardvark.SceneGraph.IO

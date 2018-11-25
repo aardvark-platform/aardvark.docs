@@ -1,10 +1,10 @@
 ﻿open System
+open Aardvark.Application
+open Aardvark.Application.Slim
 open Aardvark.Base
 open Aardvark.Base.Rendering
 open Aardvark.Base.Incremental
 open Aardvark.SceneGraph
-open Aardvark.Application
-open Aardvark.Application.WinForms
 
 [<EntryPoint>]
 let main argv = 
@@ -13,8 +13,8 @@ let main argv =
 
     // simple OpenGL window
     use app = new OpenGlApplication()
-    let win = app.CreateSimpleRenderWindow()
-    win.Text <- "AdaptiveWorld (aardvark.docs)"
+    let win = app.CreateGameWindow(8)
+    win.Title <- "AdaptiveWorld (aardvark.docs)"
 
     // view, projection and default camera controllers
     let initialView = CameraView.lookAt (V3d(16.0, 11.0, 6.0)) V3d.Zero V3d.OOI

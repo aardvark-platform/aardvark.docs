@@ -1,13 +1,11 @@
 ﻿open System
-open System.Diagnostics
-
+open Aardvark.Application
+open Aardvark.Application.Slim
 open Aardvark.Base
 open Aardvark.Base.Rendering
 open Aardvark.Base.Incremental
 open Aardvark.Docs.SierpinksiTetrahedron
 open Aardvark.SceneGraph
-open Aardvark.Application
-open Aardvark.Application.WinForms
 
 type Episode = { Start : float; Stop : float; GenerateSg : (IMod<float> -> ISg) }
 
@@ -19,8 +17,8 @@ let main argv =
 
     // simple OpenGL window
     use app = new OpenGlApplication()
-    let win = app.CreateSimpleRenderWindow()
-    win.Text <- "SierpinskiTetrahedron (aardvark.docs)"
+    let win = app.CreateGameWindow(8)
+    win.Title <- "SierpinskiTetrahedron (aardvark.docs)"
   
     // define scene
     let h = 0.5 * sqrt 3.0  // height of triangle

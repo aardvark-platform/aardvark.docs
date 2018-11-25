@@ -1,10 +1,10 @@
 ﻿open System
+open Aardvark.Application
+open Aardvark.Application.Slim
 open Aardvark.Base
 open Aardvark.Base.Rendering
 open Aardvark.Base.Incremental
 open Aardvark.SceneGraph
-open Aardvark.Application
-open Aardvark.Application.WinForms
 
 [<EntryPoint>]
 let main argv =
@@ -14,8 +14,8 @@ let main argv =
 
     // create simple render window
     use app = new OpenGlApplication()
-    let win = app.CreateSimpleRenderWindow()
-    win.Text <- "Model Loading (aardvark.docs)"
+    let win = app.CreateGameWindow(8)
+    win.Title <- "Model Loading (aardvark.docs)"
 
     // view, projection and default camera controllers
     let initialView = CameraView.lookAt (V3d(9.3, 9.9, 8.6)) V3d.Zero V3d.OOI
@@ -23,7 +23,7 @@ let main argv =
     let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
     
     let model = 
-        Aardvark.SceneGraph.IO.Loader.Assimp.load @"..\..\data\aardvark\aardvark.obj" 
+        Aardvark.SceneGraph.IO.Loader.Assimp.load @"..\..\..\data\aardvark\aardvark.obj" 
         |> Sg.adapter
         |> Sg.transform (Trafo3d.Scale(1.0,1.0,-1.0))
 

@@ -1,10 +1,10 @@
 ﻿open System
+open Aardvark.Application
+open Aardvark.Application.Slim
 open Aardvark.Base
 open Aardvark.Base.Rendering
 open Aardvark.Base.Incremental
 open Aardvark.SceneGraph
-open Aardvark.Application
-open Aardvark.Application.WinForms
 
 [<EntryPoint>]
 let main argv =
@@ -14,8 +14,8 @@ let main argv =
 
     // create simple render window
     use app = new OpenGlApplication()
-    let win = app.CreateSimpleRenderWindow()
-    win.Text <- "Background Color (aardvark.docs)"
+    let win = app.CreateGameWindow(8)
+    win.Title <- "Background Color (aardvark.docs)"
 
     // view, projection and default camera controllers
     let initialView = CameraView.lookAt (V3d(4, 3, 2)) V3d.Zero V3d.OOI

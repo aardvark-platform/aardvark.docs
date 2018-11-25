@@ -25,7 +25,6 @@ module Geometry =
                ]
             |> Sg.uniform "PointSize" (Mod.constant pointsize)
 
-
     let grid (bounds : Box2d) (color : C4b) =
         let lines =
             [
