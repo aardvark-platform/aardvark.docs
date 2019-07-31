@@ -10,8 +10,9 @@ bin/Debug
 /src/.vs
 /paket-files
 /.fake
-/.paket/paket.exe
+/.paket
 /Aardvark.log
 /.vs
 /.paket/Paket.Restore.targets
 /src/ModelUpdateView/.domaincache
+/.ionide/

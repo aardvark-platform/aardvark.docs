@@ -1,4 +1,5 @@
 ﻿open System
+open System.IO
 open Aardvark.Application
 open Aardvark.Application.Slim
 open Aardvark.Base
@@ -8,6 +9,8 @@ open Aardvark.SceneGraph
 
 [<EntryPoint>]
 let main argv =
+
+    printfn "Current directory %A" (Directory.GetCurrentDirectory())
 
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()

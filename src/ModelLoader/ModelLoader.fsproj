@@ -11,6 +11,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\bin\Release</OutputPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunWorkingDirectory>$(OutputPath)\$(TargetFramework)</RunWorkingDirectory>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
   </ItemGroup>
