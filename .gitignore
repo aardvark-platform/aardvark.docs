@@ -16,3 +16,4 @@ bin/Debug
 /.paket/Paket.Restore.targets
 /src/ModelUpdateView/.domaincache
 /.ionide/
+/.vscode/
