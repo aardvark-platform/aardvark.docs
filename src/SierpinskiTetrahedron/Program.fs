@@ -11,7 +11,6 @@ type Episode = { Start : float; Stop : float; GenerateSg : (IMod<float> -> ISg) 
 
 [<EntryPoint>]
 let main argv = 
-
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 
@@ -89,10 +88,8 @@ let main argv =
                 app.Runtime.CompileClear(win.FramebufferSignature, Mod.constant C4f.Gray70)
                 app.Runtime.CompileRender(win.FramebufferSignature, sg)
             ]
-        //|> DefaultOverlays.withStatistics
 
     // start
     win.RenderTask <- task
-    //ft.Animation () |> Async.Start
     win.Run()
     0

@@ -8,7 +8,6 @@ open Aardvark.SceneGraph
 
 [<EntryPoint>]
 let main argv =
-
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 
@@ -26,8 +25,6 @@ let main argv =
         Aardvark.SceneGraph.IO.Loader.Assimp.load @"..\..\..\data\aardvark\aardvark.obj" 
         |> Sg.adapter
         |> Sg.transform (Trafo3d.Scale(1.0,1.0,-1.0))
-
-    let scene = model
 
     let scene = 
         [
