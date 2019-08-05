@@ -8,7 +8,6 @@ open Aardvark.SceneGraph
 
 [<EntryPoint>]
 let main argv =
-
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 
@@ -47,7 +46,6 @@ let main argv =
     
     Async.Start bgColorAnimation
     
-
     // specify render task(s)
     let task =
         [
@@ -55,7 +53,6 @@ let main argv =
             app.Runtime.CompileRender(win.FramebufferSignature, sg)
         ]
         |> RenderTask.ofList
-        //|> DefaultOverlays.withStatistics
 
     // start
     win.RenderTask <- task

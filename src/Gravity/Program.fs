@@ -9,7 +9,6 @@ open Aardvark.SceneGraph
 
 [<EntryPoint>]
 let main argv = 
-
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 

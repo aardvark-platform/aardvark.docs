@@ -14,3 +14,24 @@ Aardvark.Docs is part of the open-source [Aardvark platform](https://github.com/
 Each platform repository contains self-contained standalone examples (e.g. [rendering examples](https://github.com/aardvark-platform/aardvark.rendering/tree/master/src/Examples%20(netcore))). The examples presented here combine multiple packages.
 A more technical platform walkthrough can be found [here](https://github.com/aardvark-platform/walkthrough).
 
+Build
+-----
+
+Install [.NET Core SDK][dotnet-core-sdk] for your platform, then run:
+
+```console
+$ dotnet build ./src/aardvark.docs.sln
+```
+
+Run
+---
+
+Requires [.NET Core Runtime][dotnet-core-runtime] version 2.0+, e.g. to run [Hello World][hello-world] example enter:
+
+```console
+$ dotnet run -c Release -p .\src\HelloWorld\HelloWorld.fsproj
+```
+
+[dotnet-core-runtime]: https://www.microsoft.com/net/download/core#/runtime
+[dotnet-core-sdk]: https://www.microsoft.com/net/download/core
+[hello-world]: https://github.com/aardvark-platform/aardvark.docs/wiki/Hello-World-Tutorial

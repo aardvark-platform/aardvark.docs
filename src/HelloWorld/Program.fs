@@ -9,9 +9,6 @@ open Aardvark.SceneGraph
 
 [<EntryPoint>]
 let main argv =
-
-    printfn "Current directory %A" (Directory.GetCurrentDirectory())
-
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 
@@ -51,7 +48,6 @@ let main argv =
     // specify render task
     let task =
         app.Runtime.CompileRender(win.FramebufferSignature, sg)
-            //|> DefaultOverlays.withStatistics
 
     // start
     win.RenderTask <- task
