@@ -22,7 +22,7 @@ let main argv =
     let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
     
     let model = 
-        Aardvark.SceneGraph.IO.Loader.Assimp.load @"..\..\..\data\aardvark\aardvark.obj" 
+        Aardvark.SceneGraph.IO.Loader.Assimp.load (Path.combine [__SOURCE_DIRECTORY__; ".."; ".."; "data"; "aardvark"; "aardvark.obj"])
         |> Sg.adapter
         |> Sg.transform (Trafo3d.Scale(1.0,1.0,-1.0))
 

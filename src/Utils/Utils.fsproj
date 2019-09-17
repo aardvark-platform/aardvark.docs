@@ -16,6 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aardvark.SceneGraph" Version="4.10.3" />
+    <PackageReference Include="Aardvark.SceneGraph" Version="4.11.7" />
   </ItemGroup>
 </Project>
