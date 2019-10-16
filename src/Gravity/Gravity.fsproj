@@ -26,4 +26,8 @@
     <PackageReference Include="Aardvark.Application.Slim.GL" Version="4.11.7" />
     <PackageReference Include="Aardvark.SceneGraph" Version="4.11.7" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+  </ItemGroup>
 </Project>

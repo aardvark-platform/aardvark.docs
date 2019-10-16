@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="SSAO.fs" />
+    <Compile Include="Util.fs" />
+    <Compile Include="Model.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Aardium" Version="1.0.21" />
+    <PackageReference Include="Aardvark.Application.Slim.GL" Version="4.11.8" />
+    <PackageReference Include="Aardvark.Application.Utilities" Version="4.11.8" />
+    <PackageReference Include="Aardvark.SceneGraph" Version="4.11.8" />
+    <PackageReference Include="Aardvark.SceneGraph.IO" Version="4.11.8" />
+    <PackageReference Include="Aardvark.UI" Version="4.6.1" />
+    <PackageReference Include="Aardvark.UI.Primitives" Version="4.6.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+  </ItemGroup>
+</Project>

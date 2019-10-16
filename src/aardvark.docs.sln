@@ -1,20 +1,22 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2050
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Utils", "Utils\Utils.fsproj", "{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Utils", "Utils\Utils.fsproj", "{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HelloWorld", "HelloWorld\HelloWorld.fsproj", "{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HelloWorld", "HelloWorld\HelloWorld.fsproj", "{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BackgroundColor", "BackgroundColor\BackgroundColor.fsproj", "{D6D6BC61-B0E5-4328-A528-D2921AFEA50B}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "BackgroundColor", "BackgroundColor\BackgroundColor.fsproj", "{D6D6BC61-B0E5-4328-A528-D2921AFEA50B}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Gravity", "Gravity\Gravity.fsproj", "{A04A78F8-FC4C-46CF-A431-1C4A81642193}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Gravity", "Gravity\Gravity.fsproj", "{A04A78F8-FC4C-46CF-A431-1C4A81642193}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SierpinskiTetrahedron", "SierpinskiTetrahedron\SierpinskiTetrahedron.fsproj", "{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SierpinskiTetrahedron", "SierpinskiTetrahedron\SierpinskiTetrahedron.fsproj", "{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ModelLoader", "ModelLoader\ModelLoader.fsproj", "{64A810B9-B8B2-43BF-9FB4-2860CA3C1FFD}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModelLoader", "ModelLoader\ModelLoader.fsproj", "{64A810B9-B8B2-43BF-9FB4-2860CA3C1FFD}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "AdaptiveWorld", "AdaptiveWorld\AdaptiveWorld.fsproj", "{CCA052C1-45CD-4D02-8849-EEA287583917}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SSAO", "SSAO\SSAO.fsproj", "{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,10 @@ Global
 		{CCA052C1-45CD-4D02-8849-EEA287583917}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCA052C1-45CD-4D02-8849-EEA287583917}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCA052C1-45CD-4D02-8849-EEA287583917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
