@@ -19,10 +19,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Aardium" Version="1.0.21" />
-    <PackageReference Include="Aardvark.Application.Slim.GL" Version="4.11.8" />
-    <PackageReference Include="Aardvark.Application.Utilities" Version="4.11.8" />
-    <PackageReference Include="Aardvark.SceneGraph" Version="4.11.8" />
-    <PackageReference Include="Aardvark.SceneGraph.IO" Version="4.11.8" />
+    <PackageReference Include="Aardvark.Application.Slim.GL" Version="4.11.9" />
+    <PackageReference Include="Aardvark.Application.Utilities" Version="4.11.9" />
+    <PackageReference Include="Aardvark.SceneGraph" Version="4.11.9" />
+    <PackageReference Include="Aardvark.SceneGraph.IO" Version="4.11.9" />
     <PackageReference Include="Aardvark.UI" Version="4.6.1" />
     <PackageReference Include="Aardvark.UI.Primitives" Version="4.6.1" />
   </ItemGroup>

@@ -107,6 +107,14 @@ module SSAO =
                 addressV WrapMode.Clamp
                 filter Filter.MinMagLinear
             }
+            
+        let random =
+            sampler2d {
+                texture uniform?Random
+                addressU WrapMode.Wrap
+                addressV WrapMode.Wrap
+                filter Filter.MinMagPoint
+            }
 
         type UniformScope with
             member x.Visualization : SSAOVisualization = uniform?Visualization
@@ -151,13 +159,16 @@ module SSAO =
 
                 let vn = 
                     uniform.ViewTrafo * V4d(wn, 0.0) |> Vec.xyz |> Vec.normalize
-                    
+
+
+                let x = random.Sample(pp.XY).XYZ |> Vec.normalize
                 let z = vn
-                let y = Vec.cross z V3d.IOO |> Vec.normalize
+                let y = Vec.cross z x |> Vec.normalize
                 let x = Vec.cross y z |> Vec.normalize
                     
                 let mutable occlusion = 0.0
                 for si in 0 .. uniform.Samples - 1 do
+
                     let dir = sampleDirections.[si] * uniform.Radius
                     let p = vp + x * dir.X + y * dir.Y + z * dir.Z
               
@@ -289,6 +300,17 @@ module SSAO =
                 DefaultSemantic.Colors, RenderbufferFormat.Rgba8
             ]
 
+        let randomTex = 
+            let img = PixImage<float32>(Col.Format.RGB, V2i.II * 512)
+
+            let rand = RandomSystem()
+            img.GetMatrix<C3f>().SetByCoord (fun _ ->
+                rand.UniformV3dDirection().ToC3d().ToC3f()
+            ) |> ignore
+
+            runtime.PrepareTexture(PixTexture2d(PixImageMipMap [| img :> PixImage |], TextureParams.empty))
+
+
         let clear = runtime.CompileClear(signature, ~~[DefaultSemantic.Colors, C4f(0,0,0,0); DefaultSemantic.Normals, C4f(0, 0, 0, 0)], ~~1.0)
         let task = runtime.CompileRender(signature, sg)
 
@@ -373,6 +395,7 @@ module SSAO =
                 |> Sg.diffuseTexture color
                 |> Sg.viewTrafo view
                 |> Sg.projTrafo proj
+                |> Sg.uniform "Random" (Mod.constant (randomTex :> ITexture))
                 |> Sg.uniform "Radius" config.radius
                 |> Sg.uniform "Threshold" config.threshold
                 |> Sg.uniform "Samples" config.samples
