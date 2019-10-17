@@ -166,7 +166,6 @@ module App =
         |> Sg.shader {
             do! DefaultSurfaces.trafo
             do! DefaultSurfaces.vertexColor
-            do! DefaultSurfaces.simpleLighting
         }
 
     let view (m : MModel) =
@@ -195,7 +194,6 @@ module App =
                         do! DefaultSurfaces.trafo
                         do! DefaultSurfaces.constantColor C4f.White
                         do! DefaultSurfaces.diffuseTexture
-                        do! DefaultSurfaces.simpleLighting
                     }
             )
 
@@ -275,6 +273,8 @@ module App =
                                         SSAOVisualization.Normal, "normal"
                                         SSAOVisualization.Ambient, "ambient"
                                         SSAOVisualization.Depth, "depth"
+                                        SSAOVisualization.Diffuse, "diffuse"
+                                        SSAOVisualization.AmbientAndDiffuse, "ambient & diffuse"
                                     ]
                                 )
                             ]

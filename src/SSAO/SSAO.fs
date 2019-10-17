@@ -15,24 +15,26 @@ type SSAOVisualization =
     | Normal    = 1
     | Color     = 2
     | Ambient   = 3
-    | Composed  = 4
+    | Diffuse   = 4
+    | AmbientAndDiffuse   = 5
+    | Composed  = 6
 
-module SSAOVisualization =
-    let next (v : SSAOVisualization) =
-        match v with
-            | SSAOVisualization.Depth -> SSAOVisualization.Normal
-            | SSAOVisualization.Normal -> SSAOVisualization.Color
-            | SSAOVisualization.Color -> SSAOVisualization.Composed
-            | SSAOVisualization.Composed -> SSAOVisualization.Ambient
-            | _ -> SSAOVisualization.Depth
+//module SSAOVisualization =
+//    let next (v : SSAOVisualization) =
+//        match v with
+//            | SSAOVisualization.Depth -> SSAOVisualization.Normal
+//            | SSAOVisualization.Normal -> SSAOVisualization.Color
+//            | SSAOVisualization.Color -> SSAOVisualization.Composed
+//            | SSAOVisualization.Composed -> SSAOVisualization.Ambient
+//            | _ -> SSAOVisualization.Depth
         
-    let prev (v : SSAOVisualization) =
-        match v with
-            | SSAOVisualization.Depth -> SSAOVisualization.Ambient
-            | SSAOVisualization.Composed -> SSAOVisualization.Color
-            | SSAOVisualization.Color -> SSAOVisualization.Normal
-            | SSAOVisualization.Normal -> SSAOVisualization.Depth
-            | _ -> SSAOVisualization.Ambient
+//    let prev (v : SSAOVisualization) =
+//        match v with
+//            | SSAOVisualization.Depth -> SSAOVisualization.Ambient
+//            | SSAOVisualization.Composed -> SSAOVisualization.Color
+//            | SSAOVisualization.Color -> SSAOVisualization.Normal
+//            | SSAOVisualization.Normal -> SSAOVisualization.Depth
+//            | _ -> SSAOVisualization.Ambient
 
 type SSAOConfig =
     {
@@ -124,6 +126,7 @@ module SSAO =
             member x.Sharpness : float = uniform?Sharpness
             member x.Gamma : float = uniform?Gamma
             member x.Samples : int = uniform?Samples
+            member x.Light : V3d = uniform?Light
 
         let sampleDirections =
             let rand = RandomSystem()
@@ -247,11 +250,8 @@ module SSAO =
                 match uniform.Visualization with
                     | SSAOVisualization.Depth -> 
                         let d = depth.Sample(v.tc).X
-                        //let u_zNear = 0.01
-                        //let u_zFar = 100.0
-                        //let linear = (2.0 * u_zNear) / (u_zFar + u_zNear - d * (u_zFar - u_zNear))
-                        let linear = d ** (128.0)
-                        return V4d(linear, linear, linear, 1.0)
+                        let v = d ** (128.0)
+                        return V4d(v, v, v, 1.0)
 
                     | SSAOVisualization.Color ->
                         return color.Sample(v.tc)
@@ -264,10 +264,49 @@ module SSAO =
                         let a = ambient.Sample(v.tc)
                         return a
 
-                    | _ ->
+                    | SSAOVisualization.Diffuse ->
+                        let d = depth.Sample(v.tc).X * 2.0 - 1.0
+                        let pp = V4d(v.pos.X, v.pos.Y, d, 1.0)
+                        let a = uniform.ViewProjTrafoInv * pp
+                        let wp = a.XYZ / a.W
+                        let n = normal.Sample(v.tc).XYZ.Normalized
+                        let lp = uniform.Light
+
+                        let ld = Vec.normalize (lp - wp)
+                        let diffuse = Vec.dot ld n |> clamp 0.0 1.0
+                        
+                        let c = color.Sample(v.tc).XYZ
+                        return V4d(diffuse * c, 1.0)
+                        
+                    | SSAOVisualization.AmbientAndDiffuse ->
+                        let d = depth.Sample(v.tc).X * 2.0 - 1.0
+                        let pp = V4d(v.pos.X, v.pos.Y, d, 1.0)
+                        let vo = uniform.ViewProjTrafoInv * pp
+                        let wp = vo.XYZ / vo.W
+
                         let a = ambient.Sample(v.tc).X ** uniform.Gamma
+                        let n = normal.Sample(v.tc).XYZ.Normalized
+                        let lp = uniform.Light
+
+                        let ld = Vec.normalize (lp - wp)
+                        let diffuse = Vec.dot ld n |> clamp 0.0 1.0
+
+                        return V4d((a * diffuse) * V3d.III, 1.0)
+                    | _ ->
+                        let d = depth.Sample(v.tc).X * 2.0 - 1.0
+                        let pp = V4d(v.pos.X, v.pos.Y, d, 1.0)
+                        let vo = uniform.ViewProjTrafoInv * pp
+                        let wp = vo.XYZ / vo.W
+
+                        let a = ambient.Sample(v.tc).X ** uniform.Gamma
+                        let n = normal.Sample(v.tc).XYZ.Normalized
+                        let lp = uniform.Light
+
+                        let ld = Vec.normalize (lp - wp)
+                        let diffuse = Vec.dot ld n |> clamp 0.0 1.0
+
                         let c = color.Sample(v.tc)
-                        return V4d(a * c.XYZ, c.W)
+                        return V4d((a * diffuse) * c.XYZ, c.W)
                          
 
             }
@@ -361,23 +400,10 @@ module SSAO =
         let result =
             Mod.custom (fun token ->
                 use __ = runtime.ContextLock
-
                 let (fbo,c,n,d) = framebufferAndTextures.GetValue token
                 let output = OutputDescription.ofFramebuffer fbo
                 clear.Run(token, RenderToken.Empty, output)
                 task.Run(token, RenderToken.Empty, output)
-
-                //let dst = Matrix<float32>(fbo.Size)
-                //runtime.DownloadDepth(unbox d, 0, 0, dst)
-
-                //let img = PixImage<byte>(Col.Format.RGBA, fbo.Size)
-                //img.GetMatrix<C4b>().SetMap(dst, fun d -> HSVf(d / 3.0f, 1.0f, 1.0f).ToC3f().ToC4b()) |> ignore
-                //img.SaveAsImage @"C:\Users\Schorsch\Desktop\depth.png"
-
-
-                //runtime.Download(unbox<IBackendTexture> c).SaveAsImage @"C:\Users\Schorsch\Desktop\render.png"
-
-
                 (c,n,d)
             )
 
@@ -396,6 +422,7 @@ module SSAO =
                 |> Sg.viewTrafo view
                 |> Sg.projTrafo proj
                 |> Sg.uniform "Random" (Mod.constant (randomTex :> ITexture))
+               
                 |> Sg.uniform "Radius" config.radius
                 |> Sg.uniform "Threshold" config.threshold
                 |> Sg.uniform "Samples" config.samples
@@ -481,6 +508,7 @@ module SSAO =
             |> Sg.diffuseTexture color
             |> Sg.uniform "Visualization" config.visualization
             |> Sg.uniform "Gamma" config.gamma
+            |> Sg.uniform "Light" (Mod.constant (10.0 * V3d.OOI))
             |> Sg.viewTrafo view
             |> Sg.projTrafo proj
             |> Sg.shader {
