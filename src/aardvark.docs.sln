@@ -18,6 +18,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "AdaptiveWorld", "AdaptiveWo
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SSAO", "SSAO\SSAO.fsproj", "{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorldCSharp", "HelloWorldCSharp\HelloWorldCSharp.csproj", "{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
