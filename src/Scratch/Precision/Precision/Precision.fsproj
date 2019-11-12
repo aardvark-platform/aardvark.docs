@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Shadows.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <PackageReference Include="Aardvark.Application.Slim.GL" Version="4.11.7" />
+    <PackageReference Include="Aardvark.SceneGraph" Version="4.11.7" />
+  </ItemGroup>
+
+</Project>

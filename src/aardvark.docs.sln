@@ -20,6 +20,10 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SSAO", "SSAO\SSAO.fsproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorldCSharp", "HelloWorldCSharp\HelloWorldCSharp.csproj", "{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scratch", "Scratch", "{8F9256EA-98FE-4B88-97CB-7A3FF4D8D24C}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Precision", "Scratch\Precision\Precision\Precision.fsproj", "{E5AB11A3-2613-4F58-9382-9A22225BB6DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,9 +66,17 @@ Global
 		{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5AB11A3-2613-4F58-9382-9A22225BB6DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5AB11A3-2613-4F58-9382-9A22225BB6DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5AB11A3-2613-4F58-9382-9A22225BB6DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5AB11A3-2613-4F58-9382-9A22225BB6DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5} = {8F9256EA-98FE-4B88-97CB-7A3FF4D8D24C}
+		{E5AB11A3-2613-4F58-9382-9A22225BB6DF} = {8F9256EA-98FE-4B88-97CB-7A3FF4D8D24C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A534AE71-A288-4825-A816-A6991B8EABE6}
