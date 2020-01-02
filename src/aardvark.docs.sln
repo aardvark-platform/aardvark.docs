@@ -20,6 +20,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SSAO", "SSAO\SSAO.fsproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorldCSharp", "HelloWorldCSharp\HelloWorldCSharp.csproj", "{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Refactoring", "Refactoring", "{48FB4C47-55C4-43D5-8533-6C5B37CCDFC3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5} = {48FB4C47-55C4-43D5-8533-6C5B37CCDFC3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A534AE71-A288-4825-A816-A6991B8EABE6}

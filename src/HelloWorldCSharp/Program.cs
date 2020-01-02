@@ -35,7 +35,7 @@ namespace HelloWorldCSharp
                     Mod.Init(C4b.Blue), 
                     Mod.Init(Box3d.FromCenterAndSize(V3d.Zero, V3d.III))
                  ); 
-                var initialViewTrafo = CameraView.LookAt(V3d.III * 3.0, V3d.OOO, V3d.OOI);
+                var initialViewTrafo = CameraView.LookAt(new V3d(0.2,1.2,0.9) * 3.0, V3d.OOO, V3d.OOI);
                 var controlledViewTrafo =
                     Aardvark.Application.DefaultCameraController.control(win.Mouse, win.Keyboard,
                         win.Time, initialViewTrafo);
