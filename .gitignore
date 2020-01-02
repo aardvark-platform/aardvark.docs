@@ -17,3 +17,5 @@ bin/Debug
 /src/ModelUpdateView/.domaincache
 /.ionide/
 /.vscode/
+*.domaincache
+*.g.fs
