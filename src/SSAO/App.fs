@@ -1,8 +1,8 @@
 ﻿namespace SSAO
 
 open Aardvark.Base
-open Aardvark.Base.Incremental
-open Aardvark.Base.Incremental.Operators
+open FSharp.Data.Adaptive
+open FSharp.Data.Adaptive.Operators
 open Aardvark.UI
 open Aardvark.UI.Generic
 open Aardvark.SceneGraph
@@ -24,8 +24,6 @@ module PointShader =
         }
 
 module App =
-    do Loader.Assimp.initialize()
-    
     type Message =
         | SetRadius of float
         | SetThreshold of float
@@ -57,8 +55,8 @@ module App =
            time            = MicroTime.Zero
         }
 
-    let simpleScene (time : IMod<MicroTime>) =
-        let time = time |> Mod.map ((*)0.5)
+    let simpleScene (time : aval<MicroTime>) =
+        let time = time |> AVal.map ((*)0.5)
         //let time = Mod.constant MicroTime.Zero
         // Sg.box provides a scenegraph containing a box (which can be changed, as
         // indicated by the modifiable arguments).
@@ -68,9 +66,9 @@ module App =
         // now let us use the dynamic box (in order to change vertex attributes)
         let colors = [ C4b.Yellow; C4b.Green; C4b.Blue ]
         let mutable currentIndex = 0
-        let boxColor = Mod.init colors.[currentIndex]
+        let boxColor = cval colors.[currentIndex]
     
-        let dynamicBox = Sg.box boxColor (Box3d.FromMinAndSize(new V3d(2, 1, 1), new V3d(3, 4, 2)) |> Mod.constant)
+        let dynamicBox = Sg.box boxColor (Box3d.FromMinAndSize(new V3d(2, 1, 1), new V3d(3, 4, 2)) |> AVal.constant)
 
         // create a simple subdivision sphere (as with box the tick' version of the function 
         // can be used to generate a static sphere
@@ -124,7 +122,7 @@ module App =
                 Array.init ct (fun _ -> rand.UniformC3f().ToC4b())
 
             let rnd = 
-                time |> Mod.map (fun mt -> 
+                time |> AVal.map (fun mt -> 
                     pos |> Array.map (fun (randomAxis,randomTurnrate,randomMovespeed,trafo) -> 
                         let rot = Trafo3d.Rotation(randomAxis,randomTurnrate * mt.TotalSeconds * 1.5)
 
@@ -143,7 +141,7 @@ module App =
 
             let instancedAttributes =
                 Map.ofList [
-                    string DefaultSemantic.Colors, (typeof<C4b>, Mod.constant (colors :> System.Array))
+                    string DefaultSemantic.Colors, (typeof<C4b>, AVal.constant (colors :> System.Array))
                     "ModelTrafo", (typeof<Trafo3d>, rnd)
                 ]
 
@@ -168,9 +166,9 @@ module App =
             do! DefaultSurfaces.vertexColor
         }
 
-    let view (m : MModel) =
+    let view (m : AdaptiveModel) =
         let scene =
-            m.scene |> Mod.map (fun s ->
+            m.scene |> AVal.map (fun s ->
                 match s with
                 | Simple -> 
                     simpleScene m.time
@@ -216,51 +214,51 @@ module App =
                     (Sg.dynamic scene)
 
                 div [ style "position: fixed; bottom: 5px; right: 5px"; clazz "ui mini red label" ] [
-                    text (m.status |> Mod.map (function Some s -> s | None -> "idle"))
+                    text (m.status |> AVal.map (function Some s -> s | None -> "idle"))
                 ]
 
                 div [ style "position: fixed; top: 20px; left: 20px"; clientEvent "onmouseenter" "$('#__ID__').animate({ opacity: 1.0 });";  clientEvent "onmouseleave" "$('#__ID__').animate({ opacity: 0.2 });" ] [
                     table [ clazz "ui inverted table" ] [
                         tr [] [
                             td [] "radius"
-                            td [ clazz "right aligned" ] (m.radius |> Mod.map (sprintf " %.3f"))
+                            td [ clazz "right aligned" ] (m.radius |> AVal.map (sprintf " %.3f"))
                             td [] [ slider { min = 0.0; max = 3.0; step = 0.01  } [ clazz "ui inverted red slider"; style "width: 100px"] m.radius SetRadius ]
                         ]
 
                         tr [] [
                             td [] "threshold"
-                            td [ clazz "right aligned" ] (m.threshold |> Mod.map (sprintf " %.3f"))
+                            td [ clazz "right aligned" ] (m.threshold |> AVal.map (sprintf " %.3f"))
                             td [] [ slider { min = 0.0; max = 2.8; step = 0.01  }[ clazz "ui inverted red slider"; style "width: 100px"] m.threshold SetThreshold ]
                         ]
                 
                         tr [] [
                             td [] "sigma"
-                            td [ clazz "right aligned" ] (m.sigma |> Mod.map (sprintf " %.3f"))
+                            td [ clazz "right aligned" ] (m.sigma |> AVal.map (sprintf " %.3f"))
                             td [] [ slider { min = 0.0; max = 16.0; step = 0.01  }[ clazz "ui inverted red slider"; style "width: 100px"]m.sigma SetSigma ]
                         ]
                         
                         tr [] [
                             td [] "sharpness"
-                            td [ clazz "right aligned" ] (m.sharpness |> Mod.map (sprintf " %.3f"))
+                            td [ clazz "right aligned" ] (m.sharpness |> AVal.map (sprintf " %.3f"))
                             td [] [ slider { min = 0.0; max = 16.0; step = 0.01  } [ clazz "ui inverted red slider"; style "width: 100px"] m.sharpness SetSharpness ]
                         ]
                         
                         tr [] [
                             td [] "scale"
-                            td [ clazz "right aligned" ] (m.scale |> Mod.map (sprintf " %.1f"))
+                            td [ clazz "right aligned" ] (m.scale |> AVal.map (sprintf " %.1f"))
                             td [] [ slider { min = 0.1; max = 1.0; step = 0.1  } [ clazz "ui inverted red slider"; style "width: 100px"] m.scale SetScale ]
                         ]
                         
                         tr [] [
                             td [] "gamma"
-                            td [ clazz "right aligned" ] (m.gamma |> Mod.map (sprintf " %.3f"))
+                            td [ clazz "right aligned" ] (m.gamma |> AVal.map (sprintf " %.3f"))
                             td [] [ slider { min = 0.0; max = 8.0; step = 0.05  } [ clazz "ui inverted red slider"; style "width: 100px"] m.gamma SetGamma ]
                         ]
 
                         tr [] [
                             td [] "samples"
-                            td [ clazz "right aligned" ] (m.samples |> Mod.map (sprintf " %d"))
-                            td [] [ slider { min = 8.0; max = 512.0; step = 8.0  } [ clazz "ui inverted red slider"; style "width: 100px"] (m.samples |> Mod.map float) (int>>clamp 8 512>>SetSamples) ]
+                            td [ clazz "right aligned" ] (m.samples |> AVal.map (sprintf " %d"))
+                            td [] [ slider { min = 8.0; max = 512.0; step = 8.0  } [ clazz "ui inverted red slider"; style "width: 100px"] (m.samples |> AVal.map float) (int>>clamp 8 512>>SetSamples) ]
                         ]
 
                         tr [] [

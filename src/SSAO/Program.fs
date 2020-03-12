@@ -5,7 +5,6 @@ open Aardvark.Base
 open Suave
 open Aardium
 open Aardvark.UI
-open Aardvark.Rendering.Vulkan
 open SSAO
 open Aardvark.Application.Slim
 
@@ -13,7 +12,6 @@ open Aardvark.Application.Slim
 let main argv =
     System.Threading.ThreadPool.SetMinThreads(24,24) |> (fun f -> if not f then failwith "" else ignore f)
 
-    Ag.initialize()
     Aardvark.Init()
     Aardium.init()
 

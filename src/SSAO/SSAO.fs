@@ -3,8 +3,8 @@
 open System
 open System.IO
 open Aardvark.Base
-open Aardvark.Base.Incremental
-open Aardvark.Base.Incremental.Operators
+open FSharp.Data.Adaptive
+open FSharp.Data.Adaptive.Operators
 open Aardvark.Base.Rendering
 open System.Runtime.CompilerServices
 open Aardvark.SceneGraph
@@ -38,14 +38,14 @@ type SSAOVisualization =
 
 type SSAOConfig =
     {
-        radius          : IMod<float>
-        threshold       : IMod<float>
-        visualization   : IMod<SSAOVisualization>
-        scale           : IMod<float>
-        sigma           : IMod<float>
-        sharpness       : IMod<float>
-        gamma           : IMod<float>
-        samples           : IMod<int>
+        radius          : aval<float>
+        threshold       : aval<float>
+        visualization   : aval<SSAOVisualization>
+        scale           : aval<float>
+        sigma           : aval<float>
+        sharpness       : aval<float>
+        gamma           : aval<float>
+        samples         : aval<int>
     }
 
     static member Default =
@@ -313,12 +313,12 @@ module SSAO =
 
     
 
-    let compileWithSSAO (outputSignature : IFramebufferSignature) (config : SSAOConfig) (view : IMod<Trafo3d>) (proj : IMod<Trafo3d>) (size : IMod<V2i>) (sg : ISg) =
-        let size = size |> Mod.map (fun s -> V2i(max 1 s.X, max 1 s.Y))
+    let compileWithSSAO (outputSignature : IFramebufferSignature) (config : SSAOConfig) (view : aval<Trafo3d>) (proj : aval<Trafo3d>) (size : aval<V2i>) (sg : ISg) =
+        let size = size |> AVal.map (fun s -> V2i(max 1 s.X, max 1 s.Y))
 
         let runtime = outputSignature.Runtime
         let halfSize = 
-            Mod.custom (fun t ->
+            AVal.custom (fun t ->
                 let s = size.GetValue t
                 let d = config.scale.GetValue t
                 V2i(
@@ -359,7 +359,7 @@ module SSAO =
         let mutable oldFbo = None
 
         let framebufferAndTextures =
-            size |> Mod.map (fun s ->
+            size |> AVal.map (fun s ->
                 do
                     let oc = oldColor
                     let on = oldNormal
@@ -398,7 +398,7 @@ module SSAO =
             )
 
         let result =
-            Mod.custom (fun token ->
+            AVal.custom (fun token ->
                 use __ = runtime.ContextLock
                 let (fbo,c,n,d) = framebufferAndTextures.GetValue token
                 let output = OutputDescription.ofFramebuffer fbo
@@ -407,9 +407,9 @@ module SSAO =
                 (c,n,d)
             )
 
-        let color   = result |> Mod.map (fun (c,_,_) -> c)
-        let normal  = result |> Mod.map (fun (_,n,_) -> n)
-        let depth   = result |> Mod.map (fun (_,_,d) -> d)
+        let color   = result |> AVal.map (fun (c,_,_) -> c)
+        let normal  = result |> AVal.map (fun (_,n,_) -> n)
+        let depth   = result |> AVal.map (fun (_,_,d) -> d)
 
         let ambient = 
             Sg.fullScreenQuad
@@ -421,7 +421,7 @@ module SSAO =
                 |> Sg.diffuseTexture color
                 |> Sg.viewTrafo view
                 |> Sg.projTrafo proj
-                |> Sg.uniform "Random" (Mod.constant (randomTex :> ITexture))
+                |> Sg.uniform "Random" (AVal.constant (randomTex :> ITexture))
                
                 |> Sg.uniform "Radius" config.radius
                 |> Sg.uniform "Threshold" config.threshold
@@ -460,7 +460,7 @@ module SSAO =
             let background = C4b(0uy, 0uy, 0uy, 128uy)
 
             let text =
-                Mod.custom (fun t ->
+                AVal.custom (fun t ->
                     let vis = config.visualization.GetValue t
                     let r = config.radius.GetValue t
                     let s = config.scale.GetValue t
@@ -478,14 +478,14 @@ module SSAO =
 
             let shape =
                 text
-                |> Mod.map (fun str ->
+                |> AVal.map (fun str ->
                     let shape = textConfig.Layout str
                     let bounds = shape.bounds.EnlargedBy(V2d(0.1, 0.0))
                     ShapeList.prepend (ConcreteShape.fillRoundedRectangle background 0.1 bounds) shape
                 )
 
             let trafo =
-                Mod.custom (fun token ->
+                AVal.custom (fun token ->
                     let shape = shape.GetValue token
                     let s = size.GetValue token
                     let bounds = shape.bounds
@@ -508,7 +508,7 @@ module SSAO =
             |> Sg.diffuseTexture color
             |> Sg.uniform "Visualization" config.visualization
             |> Sg.uniform "Gamma" config.gamma
-            |> Sg.uniform "Light" (Mod.constant (10.0 * V3d.OOI))
+            |> Sg.uniform "Light" (AVal.constant (10.0 * V3d.OOI))
             |> Sg.viewTrafo view
             |> Sg.projTrafo proj
             |> Sg.shader {
