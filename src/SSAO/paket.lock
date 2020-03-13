@@ -426,7 +426,7 @@ NUGET
     Ultz.SuperInvoke.Loader (1.0.3)
       Microsoft.DotNet.PlatformAbstractions (>= 3.1.1)
       Microsoft.Extensions.DependencyModel (>= 3.1.1)
-    Unofficial.AssimpNet (4.0.8)
+    Unofficial.AssimpNet (4.0.9)
     Unofficial.LibTessDotNet (2.0.2)
     Unofficial.OpenTK (3.0.18)
     Unofficial.OpenVR (1.1)

@@ -10,4 +10,4 @@ nuget Aardvark.Rendering.Text            ~> 5.0.2
 nuget Aardvark.Application.Utilities     ~> 5.0.2
 nuget Adaptify.MSBuild                   ~> 0.0.39
 nuget Aardium                            ~> 1.0.30
-nuget Unofficial.AssimpNet               ~> 4.0.8
+nuget Unofficial.AssimpNet               ~> 4.0.9
