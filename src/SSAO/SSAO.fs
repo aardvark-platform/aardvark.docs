@@ -530,7 +530,7 @@ module SSAO =
         let current =
             let textConfig =
                 {
-                    font = Font "Consolas"
+                    font = FontSquirrel.Hack.Regular
                     color = C4b.White
                     align = TextAlignment.Left
                     flipViewDependent = false
