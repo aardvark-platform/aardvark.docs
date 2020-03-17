@@ -1,0 +1,11 @@
+8k_moon.jpg - Moon Surface Texture
+
+downloaded from: https://www.solarsystemscope.com/textures/
+license: Attribution 4.0 International
+
+
+
+hip2.dat - Reduced Hipparcos Catalog Data (Hip I311)
+
+downloaded from: https://cdsarc.unistra.fr/viz-bin/cat/I/311
+Acknowledgement: Floor van Leeuwen, Institute of Astronomy, Cambridge University
