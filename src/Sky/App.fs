@@ -292,7 +292,7 @@ module App =
         let sunDir = skyData |> AVal.map (fun ((p,t),_) -> Sky.V3dFromPhiTheta(p, t))
         let sunColor = AVal.map2 (fun ((p,t),_) (tu) -> 
                                         let sunColorXYZ = SunLightScattering(p, t, tu).GetRadiance().ToC3f()
-                                        let sunColorRgb = sunColorXYZ.XYZinC3fToLinearSRGB().Clamped(0.0f, 1e30f)
+                                        let sunColorRgb = sunColorXYZ.XYZinC3fToLinearSRGB().Clamped(0.0f, float32 1e30)
                                         //let sunLuminance = sunColorRgb * Constant.Pi // radiance in k lumen/sr (cd) ???
                                         let sunLuminance = sunColorRgb
                                         // Wiki: 1.6 Gcd / m^2  Solar disk at noon
@@ -306,7 +306,7 @@ module App =
                                         | Some x -> 
                                             let (p,t) = x.moonPT
                                             let moonColorXYZ = SunLightScattering(p, t, tu).GetRadiance().ToC3f() // assume spectrum as sun for now // NOTE: will also attenuate the moon below the horizon
-                                            let moonColorRgb = moonColorXYZ.XYZinC3fToLinearSRGB().Clamped(0.0f, 1e30f)
+                                            let moonColorRgb = moonColorXYZ.XYZinC3fToLinearSRGB().Clamped(0.0f, float32 1e30)
                                             let moonLuminance = moonColorRgb * 2.5e3 / 1.6e9
                                             // Wiki: 2.5k cd/m^2 Moon surface vs 1.6e9 cd/m^2 of sun // NOTE: other paper states 4.9-5.4k average of moon disk near perigee (super moon)
                                             // Geometric albedo of moon 0.12 -> could also calculate illumination from solar disk with this albedo

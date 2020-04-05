@@ -1,5 +1,6 @@
 framework: netcoreapp3.1
 source https://api.nuget.org/v3/index.json
+storage: none
 
 nuget FSharp.Core                           >= 4.6.2 lowest_matching: true
                                             
@@ -20,7 +21,7 @@ nuget Aardvark.Service                      ~> 5.0.1
 nuget Aardvark.UI                           ~> 5.0.1
 nuget Aardvark.UI.Primitives                ~> 5.0.1
 
-nuget Adaptify.MSBuild                      ~> 0.0.39
+nuget Adaptify.MSBuild                      ~> 0.0.41
 
 nuget Aardium                               ~> 1.0.30
 
