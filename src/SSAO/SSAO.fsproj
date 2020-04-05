@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\..\bin\Debug\</OutputPath>
@@ -17,16 +17,5 @@
     <Compile Include="App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Aardium" Version="1.0.21" />
-    <PackageReference Include="Aardvark.Application.Slim.GL" Version="4.12.0" />
-    <PackageReference Include="Aardvark.Application.Utilities" Version="4.12.0" />
-    <PackageReference Include="Aardvark.SceneGraph" Version="4.12.0" />
-    <PackageReference Include="Aardvark.SceneGraph.IO" Version="4.12.0" />
-    <PackageReference Include="Aardvark.UI" Version="4.6.3" />
-    <PackageReference Include="Aardvark.UI.Primitives" Version="4.6.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
-  </ItemGroup>
+  <Import Project=".paket\Paket.Restore.targets" />
 </Project>

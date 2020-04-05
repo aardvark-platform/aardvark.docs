@@ -19,3 +19,9 @@ bin/Debug
 /.vscode/
 *.domaincache
 *.g.fs
+**/.ionide/
+**/paket-files/
+**/.paket/
+**/Aardvark.log
+**/.DS_Store
+/src/Sky/packages

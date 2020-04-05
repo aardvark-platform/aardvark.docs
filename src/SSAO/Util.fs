@@ -1,8 +1,8 @@
 ﻿namespace SSAO
 
 open Aardvark.Base
-open Aardvark.Base.Incremental
-open Aardvark.Base.Incremental.Operators
+open FSharp.Data.Adaptive
+open FSharp.Data.Adaptive.Operators
 open Aardvark.UI
 open Aardvark.UI.Primitives
 open Aardvark.UI.Generic
@@ -15,11 +15,11 @@ module Utilities =
 
     let ssaoRenderControl (att : list<string * AttributeValue<FreeFlyController.Message>>) (mapping : FreeFlyController.Message -> seq<'msg>) cfg (frustum : Frustum) (sg : ISg) =
 
-        let view (s : MCameraControllerState) =
+        let view (s : AdaptiveCameraControllerState) =
             let scene = SSAO.getScene cfg sg
-            let cam : IMod<Camera> = Mod.map (fun v -> { cameraView = v; frustum = frustum }) s.view 
+            let cam : aval<Camera> = AVal.map (fun v -> { cameraView = v; frustum = frustum }) s.view 
             DomNode.RenderControl(AttributeMap.ofList att, cam, scene, None)
-                |> FreeFlyController.withControls s id (Mod.constant frustum)
+                |> FreeFlyController.withControls s id (AVal.constant frustum)
             
         let app =
             {
@@ -42,13 +42,13 @@ module Utilities =
             { kind = ReferenceKind.Stylesheet; url = "https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.css"; name = "semui-range"}
         ]
 
-    let inline slider (att : list<string * AttributeValue<'msg>>) (min : float) (max : float) (step : float) (value : IMod<float>) (onChange : float -> 'msg) =
+    let inline slider (att : list<string * AttributeValue<'msg>>) (min : float) (max : float) (step : float) (value : aval<float>) (onChange : float -> 'msg) =
         
         let channelName = sprintf "channel%d" (newId())
         
         let boot = 
             String.concat ";" [
-                sprintf "$('#__ID__').range({ min: %f, max: %f, step: %f, start: %f, onChange: function(value, meta) { if(meta.triggeredByUser) aardvark.processEvent('__ID__', 'onchange', value); } });" min max step (Mod.force value)
+                sprintf "$('#__ID__').range({ min: %f, max: %f, step: %f, start: %f, onChange: function(value, meta) { if(meta.triggeredByUser) aardvark.processEvent('__ID__', 'onchange', value); } });" min max step (AVal.force value)
                 sprintf "%s.onmessage = function(value) {$('#__ID__').range('set value', value); };" channelName
             ]
             
@@ -58,7 +58,7 @@ module Utilities =
             )
             
         require semuirange (
-            onBoot' [channelName, Mod.channel value] boot (div (changeAtt :: att) [])
+            onBoot' [channelName, AVal.channel value] boot (div (changeAtt :: att) [])
         )
 
 

@@ -1,14 +1,15 @@
 ﻿namespace SSAO
 
 open Aardvark.Base
-open Aardvark.Base.Incremental
+open FSharp.Data.Adaptive
 open Aardvark.SceneGraph.IO
+open Adaptify
 
 type Scene =
     | Simple
     | Model of scene : list<Loader.Scene>
 
-[<DomainType>]
+[<ModelType>]
 type Model =
     {
         scene           : Scene
