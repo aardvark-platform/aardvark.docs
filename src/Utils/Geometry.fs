@@ -1,10 +1,9 @@
 namespace Aardvark.Docs.Utils
 
 open Aardvark.Base
-open Aardvark.Base.Incremental
+open FSharp.Data.Adaptive
 open Aardvark.Base.Rendering
 open Aardvark.SceneGraph
-open FShade
 open System
 
 module Geometry = 
@@ -12,8 +11,8 @@ module Geometry =
     let private r = Random()
     
     let points n pointsize (bounds : Box2d) =
-        let positions = Mod.constant [| for x in 1..n do yield bounds.Min.XYO + bounds.Size.XYO * V3d(r.NextDouble(), r.NextDouble(), 0.0) |]
-        let colors = Mod.constant [| for x in 1..n do yield C4b(r.Next(256), r.Next(256), r.Next(256)) |]
+        let positions = AVal.constant [| for x in 1..n do yield bounds.Min.XYO + bounds.Size.XYO * V3d(r.NextDouble(), r.NextDouble(), 0.0) |]
+        let colors = AVal.constant [| for x in 1..n do yield C4b(r.Next(256), r.Next(256), r.Next(256)) |]
         DrawCallInfo(FaceVertexCount = n, InstanceCount = 1)
             |> Sg.render IndexedGeometryMode.PointList 
             |> Sg.vertexAttribute DefaultSemantic.Positions positions
@@ -23,7 +22,7 @@ module Geometry =
                 DefaultSurfaces.vertexColor |> toEffect
                 DefaultSurfaces.pointSprite |> toEffect
                ]
-            |> Sg.uniform "PointSize" (Mod.constant pointsize)
+            |> Sg.uniform "PointSize" (AVal.constant pointsize)
 
     let grid (bounds : Box2d) (color : C4b) =
         let lines =
@@ -32,13 +31,13 @@ module Geometry =
                 [| for y in bounds.Min.Y..0.5..bounds.Max.Y do yield Line3d(V3d(bounds.Min.X, y, 0.0), V3d(bounds.Max.X, y, 0.0)) |]
             ]
             |> Array.concat
-        Sg.lines (Mod.constant color) (Mod.constant lines)
+        Sg.lines (AVal.constant color) (AVal.constant lines)
         |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
                 DefaultSurfaces.constantColor (C4f(color)) |> toEffect
                 ThickLine.Effect
                ]
-        |> Sg.uniform "LineWidth" (Mod.constant 0.5)
+        |> Sg.uniform "LineWidth" (AVal.constant 0.5)
 
     let aardvark (color : C4b) (lineWidth : float) =
         let ps = [|
@@ -84,10 +83,10 @@ module Geometry =
                 [| for struct (a, b) in ps.PairChainWrap() do yield Line3d(V3d(float a.X, float a.Y, 0.0), V3d(float b.X, float b.Y, 0.0)) |]
             ]
             |> Array.concat
-        Sg.lines (Mod.constant color) (Mod.constant lines)
+        Sg.lines (AVal.constant color) (AVal.constant lines)
         |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
                 DefaultSurfaces.constantColor (C4f(color)) |> toEffect
                 ThickLine.Effect
                ]
-        |> Sg.uniform "LineWidth" (Mod.constant lineWidth)
+        |> Sg.uniform "LineWidth" (AVal.constant lineWidth)

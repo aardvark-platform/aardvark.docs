@@ -1,0 +1,8 @@
+framework: netstandard2.0
+source https://api.nuget.org/v3/index.json
+storage: none
+
+nuget FSharp.Core
+nuget Aardvark.SceneGraph 
+nuget Aardvark.Base.Incremental
+
