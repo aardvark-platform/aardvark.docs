@@ -1,16 +1,15 @@
 ﻿open System
-open System.IO
 open Aardvark.Application
 open Aardvark.Application.Slim
 open Aardvark.Base
 open Aardvark.Base.Rendering
-open Aardvark.Base.Incremental
 open Aardvark.SceneGraph
+open FSharp.Data.Adaptive
 
 [<EntryPoint>]
 let main argv =
     // initialize runtime system
-    Ag.initialize(); Aardvark.Init()
+    Aardvark.Init()
 
     // create simple render window
     use app = new OpenGlApplication()
@@ -20,7 +19,7 @@ let main argv =
     // view, projection and default camera controllers
     let initialView = CameraView.lookAt (V3d(9.3, 9.9, 8.6)) V3d.Zero V3d.OOI
     let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
-    let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
+    let proj = win.Sizes |> AVal.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
     
     // generate 11 x 11 x 11 colored boxes
     let norm x = (x + 5.0) * 0.1
@@ -36,14 +35,14 @@ let main argv =
     // define scene
     let sg =
         boxes
-            |> Sg.group
+            |> Sg.ofSeq
             |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
                 DefaultSurfaces.vertexColor |> toEffect
                 DefaultSurfaces.simpleLighting |> toEffect
                ]
-            |> Sg.viewTrafo (view |> Mod.map CameraView.viewTrafo)
-            |> Sg.projTrafo (proj |> Mod.map Frustum.projTrafo)
+            |> Sg.viewTrafo (view |> AVal.map CameraView.viewTrafo)
+            |> Sg.projTrafo (proj |> AVal.map Frustum.projTrafo)
 
     // specify render task
     let task =
