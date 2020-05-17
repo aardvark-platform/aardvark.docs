@@ -27,6 +27,16 @@
   <ItemGroup>
     <PackageReference Include="Aardvark.Application.Slim.GL" Version="4.12.0" />
     <PackageReference Include="Aardvark.SceneGraph" Version="4.12.0" />
+    <PackageReference Include="Aardvark.Base" Version="4.5.17 " />
+    <PackageReference Include="Aardvark.Base.Essentials" Version="4.5.17 " />
+    <PackageReference Include="Aardvark.Base.Telemetry" Version="4.5.17 " />
+    <PackageReference Include="Aardvark.Base.FSharp" Version="4.5.17 " />
+    <PackageReference Include="Aardvark.Base.Incremental" Version="4.5.17 " />
+    <PackageReference Include="Aardvark.Base.Rendering" Version="4.12.0 " />
+    <PackageReference Include="FShade.Core" Version="4.3.9 " />
+    <PackageReference Include="FShade.Imperative" Version="4.3.9 " />
+    <PackageReference Include="FShade.GLSL" Version="4.3.9 " />
+    <PackageReference Include="System.Collections.Immutable" Version="1.5.0 " />
   </ItemGroup>
 
   <ItemGroup>

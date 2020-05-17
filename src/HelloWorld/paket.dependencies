@@ -1,7 +1,0 @@
-framework: netcoreapp3.1
-source https://api.nuget.org/v3/index.json
-storage: none
-
-nuget FSharp.Core
-nuget Aardvark.SceneGraph 
-nuget Aardvark.Application.Slim.GL

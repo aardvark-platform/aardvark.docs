@@ -14,5 +14,5 @@
     <Compile Include="ThickLine.fs" />
     <Compile Include="Geometry.fs" />
   </ItemGroup>
-  <Import Project=".paket\Paket.Restore.targets" />
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

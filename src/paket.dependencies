@@ -1,8 +1,10 @@
-framework: netcoreapp3.1
+framework: netcoreapp3.1, netstandard2.0
 source https://api.nuget.org/v3/index.json
 storage: none
 
 nuget FSharp.Core                           >= 4.6.2 lowest_matching: true
+
+nuget FSharp.Data.Adaptive                 ~> 0.0.17
                                             
 nuget Aardvark.Base                         ~> 5.0.5
 nuget Aardvark.Base.Incremental             ~> 5.0.5
@@ -16,6 +18,7 @@ nuget Aardvark.Rendering.Text               ~> 5.0.2
 nuget Aardvark.Application.Slim             ~> 5.0.2
 nuget Aardvark.Application.Slim.GL          ~> 5.0.2
 nuget Aardvark.Application.Slim.Vulkan      ~> 5.0.2
+nuget Aardvark.Application.Utilities     ~> 5.0.2
                                             
 nuget Aardvark.Service                      ~> 5.0.1
 nuget Aardvark.UI                           ~> 5.0.1
@@ -26,3 +29,5 @@ nuget Adaptify.MSBuild                      ~> 0.0.41
 nuget Aardium                               ~> 1.0.30
 
 nuget Aardvark.Physics.Sky                  ~> 5.0.0
+
+nuget Unofficial.AssimpNet               ~> 4.0.9
