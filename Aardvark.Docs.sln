@@ -2,43 +2,43 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Utils", "Utils\Utils.fsproj", "{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Utils", "src\Utils\Utils.fsproj", "{EF2FA5F1-F4C9-4BE1-91A4-5BF3B2ACBF23}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HelloWorld", "HelloWorld\HelloWorld.fsproj", "{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "HelloWorld", "src\HelloWorld\HelloWorld.fsproj", "{0BD82791-2F39-4A05-A4EA-8A93B6D284B0}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "BackgroundColor", "BackgroundColor\BackgroundColor.fsproj", "{D6D6BC61-B0E5-4328-A528-D2921AFEA50B}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "BackgroundColor", "src\BackgroundColor\BackgroundColor.fsproj", "{D6D6BC61-B0E5-4328-A528-D2921AFEA50B}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Gravity", "Gravity\Gravity.fsproj", "{A04A78F8-FC4C-46CF-A431-1C4A81642193}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Gravity", "src\Gravity\Gravity.fsproj", "{A04A78F8-FC4C-46CF-A431-1C4A81642193}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SierpinskiTetrahedron", "SierpinskiTetrahedron\SierpinskiTetrahedron.fsproj", "{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SierpinskiTetrahedron", "src\SierpinskiTetrahedron\SierpinskiTetrahedron.fsproj", "{4D38252C-1AC6-4EE5-B6C3-395C458FF4A5}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModelLoader", "ModelLoader\ModelLoader.fsproj", "{64A810B9-B8B2-43BF-9FB4-2860CA3C1FFD}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ModelLoader", "src\ModelLoader\ModelLoader.fsproj", "{64A810B9-B8B2-43BF-9FB4-2860CA3C1FFD}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "AdaptiveWorld", "AdaptiveWorld\AdaptiveWorld.fsproj", "{CCA052C1-45CD-4D02-8849-EEA287583917}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "AdaptiveWorld", "src\AdaptiveWorld\AdaptiveWorld.fsproj", "{CCA052C1-45CD-4D02-8849-EEA287583917}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SSAO", "SSAO\SSAO.fsproj", "{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "SSAO", "src\SSAO\SSAO.fsproj", "{C6D59BE4-CFFA-4916-9590-DABB5EB247BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorldCSharp", "HelloWorldCSharp\HelloWorldCSharp.csproj", "{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorldCSharp", "src\HelloWorldCSharp\HelloWorldCSharp.csproj", "{9C51D369-7DCB-4D4F-8B2B-EEEBB201A2F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Refactoring", "Refactoring", "{48FB4C47-55C4-43D5-8533-6C5B37CCDFC3}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sky", "Sky\Sky.fsproj", "{8DEF59B8-3EF0-4D20-A977-76FEA537E3AF}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sky", "src\Sky\Sky.fsproj", "{8DEF59B8-3EF0-4D20-A977-76FEA537E3AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".git", ".git", "{B78C8CF6-A717-4F87-8D7E-C697E9EB7773}"
 	ProjectSection(SolutionItems) = preProject
-		..\.gitignore = ..\.gitignore
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{8A25AE20-B025-4914-A520-695C18E617F3}"
 	ProjectSection(SolutionItems) = preProject
-		..\.travis.yml = ..\.travis.yml
-		..\appveyor.yml = ..\appveyor.yml
+		.travis.yml = .travis.yml
+		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{28FBE24E-2F49-436B-BDDC-2C43714552C6}"
 	ProjectSection(SolutionItems) = preProject
-		..\LICENSE = ..\LICENSE
-		..\README.md = ..\README.md
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{C8CC0D45-89F0-41AE-97E8-3986F765121D}"
