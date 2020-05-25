@@ -8,4 +8,4 @@ env:
 mono: none
 dotnet: 2.2
 script:
-    - dotnet build ./src/aardvark.docs.sln
+    - dotnet build ./aardvark.docs.sln
