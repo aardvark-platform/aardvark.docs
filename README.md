@@ -16,16 +16,18 @@ A more technical platform walkthrough can be found [here](https://github.com/aar
 Build
 -----
 
-Install [.NET Core SDK][dotnet-core-sdk] for your platform, then run:
+Install [.NET Core SDK][dotnet-core-sdk] for your platform. 
+run ``build.cmd or build.sh`` to install all dependencies.
+Then run:
 
 ```console
-$ dotnet build ./src/aardvark.docs.sln
+$ dotnet build Ardvark.Docs.sln
 ```
 
 Run
 ---
 
-Requires [.NET Core Runtime][dotnet-core-runtime] version 2.0+, e.g. to run [Hello World][hello-world] example enter:
+Requires [.NET Core Runtime][dotnet-core-runtime] version 3.1+, e.g. to run [Hello World][hello-world] example enter:
 
 ```console
 $ dotnet run -c Release -p .\src\HelloWorld\HelloWorld.fsproj
