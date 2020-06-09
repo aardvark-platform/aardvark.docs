@@ -5,9 +5,12 @@ open Aardvark.Base
 open Aardvark.Base.Rendering
 open Aardvark.Base.Incremental
 open Aardvark.SceneGraph
+open Aardvark.SceneGraph.IO
 
 [<EntryPoint>]
 let main argv =
+    Loader.Assimp.initialize() // initialize model loading assimp lib in aardvark.scenegraph.io
+
     // initialize runtime system
     Ag.initialize(); Aardvark.Init()
 
@@ -22,7 +25,7 @@ let main argv =
     let proj = win.Sizes |> Mod.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
     
     let model = 
-        Aardvark.SceneGraph.IO.Loader.Assimp.load (Path.combine [__SOURCE_DIRECTORY__; ".."; ".."; "data"; "aardvark"; "aardvark.obj"])
+        Loader.Assimp.load (Path.combine [__SOURCE_DIRECTORY__; ".."; ".."; "data"; "aardvark"; "aardvark.obj"])
         |> Sg.adapter
         |> Sg.transform (Trafo3d.Scale(1.0,1.0,-1.0))
 
