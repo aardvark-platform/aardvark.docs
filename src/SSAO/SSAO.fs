@@ -137,22 +137,7 @@ module SSAO =
             member x.Gamma : float = uniform?Gamma
             member x.Samples : int = uniform?Samples
             member x.Light : V3d = uniform?Light
-
-   
-           
-        let sampleDirections =
-            let rand = RandomSystem()
-            let arr = 
-                Array.init 512 (fun _ ->
-                    let phi = rand.UniformDouble() * Constant.PiTimesTwo
-                    let theta = rand.UniformDouble() * (Constant.PiHalf - 10.0 * Constant.RadiansPerDegree)
-                    V3d(
-                        cos phi * sin theta,
-                        sin phi * sin theta,
-                        cos theta
-                    )
-                )
-            arr |> Array.map (fun v -> v * (0.5 + 0.5 * rand.UniformDouble())) //(0.02 + rand.UniformDouble() * 0.03))
+            member x.SampleDirections : Arr<N<512>,V3d> = uniform?SampleDirections
 
         [<ReflectedDefinition>]
         let project (vp : V3d) =
@@ -242,7 +227,7 @@ module SSAO =
                 let mutable occlusion = 0.0
                 for si in 0 .. uniform.Samples - 1 do
 
-                    let dir = sampleDirections.[si] * uniform.Radius
+                    let dir = uniform.SampleDirections.[si] * uniform.Radius
                     let p = vp + x * dir.X + y * dir.Y + z * dir.Z
               
                     let f = 1.0 - uniform.Threshold / -p.Z
@@ -490,6 +475,21 @@ module SSAO =
         let color   = result |> AVal.map (fun (c,_,_) -> c)
         let normal  = result |> AVal.map (fun (_,n,_) -> n)
         let depth   = result |> AVal.map (fun (_,_,d) -> d)
+        
+        let sampleDirections =
+            let rand = RandomSystem()
+            let arr = 
+                Array.init 512 (fun _ ->
+                    let phi = rand.UniformDouble() * Constant.PiTimesTwo
+                    let theta = rand.UniformDouble() * (Constant.PiHalf - 10.0 * Constant.RadiansPerDegree)
+                    V3d(
+                        cos phi * sin theta,
+                        sin phi * sin theta,
+                        cos theta
+                    )
+                )
+            arr |> Array.map (fun v -> v * (0.5 + 0.5 * rand.UniformDouble())) //(0.02 + rand.UniformDouble() * 0.03))
+            |> AVal.constant
 
         let ambient = 
             Sg.fullScreenQuad
@@ -501,11 +501,11 @@ module SSAO =
                 |> Sg.diffuseTexture color
                 |> Sg.viewTrafo view
                 |> Sg.projTrafo proj
-                |> Sg.uniform "Random" (AVal.constant (randomTex :> ITexture))
-               
+                |> Sg.uniform "Random" (AVal.constant (randomTex :> ITexture))              
                 |> Sg.uniform "Radius" config.radius
                 |> Sg.uniform "Threshold" config.threshold
                 |> Sg.uniform "Samples" config.samples
+                |> Sg.uniform  "SampleDirections" sampleDirections
                 |> Sg.compile runtime ambientSignature
                 |> RenderTask.renderToColor halfSize
 
