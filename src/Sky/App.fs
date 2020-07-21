@@ -293,8 +293,8 @@ module App =
             let polColLum = Vec.dot (polCol.ToV3d()) lumVector
             let pol = pol * polCol.SRGBToXYZinC3f().ToC3d() / polColLum
 
-            let sunScale = nightTimeFadeout theta
-            let moonScale = match special with | Some x -> nightTimeFadeout (snd x.moonPT) | None -> 0.0
+            let sunFadeout = nightTimeFadeout theta
+            let moonFadeout = match special with | Some x -> nightTimeFadeout (snd x.moonPT) | None -> 0.0
 
             let skyMoon = match special with 
                           | Some x -> Some (createSky (fst x.moonPT) (snd x.moonPT))
@@ -303,9 +303,9 @@ module App =
             let cubeFaces = Array.init 6 (fun i -> PixImage.CreateCubeMapSide<float32, C4f>(i, res, 4, 
                                                             fun v ->
                                                                 let mutable xyz = C3f.Black
-                                                                xyz <- xyz + skySun.GetRadiance(v).ToC3d() * sunScale
+                                                                xyz <- xyz + skySun.GetRadiance(v).ToC3d() * sunFadeout
                                                                 if skyMoon.IsSome then
-                                                                    xyz <- xyz + skyMoon.Value.GetRadiance(v).ToC3d() * 2.5e3 / 1.6e9 * moonRefl // TODO: actual amount of reflected light
+                                                                    xyz <- xyz + skyMoon.Value.GetRadiance(v).ToC3d() * 2.5e3 / 1.6e9 * moonRefl * moonFadeout // TODO: actual amount of reflected light
                                                                 xyz <- xyz + (lightPolFun v) * pol
                                                                 let rgb = xyz.XYZinC3fToLinearSRGB().Clamped(0.0f, Single.MaxValue)
                                                                 if rgb.ToV3f().AnyNaN then 
@@ -366,25 +366,25 @@ module App =
                     |> Sg.pass pass2
                     |> Sg.onOff spaceVisible
 
-        let sgMoon =DrawCallInfo(1) |> Sg.render IndexedGeometryMode.PointList
-                    |> Sg.shader {
-                        do! Shaders.sunSpriteGs
-                        do! Shaders.moonSpritePs
-                        //do! Shaders.simpleTonemap
-                    }
-                    |> Sg.cullMode (AVal.constant CullMode.None)
-                    |> Sg.uniform "MoonColor" moonColor
-                    |> Sg.uniform "MoonDirection" moonDir
-                    |> Sg.uniform "MoonSize" moonDiameter
-                    |> Sg.uniform "SunDirection" moonDir // this is the fake sun direction for the sunSpirteGS
-                    |> Sg.uniform "SunSize" moonDiameter // this is the fake sun size for the sunSpriteGS
-                    |> Sg.uniform "CameraFov" cameraFov
-                    |> Sg.uniform "RealSunDirection" sunDir
-                    |> Sg.texture (Symbol.Create "MoonTexture") (AVal.constant (FileTexture(Path.combine [ resourcePath; "8k_moon.jpg"], { wantSrgb = true; wantCompressed = false; wantMipMaps = true }) :> ITexture))
-                    |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
+        let sgMoon = DrawCallInfo(1) |> Sg.render IndexedGeometryMode.PointList
+                     |> Sg.shader {
+                         do! Shaders.sunSpriteGs
+                         do! Shaders.moonSpritePs
+                         //do! Shaders.simpleTonemap
+                     }
+                     |> Sg.cullMode (AVal.constant CullMode.None)
+                     |> Sg.uniform "MoonColor" moonColor
+                     |> Sg.uniform "MoonDirection" moonDir
+                     |> Sg.uniform "MoonSize" moonDiameter
+                     |> Sg.uniform "SunDirection" moonDir // this is the fake sun direction for the sunSpirteGS
+                     |> Sg.uniform "SunSize" moonDiameter // this is the fake sun size for the sunSpriteGS
+                     |> Sg.uniform "CameraFov" cameraFov
+                     |> Sg.uniform "RealSunDirection" sunDir
+                     |> Sg.texture (Symbol.Create "MoonTexture") (AVal.constant (FileTexture(Path.combine [ resourcePath; "8k_moon.jpg"], { wantSrgb = true; wantCompressed = false; wantMipMaps = true }) :> ITexture))
+                     |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
                     |> Sg.blendMode' blendAdd
-                    |> Sg.pass pass2
-                    |> Sg.onOff spaceVisible
+                     |> Sg.pass pass2
+                     |> Sg.onOff spaceVisible
 
         let sgMoon = skyData |> AVal.map (fun sd -> match snd sd with | Some s -> sgMoon | None -> Sg.empty) |> Sg.dynamic
 
