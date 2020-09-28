@@ -17,20 +17,26 @@ Build
 -----
 
 Install [.NET Core SDK][dotnet-core-sdk] for your platform. 
-run ``build.cmd or build.sh`` to install all dependencies.
-Then run:
-
-```console
-$ dotnet build Ardvark.Docs.sln
-```
+Run `build.cmd` or `build.sh` to install all dependencies and build the project.
 
 Run
 ---
 
 Requires [.NET Core Runtime][dotnet-core-runtime] version 3.1+, e.g. to run [Hello World][hello-world] example enter:
 
+## Windows
 ```console
 $ dotnet run -c Release -p .\src\HelloWorld\HelloWorld.fsproj
+```
+
+## Linux / Mac
+```console
+$ dotnet run -c Release -p ./src/HelloWorld/HelloWorld.fsproj
+```
+
+If you're on a Mac, you'll additionally need to install `DevIL`:
+```console
+$ brew install devil
 ```
 
 [dotnet-core-runtime]: https://www.microsoft.com/net/download/core#/runtime
