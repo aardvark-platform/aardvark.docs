@@ -6,4 +6,12 @@ environment:
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
     DOTNET_CLI_TELEMETRY_OPTOUT: 1
 build_script:
-    - dotnet build ./aardvark.docs.sln
+    - build.cmd
+
+for:
+-
+  matrix:
+    only:
+      - image: Ubuntu
+  build_script:
+  - ./build.sh
