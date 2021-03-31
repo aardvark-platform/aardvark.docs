@@ -5,7 +5,7 @@ open System.IO
 open Aardvark.Base
 open FSharp.Data.Adaptive
 open FSharp.Data.Adaptive.Operators
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 open System.Runtime.CompilerServices
 open Aardvark.SceneGraph
 open Aardvark.Rendering.Text
@@ -372,7 +372,7 @@ module SSAO =
     let compileWithSSAO (outputSignature : IFramebufferSignature) (config : SSAOConfig) (view : aval<Trafo3d>) (proj : aval<Trafo3d>) (size : aval<V2i>) (sg : ISg) =
         let size = size |> AVal.map (fun s -> V2i(max 1 s.X, max 1 s.Y))
 
-        let runtime = outputSignature.Runtime
+        let runtime = outputSignature.Runtime :?> IRuntime
         let halfSize = 
             AVal.custom (fun t ->
                 let s = size.GetValue t
@@ -407,75 +407,24 @@ module SSAO =
 
             runtime.PrepareTexture(PixTexture2d(PixImageMipMap [| img :> PixImage |], TextureParams.empty))
 
-
-        let clear = runtime.CompileClear(signature, ~~[DefaultSemantic.Colors, C4f(0,0,0,0); DefaultSemantic.Normals, C4f(0, 0, 0, 0)], ~~1.0)
+        let clear = clear { color C4f.Zero; depth 1.0 }
         let task = runtime.CompileRender(signature, sg)
 
-        let mutable oldColor = None
-        let mutable oldNormal = None
-        let mutable oldDepth = None
-        let mutable oldFbo = None
+        let color, depth, normal =
+            let output =
+                Set.ofList [
+                    DefaultSemantic.Colors
+                    DefaultSemantic.Depth
+                    DefaultSemantic.Normals
+                ]
 
+            let map =
+                task |> RenderTask.renderSemanticsWithClear output size clear
 
-        let framebufferAndTextures =
-            size |> AVal.map (fun s ->
-                do
-                    let oc = oldColor
-                    let on = oldNormal
-                    let od = oldDepth
-                    let off = oldFbo
-                    async {
-                        do! Async.Sleep 50
-                        use __ = runtime.ContextLock
-                        oc |> Option.iter runtime.DeleteTexture
-                        on |> Option.iter runtime.DeleteTexture
-                        od |> Option.iter runtime.DeleteTexture
-                        off |> Option.iter runtime.DeleteFramebuffer
-                 
+            map |> Map.find DefaultSemantic.Colors,
+            map |> Map.find DefaultSemantic.Depth,
+            map |> Map.find DefaultSemantic.Normals
 
-                
-                    } |> Async.Start
-
-
-                let color = runtime.CreateTexture(s, TextureFormat.Rgba8, 1, samples)
-                let normal = runtime.CreateTexture(s, TextureFormat.Rgba32f, 1, samples)
-                let depth = runtime.CreateTexture(s, TextureFormat.Depth24Stencil8, 1, samples)
-  
-                let fbo = 
-                    runtime.CreateFramebuffer(
-                        signature, 
-                        [
-                            DefaultSemantic.Colors,     { texture = color; level = 0; slice = 0 } :> IFramebufferOutput
-                            DefaultSemantic.Depth,      { texture = depth; level = 0; slice = 0 } :> IFramebufferOutput
-                            DefaultSemantic.Normals,    { texture = normal; level = 0; slice = 0 } :> IFramebufferOutput
-                        ]
-                    )
-                 
-                                
-
-                oldColor <- Some color
-                oldNormal <- Some normal
-                oldDepth <- Some depth
-                oldFbo <- Some fbo
-
-                (fbo, color, normal, depth)
-            )
-
-        let result =
-            AVal.custom (fun token ->
-                use __ = runtime.ContextLock
-                let (fbo, c, n, d) = framebufferAndTextures.GetValue token
-                let output = OutputDescription.ofFramebuffer fbo
-                clear.Run(token, RenderToken.Empty, output)
-                task.Run(token, RenderToken.Empty, output)
-
-                (c :> ITexture, n :> ITexture, d :> ITexture)
-            )
-
-        let color   = result |> AVal.map (fun (c,_,_) -> c)
-        let normal  = result |> AVal.map (fun (_,n,_) -> n)
-        let depth   = result |> AVal.map (fun (_,_,d) -> d)
-        
         let sampleDirections =
             let rand = RandomSystem()
             let arr = 

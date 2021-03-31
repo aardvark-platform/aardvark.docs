@@ -1,5 +1,5 @@
 FSharp.Core
 Aardvark.Application.Utilities
 Aardvark.SceneGraph
-Aardvark.Base.Incremental
+Aardvark.SceneGraph.IO
 FSharp.Data.Adaptive

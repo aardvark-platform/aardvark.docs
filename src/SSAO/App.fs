@@ -7,7 +7,7 @@ open Aardvark.UI
 open Aardvark.UI.Generic
 open Aardvark.SceneGraph
 open Aardvark.SceneGraph.IO
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 open Aardvark.Service
 open Aardvark.UI.Primitives
 
@@ -57,7 +57,7 @@ module App =
 
     let simpleScene (time : aval<MicroTime>) =
         let time = time |> AVal.map ((*)0.5)
-        //let time = Mod.constant MicroTime.Zero
+        //let time = AVal.constant MicroTime.Zero
         // Sg.box provides a scenegraph containing a box (which can be changed, as
         // indicated by the modifiable arguments).
         // Sg.box' is a static variant thereof
@@ -146,7 +146,7 @@ module App =
                 ]
 
             Sg.box' C4b.White smallBox
-            |> Sg.instanced' instancedAttributes //(Mod.constant pos)
+            |> Sg.instanced' instancedAttributes //(AVal.constant pos)
             //let rand = RandomSystem()
             //IndexedGeometryPrimitives.points pos (Array.init pos.Length (fun _ -> rand.UniformC3f().ToC4b()))
 

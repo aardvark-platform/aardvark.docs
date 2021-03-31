@@ -1,9 +1,8 @@
 ﻿open System
 open System.Diagnostics
 open Aardvark.Application
-open Aardvark.Application.Slim
 open Aardvark.Base
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 open Aardvark.SceneGraph
 open FSharp.Data.Adaptive
 
@@ -11,17 +10,6 @@ open FSharp.Data.Adaptive
 let main argv = 
     // initialize runtime system
     Aardvark.Init()
-
-    // simple OpenGL window
-    use app = new OpenGlApplication()
-    let win = app.CreateGameWindow(8)
-    win.Title <- "Gravity (aardvark.docs)"
-    
-    // view, projection and default camera controllers
-    let initialView = CameraView.lookAt (V3d(50.0, 50.0, 50.0)) V3d.Zero V3d.OOI
-    let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
-    let viewPos = view |> AVal.map (fun x -> x.Location)
-    let proj = win.Sizes |> AVal.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
 
     // simulation
     let n = 64          // number of particles
@@ -46,7 +34,7 @@ let main argv =
         let vs = Array.create<V3f> n V3f.Zero                           // velocities
         let ms = [| for i in 1..n do yield float32(r.NextDouble()) |]   // masses
 
-        do! Async.Sleep 5000
+        do! Async.Sleep 8000
         while true do
             for i in 0..ps.Length-1 do
                 let p = ps.[i]
@@ -143,25 +131,24 @@ let main argv =
 
     
     let sg =
-        [ 
-          points
-          lines
-          aardvark
-          grid
-          transparentPlane
+        [
+            points
+            lines
+            aardvark
+            grid
+            transparentPlane
         ]
         |> Sg.ofSeq
-        |> Sg.viewTrafo (view |> AVal.map CameraView.viewTrafo)
-        |> Sg.projTrafo (proj |> AVal.map Frustum.projTrafo)
-
-    // specify render task
-    let task = 
-        RenderTask.ofList [
-            app.Runtime.CompileRender(win.FramebufferSignature, sg)
-        ]
 
     // start
-    win.RenderTask <- task
     simulation |> Async.Start
-    win.Run()
+
+    show {
+        display Display.Mono
+        samples 8
+        backend Backend.GL
+        debug false
+        scene sg
+    }
+
     0

@@ -1,9 +1,7 @@
-﻿open System
-open Aardvark.Application
-open Aardvark.Application.Slim
-open Aardvark.Base
-open Aardvark.Base.Rendering
+﻿open Aardvark.Base
+open Aardvark.Rendering
 open Aardvark.SceneGraph
+open Aardvark.Application
 open FSharp.Data.Adaptive
 
 [<EntryPoint>]
@@ -12,9 +10,13 @@ let main argv =
     Aardvark.Init()
 
     // simple OpenGL window
-    use app = new OpenGlApplication()
-    let win = app.CreateGameWindow(8)
-    win.Title <- "AdaptiveWorld (aardvark.docs)"
+    use win =
+        window {
+            display Display.Mono
+            samples 8
+            backend Backend.GL
+            debug false
+        }
 
     // view, projection and default camera controllers
     let initialView = CameraView.lookAt (V3d(16.0, 11.0, 6.0)) V3d.Zero V3d.OOI
@@ -50,11 +52,8 @@ let main argv =
             |> Sg.viewTrafo (view |> AVal.map CameraView.viewTrafo)
             |> Sg.projTrafo (proj |> AVal.map Frustum.projTrafo)
 
-    // specify render task
-    let task =
-        app.Runtime.CompileRender(win.FramebufferSignature, sg)
-
     // start
-    win.RenderTask <- task
+    win.Scene <- sg
     win.Run()
+
     0

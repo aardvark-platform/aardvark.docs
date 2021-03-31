@@ -8,7 +8,7 @@ open Aardvark.UI.Primitives
 open Aardvark.UI.Generic
 open Aardvark.SceneGraph
 open Aardvark.SceneGraph.IO
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 
 [<AutoOpen>]
 module Utilities =

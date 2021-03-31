@@ -4,10 +4,12 @@ open System
 open System.Diagnostics
 
 open Aardvark.Base
-open Aardvark.Base.Incremental
+open Aardvark.Rendering
 open Aardvark.SceneGraph
 
-type FoldingTetrahedron (t : IMod<double>) =
+open FSharp.Data.Adaptive
+
+type FoldingTetrahedron (t : aval<double>) =
 
     // define folding tetrahedron
     let h = 0.5 * sqrt 3.0  // height of triangle
@@ -60,12 +62,12 @@ type FoldingTetrahedron (t : IMod<double>) =
         let n2 = (fold2 angle).TransformDir V3d.OOI
         [| n0;n0;n0; n1;n1;n1; n2;n2;n2; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI; V3d.OOI;V3d.OOI;V3d.OOI;|]
 
-    member private x.Positions = t |> Mod.map (fun t ->
+    member private x.Positions = t |> AVal.map (fun t ->
         let angle = t * angleMax
         x.ComputePositions angle
         )
 
-    member private x.Normals = t |> Mod.map (fun t ->
+    member private x.Normals = t |> AVal.map (fun t ->
         let angle = t * angleMax
         x.ComputeNormals angle
         )
@@ -77,7 +79,7 @@ type FoldingTetrahedron (t : IMod<double>) =
             )
             |> Sg.render IndexedGeometryMode.TriangleList 
             |> Sg.vertexAttribute DefaultSemantic.Positions x.Positions
-            |> Sg.vertexAttribute DefaultSemantic.Colors (Mod.constant cs)
+            |> Sg.vertexAttribute' DefaultSemantic.Colors cs
             |> Sg.vertexAttribute DefaultSemantic.Normals x.Normals
             
     member private x.GetSg2 () =

@@ -1,8 +1,6 @@
-﻿open System
-open Aardvark.Application
-open Aardvark.Application.Slim
+﻿open Aardvark.Application
 open Aardvark.Base
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 open Aardvark.SceneGraph
 open FSharp.Data.Adaptive
 
@@ -11,16 +9,6 @@ let main argv =
     // initialize runtime system
     Aardvark.Init()
 
-    // create simple render window
-    use app = new OpenGlApplication()
-    let win = app.CreateGameWindow(8)
-    win.Title <- "Hello World (aardvark.docs)"
-
-    // view, projection and default camera controllers
-    let initialView = CameraView.lookAt (V3d(9.3, 9.9, 8.6)) V3d.Zero V3d.OOI
-    let view = initialView |> DefaultCameraController.control win.Mouse win.Keyboard win.Time
-    let proj = win.Sizes |> AVal.map (fun s -> Frustum.perspective 60.0 0.1 1000.0 (float s.X / float s.Y))
-    
     // generate 11 x 11 x 11 colored boxes
     let norm x = (x + 5.0) * 0.1
     let boxes = seq {
@@ -41,14 +29,17 @@ let main argv =
                 DefaultSurfaces.vertexColor |> toEffect
                 DefaultSurfaces.simpleLighting |> toEffect
                ]
-            |> Sg.viewTrafo (view |> AVal.map CameraView.viewTrafo)
-            |> Sg.projTrafo (proj |> AVal.map Frustum.projTrafo)
-
-    // specify render task
-    let task =
-        app.Runtime.CompileRender(win.FramebufferSignature, sg)
 
     // start
-    win.RenderTask <- task
-    win.Run()
+    let initialView = CameraView.lookAt (V3d(9.3, 9.9, 8.6)) V3d.Zero V3d.OOI
+
+    show {
+        display Display.Mono
+        samples 8
+        backend Backend.GL
+        debug false
+        scene sg
+        initialCamera initialView
+    }
+
     0

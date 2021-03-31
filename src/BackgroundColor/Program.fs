@@ -2,7 +2,7 @@
 open Aardvark.Application
 open Aardvark.Application.Slim
 open Aardvark.Base
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 open Aardvark.SceneGraph
 open FSharp.Data.Adaptive
 
@@ -47,7 +47,7 @@ let main argv =
     Async.Start bgColorAnimation
     
     // specify render task(s)
-    let task =
+    use task =
         [
             app.Runtime.CompileClear(win.FramebufferSignature, bgColor)
             app.Runtime.CompileRender(win.FramebufferSignature, sg)

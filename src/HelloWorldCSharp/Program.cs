@@ -7,10 +7,11 @@
  */
 using System;
 using Aardvark.Base;
-using Aardvark.Base.Incremental.CSharp;
+using Aardvark.Rendering;
+using CSharp.Data.Adaptive;
 using Aardvark.SceneGraph;
 using Aardvark.SceneGraph.CSharp;
-using Effects = Aardvark.Base.Rendering.Effects;
+using Effects = Aardvark.Rendering.Effects;
 using Aardvark.Application.Slim;
 
 namespace HelloWorldCSharp
@@ -23,7 +24,6 @@ namespace HelloWorldCSharp
             using (var app = /*new VulkanApplication() */ new OpenGlApplication())
             {
                 var win = app.CreateGameWindow(samples: 8);
-
                 // build object from indexgeometry primitives
                 var cone = 
                         IndexedGeometryPrimitives.Cone.solidCone(
@@ -32,8 +32,8 @@ namespace HelloWorldCSharp
                          ).ToSg();
                 // or directly using scene graph
                 var cube = SgPrimitives.Sg.box(
-                    Mod.Init(C4b.Blue), 
-                    Mod.Init(Box3d.FromCenterAndSize(V3d.Zero, V3d.III))
+                    AdaptiveValue.Constant(C4b.Blue),
+                    AdaptiveValue.Constant(Box3d.FromCenterAndSize(V3d.Zero, V3d.III))
                  ); 
                 var initialViewTrafo = CameraView.LookAt(new V3d(0.2,1.2,0.9) * 3.0, V3d.OOO, V3d.OOI);
                 var controlledViewTrafo =
@@ -52,9 +52,9 @@ namespace HelloWorldCSharp
                     // next, we apply the shaders (this way, the shader becomes the root node -> all children now use
                     // this so called effect (a pipeline shader which combines all shader stages into one object)
                     .WithEffects(new[] { 
-                            Aardvark.Base.Rendering.Effects.Trafo.Effect,
-                            Aardvark.Base.Rendering.Effects.VertexColor.Effect,
-                            Aardvark.Base.Rendering.Effects.SimpleLighting.Effect
+                            Effects.Trafo.Effect,
+                            Effects.VertexColor.Effect,
+                            Effects.SimpleLighting.Effect
                     })
                     .ViewTrafo(controlledViewTrafo.Map(vt => vt.ViewTrafo))
                     .ProjTrafo(frustum.Map<Frustum,Trafo3d>(f => f.ProjTrafo()));
