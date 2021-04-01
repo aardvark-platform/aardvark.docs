@@ -117,8 +117,8 @@ let main argv =
                 InstanceCount = 1
             )
         drawCall
-            |> Sg.render IndexedGeometryMode.QuadList 
-            |> Sg.vertexAttribute DefaultSemantic.Positions (AVal.constant [| V3f(-gridSize, -gridSize, 0.0); V3f(gridSize, -gridSize, 0.0); V3f(gridSize, gridSize, 0.0); V3f(-gridSize, gridSize, 0.0) |])
+            |> Sg.render IndexedGeometryMode.TriangleStrip
+            |> Sg.vertexAttribute DefaultSemantic.Positions (AVal.constant [| V3f(-gridSize, -gridSize, 0.0); V3f(gridSize, -gridSize, 0.0); V3f(-gridSize, gridSize, 0.0); V3f(gridSize, gridSize, 0.0) |])
             |> Sg.vertexAttribute DefaultSemantic.Colors (AVal.constant (Array.create 4 (C4b(0, 0, 0, 192))))
             |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
