@@ -10,9 +10,11 @@ Showcase of Aardvark.Physics.Sky functionality:
 
 This demo requires the .NET Core 3.1 SDK. It manages Nuget packages using `paket` (https://fsprojects.github.io/Paket/) that needs to be installed using the .NET Core CLI. The packages need to be restored before the build or development in Visual Studio.
 
+`dotnet new tool-manifest`
+
 `dotnet tool install Paket`
 
-`paket restore`
+`dotnet paket restore`
 
 `dotnet build Sky.fsproj -c Release`
 
