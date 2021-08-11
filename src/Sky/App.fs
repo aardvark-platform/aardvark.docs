@@ -4,7 +4,7 @@ open System
 open Aardvark.Base
 open Aardvark.UI
 open Aardvark.UI.Primitives
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 open Aardvark.Rendering.Text
 open FSharp.Data.Adaptive
 open Sky.Model
@@ -79,69 +79,6 @@ module App =
         fov = 70.0
     }
 
-    // TODO: Aardvark.rendering issue #54
-    [<AutoOpen>]
-    module Utilities =
-
-        [<AbstractClass>]
-        type OutputMod<'a, 'b>(inputs : list<IOutputMod>) =
-            inherit AbstractOutputMod<'b>()
-
-            let mutable handle : Option<'a> = None
-
-            abstract member View : 'a -> 'b
-            default x.View a = unbox a
-        
-            abstract member TryUpdate : AdaptiveToken * 'a -> bool
-            default x.TryUpdate(_,_) = false
-
-            abstract member Create : AdaptiveToken -> 'a
-            abstract member Destroy : 'a -> unit
-
-            override x.Create() =
-                for i in inputs do i.Acquire()
-
-            override x.Destroy() =
-                for i in inputs do i.Release()
-                match handle with
-                    | Some h -> 
-                        x.Destroy h
-                        handle <- None
-                    | _ ->
-                        ()
-
-            override x.Compute(t, rt) =
-                let handle = 
-                    match handle with
-                        | Some h ->
-                            if not (x.TryUpdate(t, h)) then
-                                x.Destroy(h)
-                                let h = x.Create(t)
-                                handle <- Some h
-                                h
-                            else
-                                h
-                        | None ->
-                            let h = x.Create t
-                            handle <- Some h
-                            h
-                x.View handle
-                    
-        module OutputMod =
-            let custom (dependent : list<IOutputMod>) (create : AdaptiveToken -> 'a) (tryUpdate : AdaptiveToken -> 'a -> bool) (destroy : 'a -> unit) (view : 'a -> 'b) =
-                { new OutputMod<'a, 'b>(dependent) with
-                    override x.Create t = create t
-                    override x.TryUpdate(t,h) = tryUpdate t h
-                    override x.Destroy h = destroy h
-                    override x.View h = view h
-                } :> IOutputMod<_> 
-            
-            let simple (create : AdaptiveToken -> 'a) (destroy : 'a -> unit) =
-                { new OutputMod<'a, 'a>([]) with
-                    override x.Create t = create t
-                    override x.Destroy h = destroy h
-                } :> IOutputMod<_>
-
     [<AutoOpen>]
     module SgExtensions = 
     
@@ -202,7 +139,7 @@ module App =
                              { m with fov = newFov; cameraState = { m.cameraState with freeFlyConfig = { m.cameraState.freeFlyConfig with lookAtMouseSensitivity = sens } } }
             | Nop -> m
 
-    type NumericConfig with 
+    type NumericConfig<'T> with 
         static member ctor(min : float, max : float, smallStep : float, largeStep : float) =
             { min = min; max = max; smallStep = smallStep; largeStep = largeStep }
             
@@ -306,7 +243,7 @@ module App =
                                         | Some x -> 
                                             let (p,t) = x.moonPT
                                             let moonColorXYZ = SunLightScattering(p, t, tu).GetRadiance().ToC3f() // assume spectrum as sun for now // NOTE: will also attenuate the moon below the horizon
-                                            let moonColorRgb = moonColorXYZ.XYZinC3fToLinearSRGB().Clamped(0.0f, float32 1e30)
+                                            let moonColorRgb = moonColorXYZ.XYZinC3fToLinearSRGB().Clamped(0.0f, float32 1e30).ToC3d()
                                             let moonLuminance = moonColorRgb * 2.5e3 / 1.6e9
                                             // Wiki: 2.5k cd/m^2 Moon surface vs 1.6e9 cd/m^2 of sun // NOTE: other paper states 4.9-5.4k average of moon disk near perigee (super moon)
                                             // Geometric albedo of moon 0.12 -> could also calculate illumination from solar disk with this albedo
@@ -314,7 +251,7 @@ module App =
                                             let i = srSun * 1.6e9
                                             let lum = i * 0.12 / Constant.PiTimesTwo
                                             moonLuminance
-                                        | None -> C3f.Black
+                                        | None -> C3d.Black
                             ) skyData m.turbidity
 
         let moonRefl = AVal.map2 (fun md sd -> calcSphereRefl md sd) moonDir sunDir
@@ -354,7 +291,7 @@ module App =
             //let polCol = C3b(255uy, 228uy, 206uy).ToC3f() // 5000k sRGB
             let polCol = C3b(64uy, 64uy, 96uy).ToC3f()
             let polColLum = Vec.dot (polCol.ToV3d()) lumVector
-            let pol = pol * polCol.SRGBToXYZinC3f() / polColLum
+            let pol = pol * polCol.SRGBToXYZinC3f().ToC3d() / polColLum
 
             let sunScale = nightTimeFadeout theta
             let moonScale = match special with | Some x -> nightTimeFadeout (snd x.moonPT) | None -> 0.0
@@ -366,9 +303,9 @@ module App =
             let cubeFaces = Array.init 6 (fun i -> PixImage.CreateCubeMapSide<float32, C4f>(i, res, 4, 
                                                             fun v ->
                                                                 let mutable xyz = C3f.Black
-                                                                xyz <- xyz + skySun.GetRadiance(v) * sunScale
+                                                                xyz <- xyz + skySun.GetRadiance(v).ToC3d() * sunScale
                                                                 if skyMoon.IsSome then
-                                                                    xyz <- xyz + skyMoon.Value.GetRadiance(v) * 2.5e3 / 1.6e9 * moonRefl // TODO: actual amount of reflected light
+                                                                    xyz <- xyz + skyMoon.Value.GetRadiance(v).ToC3d() * 2.5e3 / 1.6e9 * moonRefl // TODO: actual amount of reflected light
                                                                 xyz <- xyz + (lightPolFun v) * pol
                                                                 let rgb = xyz.XYZinC3fToLinearSRGB().Clamped(0.0f, Single.MaxValue)
                                                                 if rgb.ToV3f().AnyNaN then 
@@ -379,7 +316,7 @@ module App =
                                                             ) :> PixImage)
 
             // NOTE: magic face swap
-            let cubeImg = PixImageCube.create ([
+            let cubeImg = PixImageCube.Create ([
                                 CubeSide.PositiveX, cubeFaces.[2]
                                 CubeSide.NegativeX, cubeFaces.[0]
                                 CubeSide.PositiveY, cubeFaces.[5]
@@ -410,14 +347,8 @@ module App =
 
         let cameraFov = m.fov |> AVal.map (fun fv -> V2d(fv * Constant.RadiansPerDegree, fv * Constant.RadiansPerDegree)) // NOTE: not actual fov of render control
 
-        let blendAdd = BlendMode(
-                            Operation = BlendOperation.Add,
-                            AlphaOperation = BlendOperation.Add,
-                            SourceFactor = BlendFactor.One,
-                            DestinationFactor = BlendFactor.One,
-                            SourceAlphaFactor =BlendFactor.Zero,
-                            DestinationAlphaFactor = BlendFactor.One,
-                            Enabled = true)
+        let blendAdd =
+            { BlendMode.Add with SourceAlphaFactor = BlendFactor.Zero }
 
         let sgSun = DrawCallInfo(1) |> Sg.render IndexedGeometryMode.PointList
                     |> Sg.shader {
@@ -431,7 +362,7 @@ module App =
                     |> Sg.uniform "SunSize" sunDiameter
                     |> Sg.uniform "CameraFov" cameraFov
                     |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
-                    |> Sg.blendMode (AVal.constant blendAdd)
+                    |> Sg.blendMode' blendAdd
                     |> Sg.pass pass2
                     |> Sg.onOff spaceVisible
 
@@ -451,7 +382,7 @@ module App =
                     |> Sg.uniform "RealSunDirection" sunDir
                     |> Sg.texture (Symbol.Create "MoonTexture") (AVal.constant (FileTexture(Path.combine [ resourcePath; "8k_moon.jpg"], { wantSrgb = true; wantCompressed = false; wantMipMaps = true }) :> ITexture))
                     |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
-                    |> Sg.blendMode (AVal.constant blendAdd)
+                    |> Sg.blendMode' blendAdd
                     |> Sg.pass pass2
                     |> Sg.onOff spaceVisible
 
@@ -460,11 +391,11 @@ module App =
         // visible planets Mercury, Venus, Mars, Jupiter and Saturn
         // [Planet, Color & Albedo, Mean Radius in km]
         // color is an average color of pictures in sRGB with geometric albedo in A
-        let planets = [| (Planet.Mercury, C4f(0.58, 0.57, 0.57, 0.142), 2439.7); 
-                         (Planet.Venus, C4f(0.59, 0.39, 0.1, 0.689), 6051.8); 
-                         (Planet.Mars, C4f(0.50, 0.43, 0.32, 0.17), 3389.5); 
-                         (Planet.Jupiter, C4f(0.54, 0.50, 0.39, 0.538), 69911.0); 
-                         (Planet.Saturn, C4f(0.43, 0.43, 0.38, 0.499), 58232.0) |]
+        let planets = [| (Planet.Mercury, C4d(0.58, 0.57, 0.57, 0.142), 2439.7); 
+                         (Planet.Venus, C4d(0.59, 0.39, 0.1, 0.689), 6051.8); 
+                         (Planet.Mars, C4d(0.50, 0.43, 0.32, 0.17), 3389.5); 
+                         (Planet.Jupiter, C4d(0.54, 0.50, 0.39, 0.538), 69911.0); 
+                         (Planet.Saturn, C4d(0.43, 0.43, 0.38, 0.499), 58232.0) |]
 
         
         let planetSgs = planets |> Array.map (fun (p, c, r) -> 
@@ -497,7 +428,7 @@ module App =
 
                         let colorLum = c.ToV3d().Dot(lumVector)
                         let colorNorm = c / colorLum
-                        let albedo = colorNorm.ToC3f() * float c.A
+                        let albedo = colorNorm.RGB * c.A
                         let lum = i * albedo // lum if planet is 1px -> the actual cover depending on viewport resolution and fov
                         lum
                     )
@@ -511,7 +442,7 @@ module App =
                     }
                     |> Sg.cullMode (AVal.constant CullMode.None)
                     |> Sg.uniform "MagBoost" m.magBoost
-                    |> Sg.uniform "PlanetColor" lum// (Mod.constant(c * 1000.0)) // TODO calculate brightness depending on sun position and color and albedo
+                    |> Sg.uniform "PlanetColor" lum// (AVal.constant(c * 1000.0)) // TODO calculate brightness depending on sun position and color and albedo
                     |> Sg.uniform "PlanetDir" dir
                     |> Sg.uniform "PlanetSize" size
                     |> Sg.uniform "SunDirection" dir // TODO calculate direction of sun relative to this planet
@@ -567,8 +498,8 @@ module App =
                         }
                         |> Sg.uniform "CameraFov" cameraFov
                         |> Sg.uniform "MagBoost" m.magBoost
-                        |> Sg.depthTest (AVal.constant DepthTestMode.None)
-                        |> Sg.blendMode (AVal.constant blendAdd)
+                        |> Sg.depthTest' DepthTest.None
+                        |> Sg.blendMode' blendAdd
                         |> Sg.pass pass2
                         |> Sg.trafo starTrafo
                         |> Sg.onOff spaceVisible
@@ -590,7 +521,7 @@ module App =
                                 //do! DefaultSurfaces.thickLine
                                 do! DefaultSurfaces.sgColor
                             }
-                            //|> Sg.uniform "LineWidth" (Mod.constant(0.5))
+                            //|> Sg.uniform "LineWidth" (AVal.constant(0.5))
                             |> Sg.uniform "Color" (AVal.constant(C4b(115, 194, 251, 96).ToC4f()))
                             |> Sg.blendMode (AVal.constant BlendMode.Blend)
                             |> Sg.trafo starTrafo
@@ -692,7 +623,8 @@ module App =
 
         //let rc = FreeFlyController.controlledControl 
         let rc = FreeFlyController.controlledControlWithClientValues m.cameraState CameraMessage frustum (AttributeMap.ofList att) RenderControlConfig.standard 
-                    (fun clientValues -> 
+                    (fun clientValues ->
+                        let runtime = clientValues.runtime
                         
                         let hdrColorSig = clientValues.runtime.CreateFramebufferSignature(1, [
                                 DefaultSemantic.Colors, RenderbufferFormat.Rgba32f; 
@@ -716,39 +648,25 @@ module App =
                                         |> Sg.uniform "SceneTexture" sceneTex
                                         |> Aardvark.SceneGraph.RuntimeSgExtensions.Sg.compile clientValues.runtime lumSig
 
-                        let lumTex =
-                            OutputMod.custom 
-                                []
-                                (fun t -> 
-                                    let sz = clientValues.size.GetValue t
-                                    let mipCnt = Fun.Log2Int(float sz.NormMax) // wtf? there should be an int overload!
-                                    clientValues.runtime.CreateTexture(sz, TextureFormat.R32f, mipCnt, 1))
-                                (fun t h -> false)
-                                (fun h -> clientValues.runtime.DeleteTexture h)
-                                id
+                        let lumAtt =
+                            let size = clientValues.size
+                            let levels = size |> AVal.map (Vec.NormMax >> Fun.Log2Int)
+                            runtime.CreateTextureAttachment(
+                                runtime.CreateTexture2D(TextureFormat.R32f, levels, 1, size), 0, 0
+                            )
 
-                        let lumFbo = 
-                            OutputMod.custom 
-                                []
-                                (fun t -> 
-                                    let tex = lumTex.GetValue t
-                                    clientValues.runtime.CreateFramebuffer(lumSig,
-                                        Map.ofList [
-                                            DefaultSemantic.Colors, ({ texture = tex; slice = 0; level = 0 } :> IFramebufferOutput)
-                                        ]))
-                                (fun t h -> false)
-                                (fun h -> clientValues.runtime.DeleteFramebuffer h)
-                                id
-                        
+                        let lumFbo =
+                            runtime.CreateFramebuffer(lumSig, [DefaultSemantic.Colors, lumAtt])
+
                         let temp = RenderTask.renderTo lumFbo lumInitTask
-                        let lumTex = temp |> AVal.map (fun x -> 
-                                                        let fboOut = x.Attachments.[DefaultSemantic.Colors] :?> BackendTextureOutputView
-                                                        let tex = fboOut.texture
-                                                        clientValues.runtime.GenerateMipMaps(tex)
-                                                        tex
-                                                        )
+                        let lumTex =
+                            temp |> AdaptiveResource.map (fun fbo ->
+                                let out = fbo.Attachments.[DefaultSemantic.Colors] :?> ITextureLevel
+                                runtime.GenerateMipMaps(out.Texture)
+                                out.Texture
+                            )
 
-                        let sgFinal = 
+                        let sgFinal =
                             quad
                                 |> Sg.shader {
                                         do! Shaders.tonemap
@@ -759,10 +677,10 @@ module App =
                                 |> Sg.uniform "MiddleGray" m.key
                                 |> Sg.uniform "Exposure" m.exposure
                                 |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
-                                |> Sg.depthTest (AVal.constant DepthTestMode.None)
+                                |> Sg.depthTest' DepthTest.None
 
-                        let sgOverlay = 
-                            sgOverlay 
+                        let sgOverlay =
+                            sgOverlay
                                 |> Sg.viewTrafo clientValues.viewTrafo
                                 |> Sg.projTrafo clientValues.projTrafo
 

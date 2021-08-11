@@ -16,19 +16,27 @@ A more technical platform walkthrough can be found [here](https://github.com/aar
 Build
 -----
 
-Install [.NET Core SDK][dotnet-core-sdk] for your platform, then run:
-
-```console
-$ dotnet build ./src/aardvark.docs.sln
-```
+Install [.NET Core SDK][dotnet-core-sdk] for your platform. 
+Run `build.cmd` or `build.sh` to install all dependencies and build the project.
 
 Run
 ---
 
-Requires [.NET Core Runtime][dotnet-core-runtime] version 2.0+, e.g. to run [Hello World][hello-world] example enter:
+Requires [.NET Core Runtime][dotnet-core-runtime] version 3.1+, e.g. to run [Hello World][hello-world] example enter:
 
+## Windows
 ```console
 $ dotnet run -c Release -p .\src\HelloWorld\HelloWorld.fsproj
+```
+
+## Linux / Mac
+```console
+$ dotnet run -c Release -p ./src/HelloWorld/HelloWorld.fsproj
+```
+
+If you're on a Mac, you'll additionally need to install `DevIL`:
+```console
+$ brew install devil
 ```
 
 [dotnet-core-runtime]: https://www.microsoft.com/net/download/core#/runtime

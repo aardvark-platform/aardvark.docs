@@ -1,11 +1,11 @@
 ﻿namespace Sky
 
 open Aardvark.Base
-open Aardvark.Base.Rendering
+open Aardvark.Rendering
 open FShade
 
 module Shaders =
-    open Aardvark.Base.Rendering.Effects
+    open Aardvark.Rendering.Effects
 
     type ExposureMode = Manual=0 | MiddleGray=1 | Auto=2
 
