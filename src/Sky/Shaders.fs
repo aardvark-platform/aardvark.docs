@@ -80,7 +80,7 @@ module Shaders =
         member x.PlanetColor : V3d = x?PlanetColor
 
     let borderPixelSize = 64.0
-    let sunCoronaExponent = 256.0
+    let sunCoronaExponent = 1024.0
 
     let sunSpriteGs (v : Point<VertexSky>) =
         
@@ -133,16 +133,17 @@ module Shaders =
                         else 
                             pow (abs (1.0 - (viewAng - sunSizeAng) / (coronaAng - sunSizeAng))) sunCoronaExponent
             
-            // values can get up to 1,600,000 (real luminance is x1000 -> 1.6e9)
-            // max half-precision value is 65,504 
+            // values can get up to 1.6e9 
+            // when rendering to half-precision: max value is 65,504 
+            //  -> scale all luminance values by /1000
             //  -> as additive blending is used, clamp color to 30,000 for half-precision output support
-            let colMax = max uniform.SunColor.X (max uniform.SunColor.Y uniform.SunColor.Z)
-            let sunNorm = uniform.SunColor * 30000.0 / max 30000.0 colMax
+            //let colMax = max uniform.SunColor.X (max uniform.SunColor.Y uniform.SunColor.Z)
+            //let sunNorm = uniform.SunColor * 30000.0 / max 30000.0 colMax
 
             //if alpha = 1.0 then
             //    return V4d(30000.0, 0.0, 0.0, 1.0)
             //else
-            return V4d(sunNorm * alpha, 1.0)
+            return V4d(uniform.SunColor * alpha, 1.0)
         }
 
     let moonTextureSampler = 
@@ -212,12 +213,13 @@ module Shaders =
             let shade = max 0.0 (Vec.dot moonSurfaceNormal uniform.RealSunDirection)
             let shade = 0.0001 + shade * 0.9999 // 0.01% reflection from earth https://en.wikipedia.org/wiki/Planetshine 
             
-            // values can get up to 1,600,000 (real luminance is x1000 -> 1.6e9)
-            // max half-precision value is 65,504 
-            //  -> as additive blending is used, clamp color to 30,000 for half-precision output support
             let moonColor = uniform.MoonColor * shade / texNorm
-            let colMax = max moonColor.X (max moonColor.Y moonColor.Z)
-            let moonNorm = moonColor * 30000.0 / max 30000.0 colMax
+
+            // when rendering to half-precision: max value is 65,504 
+            //  -> scale all luminance values by /1000
+            //  -> as additive blending is used, clamp color to 30,000 for half-precision output support
+            //let colMax = max moonColor.X (max moonColor.Y moonColor.Z)
+            //let moonNorm = moonColor * 30000.0 / max 30000.0 colMax
 
             //if alpha = 1.0 then
             //    return V4d(30000.0, 0.0, 0.0, 1.0)
@@ -225,7 +227,7 @@ module Shaders =
             //return V4d(moonNorm * alpha, 1.0)
             //return V4d(moonNorm, 1.0)
             //return V4d(shade, shade, shade, 1.0)
-            return V4d(moonNorm * tex.XYZ, 1.0)
+            return V4d(moonColor * tex.XYZ, 1.0)
         }
 
     type Vertex = {
