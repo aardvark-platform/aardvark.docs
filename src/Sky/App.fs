@@ -405,9 +405,7 @@ module App =
                                                     Sky.V3dFromPhiTheta(phi, theta))
 
                 let size = dirAndDistance |> AVal.map2 (fun ps (struct (_, _, distance)) -> 
-                                                                // distance is in AU
-                                                                // 1 AU = 149,597,870,700m
-                                                                let distKm = 149597870.7 * distance
+                                                                let distKm = Astronomy.AU / 1000.0 * distance // convert distance from AU to km
                                                                 let radius = atan (r / distKm)
                                                                 radius * (pow ps 2.5) // diameter in radians * user factor
                                                             ) m.planetScale
@@ -417,9 +415,8 @@ module App =
                 let lum = spArgs |> AVal.map (fun (time, tz, long, lat, _) -> 
                     
                         let jd = time.ComputeJulianDayUTC(float tz) // Julian day UTC
-                        let rc = Astronomy.RectangularHeliocentricEclipticCoordinates(p, jd)
-                        let distAu = rc.Length
-                        let distKm = 149597870.7 * distAu // km
+                        let rc = Astronomy.RectangularHeliocentricEclipticCoordinates(p, jd) // coordinates in AU
+                        let distKm = rc.Length * Astronomy.AU / 1000.0 // convert to km
                         let sunRadiusKm = 695700.0 // km
                         let sunLuminance = 1.6e9
                         let a = atan (sunRadiusKm / distKm)
@@ -468,11 +465,10 @@ module App =
 
         let dirs = stars |> Array.map (fun s -> V3f(Conversion.CartesianFromSpherical(s.RArad, s.DErad)))
 
+        let intScalePerMag = float32 (Fun.Pow(100.0, 1.0/5.0)) // intensity scale per magnitude ~2.511
+        let i0 = 0.0325f // luminance of star with mag 0.0 / ~luminance of vega
         let colors = stars |> Array.map (fun s -> 
-                                            let mag = s.Hpmag
-                                            let intScalePerMag = float32 (Fun.Pow(100.0, 1.0/5.0)) // ~2.511
-                                            let i0 = 0.0325f // luminance of star with mag 0.0 / ~luminance of vega
-                                            let l = i0 / (pow intScalePerMag mag) // mag -26.7 -> 1.6e9 (per solar disc size), mag -12.7 average full moon -> 2.5e3
+                                            let l = i0 / (pow intScalePerMag s.Hpmag) // mag -26.7 -> 1.6e9 (per solar disc size), mag -12.7 average full moon -> 2.5e3
                                             // luminance the star would have if sun was 1px -> scale with viewportSize and fov (currently in shader)
                                             C4f(l, l, l, 1.0f)
                                         )
@@ -531,7 +527,7 @@ module App =
                                 let s = starDict.[hip]
                                 if s.Hpmag < float32 t then 
                                     // distance = size
-                                    // TODO/ISSUE: angle offset woul get rotated by star trafo
+                                    // TODO/ISSUE: angle offset would get rotated by star trafo
                                     let t = Trafo3d.Scale(0.15) * Trafo3d.Translation(10.0 * Conversion.CartesianFromSpherical(s.RArad, s.DErad))
                                     Some (AVal.constant(t), AVal.constant(str))
                                 else 
