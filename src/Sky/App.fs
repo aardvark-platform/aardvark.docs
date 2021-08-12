@@ -201,9 +201,7 @@ module App =
 
                 let size = 
                     (planetScale, dirAndDistance) ||> AVal.map2 (fun ps (struct (_, _, distance)) -> 
-                        // distance is in AU
-                        // 1 AU = 149,597,870,700m
-                        let distKm = 149597870.7 * distance
+                        let distKm = Astronomy.AU / 1000.0 * distance // convert distance from AU to km
                         let radius = atan (r / distKm)
                         radius * (pow ps 2.5) // diameter in radians * user factor
                     ) 
@@ -212,8 +210,7 @@ module App =
     
                 let lum = geoInfo.JulianDayUTC |> AVal.map (fun jd -> 
                     let rc = Astronomy.RectangularHeliocentricEclipticCoordinates(p, jd)
-                    let distAu = rc.Length
-                    let distKm = 149597870.7 * distAu // km
+                    let distKm = rc.Length * Astronomy.AU / 1000.0 // convert to km
                     let sunRadiusKm = 695700.0 // km
                     let sunLuminance = 1.6e9
                     let a = atan (sunRadiusKm / distKm)
@@ -264,13 +261,13 @@ module App =
             //let stars = ursaMajorStars
             let dirs = stars |> Array.map (fun s -> V3f(Conversion.CartesianFromSpherical(s.RArad, s.DErad)))
     
+            let intScalePerMag = float32 (Fun.Pow(100.0, 1.0/5.0)) // intensity scale per magnitude ~2.511
+            let i0 = 0.0325f // luminance of star with mag 0.0 / ~luminance of vega
+
             let colors = 
                 stars 
                 |> Array.map (fun s -> 
-                    let mag = s.Hpmag
-                    let intScalePerMag = float32 (Fun.Pow(100.0, 1.0/5.0)) // ~2.511
-                    let i0 = 0.0325f // luminance of star with mag 0.0 / ~luminance of vega
-                    let l = i0 / (pow intScalePerMag mag) // mag -26.7 -> 1.6e9 (per solar disc size), mag -12.7 average full moon -> 2.5e3
+                    let l = i0 / (pow intScalePerMag s.Hpmag) // mag -26.7 -> 1.6e9 (per solar disc size), mag -12.7 average full moon -> 2.5e3
                     // luminance the star would have if sun was 1px -> scale with viewportSize and fov (currently in shader)
                     C4f(l, l, l, 1.0f)
                 )
@@ -332,7 +329,7 @@ module App =
                     let s = starDict.[hip]
                     if s.Hpmag < float32 t then 
                         // distance = size
-                        // TODO/ISSUE: angle offset woul get rotated by star trafo
+                        // TODO/ISSUE: angle offset would get rotated by star trafo
                         let t = Trafo3d.Scale(0.15) * Trafo3d.Translation(10.0 * Conversion.CartesianFromSpherical(s.RArad, s.DErad))
                         Some (AVal.constant(t), AVal.constant(str))
                     else 
@@ -521,14 +518,15 @@ module App =
                     let polColLum = Vec.dot (polCol.ToV3d()) lumVector
                     pol * polCol.SRGBToXYZinC3f().ToC3d() / polColLum
     
-                let sunScale = nightTimeFadeout theta
+                let sunFadeout = nightTimeFadeout theta
+                let moonFadeout = nightTimeFadeout thetaMoon
                                        
                 let cubeFaces = Array.init 6 (fun i -> 
                     PixImage.CreateCubeMapSide<float32, C4f>(i, res, 4, 
                         fun v ->
                             let mutable xyz = C3f.Black
-                            xyz <- xyz + skySun.GetRadiance(v).ToC3d() * sunScale
-                            xyz <- xyz + skyMoon.GetRadiance(v).ToC3d() * 2.5e3 / 1.6e9 * moonRefl // TODO: actual amount of reflected light
+                            xyz <- xyz + skySun.GetRadiance(v).ToC3d() * sunFadeout
+                            xyz <- xyz + skyMoon.GetRadiance(v).ToC3d() * 2.5e3 / 1.6e9 * moonRefl * moonFadeout // TODO: actual amount of reflected light
                             xyz <- xyz + (lightPolFun v) * pol
                             let rgb = xyz.XYZinC3fToLinearSRGB().Clamped(0.0f, Single.MaxValue)
                             if rgb.ToV3f().AnyNaN then 
