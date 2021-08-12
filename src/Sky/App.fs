@@ -88,7 +88,7 @@ module GeoApp =
             Html.row "Date" [ datePicker m.time SetDate ]
             Html.row "DateTime" [dateTimePicker m.time SetDateTime]
             Html.row "" [ button [clazz "ui button"; onClick (fun _ -> SetNow)] [text "Now"] ]
-            Html.row "SunPos" [ Incremental.text (m.SunPosition ||> AVal.map2 (fun coord d -> sprintf "phi: %.2f° theta: %.2f° - d: %.2fm" coord.Phi coord.Theta d)) ]
+            Html.row "SunPos" [ Incremental.text (m.SunPosition ||> AVal.map2 (fun coord d -> sprintf "azimuth: %.2f° zenith: %.2f° dist: %.2f million km" (coord.Phi.DegreesFromRadians()) (coord.Theta.DegreesFromRadians()) (d / 1000000000.0))) ]
             Html.row "SunDir" [ Incremental.text (m.SunDirection |> AVal.map (sprintf "%A")) ]
         ]
 
@@ -151,21 +151,21 @@ module App =
     let update (m : Model) (msg : Message) =
         match msg with
         | CameraMessage msg -> { m with cameraState = FreeFlyController.update m.cameraState msg }
-        | SetTurbidity v -> { m with skyInfo = { m.skyInfo with turbidity = v }}
-        | SetLightPollution v -> { m with skyInfo = { m.skyInfo with lightPollution = v }}
-        | SetResolution v -> { m with skyInfo = { m.skyInfo with res = v }}
-        | SetSkyType o ->  match o with | Some v -> { m with skyInfo = { m.skyInfo with skyType = v }} | None -> m
-        | SetCIEType o -> match o with | Some v -> { m with skyInfo = { m.skyInfo with cieType = v }} | None -> m
+        | SetTurbidity v -> { m with skyParams = { m.skyParams with turbidity = v }}
+        | SetLightPollution v -> { m with skyParams = { m.skyParams with lightPollution = v }}
+        | SetResolution v -> { m with skyParams = { m.skyParams with res = v }}
+        | SetSkyType o ->  match o with | Some v -> { m with skyParams = { m.skyParams with skyType = v }} | None -> m
+        | SetCIEType o -> match o with | Some v -> { m with skyParams = { m.skyParams with cieType = v }} | None -> m
         | SetPlanetScale v -> { m with planetScale = v }
         | SetExposure v -> { m with exposure = v }
         | SetKey v -> { m with key = v }
         | SetExposureMode o -> match o with | Some v -> { m with exposureMode = v } | None -> m
-        | SetMagBoost v -> { m with starInfo = { m.starInfo with magBoost = v }}
-        | SetStarSigns v -> { m with starInfo = { m.starInfo with starSigns = v }}
-        | ToggleStarSigns -> { m with starInfo = { m.starInfo with starSigns = not m.starInfo.starSigns }}
-        | SetObjectNames v -> { m with starInfo = { m.starInfo with objectNames = v }}
-        | ToggleObjectNames -> { m with starInfo = { m.starInfo with objectNames = not m.starInfo.objectNames }}
-        | SetObjectNameThreshold v -> { m with starInfo = { m.starInfo with objectNameThreshold = v }}
+        | SetMagBoost v -> { m with starParams = { m.starParams with magBoost = v }}
+        | SetStarSigns v -> { m with starParams = { m.starParams with starSigns = v }}
+        | ToggleStarSigns -> { m with starParams = { m.starParams with starSigns = not m.starParams.starSigns }}
+        | SetObjectNames v -> { m with starParams = { m.starParams with objectNames = v }}
+        | ToggleObjectNames -> { m with starParams = { m.starParams with objectNames = not m.starParams.objectNames }}
+        | SetObjectNameThreshold v -> { m with starParams = { m.starParams with objectNameThreshold = v }}
         | AdjustFoV v -> 
             let newFov = clamp 0.1 170.0 (m.fov * (pow 1.05 -v.Y))
             let sens = newFov / 70.0 / 100.0
@@ -246,7 +246,7 @@ module App =
 
     module Stars = 
         
-        let sg (geoInfo: AdaptiveGeoInfo) (starInfo: AdaptiveStarInfo) (cameraFov: aval<V2d>) (spaceVisible: aval<bool>) : ISg<_> * ISg<_> = 
+        let sg (geoInfo: AdaptiveGeoInfo) (starParams: AdaptiveStarParams) (cameraFov: aval<V2d>) (spaceVisible: aval<bool>) : ISg<_> * ISg<_> = 
 
             Log.startTimed "reading star database"
             let stars = Hip.readHip311Database (Path.combine [ resourcePath; "hip2.dat" ])
@@ -292,7 +292,7 @@ module App =
                 |> Sg.vertexAttribute DefaultSemantic.Colors (AVal.constant colors)
                 |> Sg.effect [ Shaders.starEffect ]
                 |> Sg.uniform "CameraFov" cameraFov
-                |> Sg.uniform "MagBoost" starInfo.magBoost
+                |> Sg.uniform "MagBoost" starParams.magBoost
                 |> Sg.depthTest' DepthTest.None
                 |> Sg.blendMode' { BlendMode.Add with SourceAlphaFactor = BlendFactor.Zero }
                 |> Sg.pass RenderPass.skyPass2
@@ -321,10 +321,10 @@ module App =
                 |> Sg.uniform' "Color" (C4b(115, 194, 251, 96).ToC4f())
                 |> Sg.blendMode' BlendMode.Blend
                 |> Sg.trafo starTrafo
-                |> Sg.onOff starInfo.starSigns
+                |> Sg.onOff starParams.starSigns
     
             let objNames = 
-                starInfo.objectNameThreshold 
+                starParams.objectNameThreshold 
                 |> ASet.bind (fun t -> (Hip.NamedStars |> Array.choose (fun (str, hip) -> 
                     let s = starDict.[hip]
                     if s.Hpmag < float32 t then 
@@ -341,7 +341,7 @@ module App =
                 ViewSpaceTrafoApplicator(AVal.constant (Sg.textsWithConfig cfg objNames |> Aardvark.SceneGraph.SgFSharp.Sg.trafo starTrafo))
                 |> Sg.noEvents
                 |> Sg.blendMode' BlendMode.Blend
-                |> Sg.onOff starInfo.objectNames
+                |> Sg.onOff starParams.objectNames
 
             let overlay = [ starSignSg; objNameSg ] |> Sg.ofSeq
 
@@ -449,14 +449,14 @@ module App =
 
     module Sky = 
         
-        let sg (geoInfo: AdaptiveGeoInfo) (skyInfo: AdaptiveSkyInfo) : ISg<_> = 
+        let sg (geoInfo: AdaptiveGeoInfo) (skyParams: AdaptiveSkyParams) : ISg<_> = 
             
             // luminance of natural sky back during moonless night without light pollution is 22 magnitude per square arcsecond (mag/arcsec2) -> 1.7e-4 cd/m2
             // in cities 13 and 15 mag/arcsec2 -> 0.1 to 0.68 cd/m^2 = x1000
             // mag 20 = ~1.0 mcd/m2
             // mag 22 = 174 μcd/m2
             let skyBackLumiance = 1.7e-4
-            let lightPol = skyInfo.lightPollution |> AVal.map (fun x -> skyBackLumiance + skyBackLumiance * x) // lightPollution is factor relative to natural sky back
+            let lightPol = skyParams.lightPollution |> AVal.map (fun x -> skyBackLumiance + skyBackLumiance * x) // lightPollution is factor relative to natural sky back
 
             let calcSphereRefl (viewDir : V3d) (lightDir : V3d) = 
                 let rnd = HaltonRandomSeries(2, RandomSystem(42))
@@ -489,12 +489,12 @@ module App =
             
             let skyImage = adaptive {
                 let! (phi, theta) = sunPos |> AVal.map (fun x -> x.Phi, x.Theta)
-                let! turb = skyInfo.turbidity
-                let! res = skyInfo.res
+                let! turb = skyParams.turbidity
+                let! res = skyParams.res
                 let! moonRefl = moonRefl
                 let! pol = lightPol
-                let! cie = skyInfo.cieType
-                let! skyType = skyInfo.skyType
+                let! cie = skyParams.cieType
+                let! skyType = skyParams.skyType
                 let! (phiMoon, thetaMoon) = moonPos |> AVal.map (fun x -> x.Phi, x.Theta)
     
                 //Log.line "sun theta: %d" (90 - int (theta.DegreesFromRadians()))
@@ -599,7 +599,7 @@ module App =
     let skySGs (m: AdaptiveModel) (clientValues: Aardvark.Service.ClientValues) : ISg<_> = 
            
         let spaceVisible = 
-            (m.skyInfo.skyType, m.skyInfo.cieType) ||> AVal.map2 (fun model cie ->
+            (m.skyParams.skyType, m.skyParams.cieType) ||> AVal.map2 (fun model cie ->
                 match model with
                 | CIE -> CIESkyExt.IsSunVisible(cie)
                 | _ -> true
@@ -607,14 +607,14 @@ module App =
 
         let cameraFov = m.fov |> AVal.map (fun fv -> V2d(fv * Constant.RadiansPerDegree, fv * Constant.RadiansPerDegree)) // NOTE: not actual fov of render control
         
-        let starSg, starOverlaySg = Stars.sg m.geoInfo m.starInfo cameraFov spaceVisible
+        let starSg, starOverlaySg = Stars.sg m.geoInfo m.starParams cameraFov spaceVisible
         
         let sgSky = 
             [ 
-                Sky.sg m.geoInfo m.skyInfo 
-                Sun.sg m.geoInfo m.skyInfo.turbidity cameraFov spaceVisible
-                Moon.sg m.geoInfo m.skyInfo.turbidity cameraFov spaceVisible
-                Planets.sg m.geoInfo m.planetScale m.starInfo.magBoost cameraFov spaceVisible
+                Sky.sg m.geoInfo m.skyParams 
+                Sun.sg m.geoInfo m.skyParams.turbidity cameraFov spaceVisible
+                Moon.sg m.geoInfo m.skyParams.turbidity cameraFov spaceVisible
+                Planets.sg m.geoInfo m.planetScale m.starParams.magBoost cameraFov spaceVisible
                 starSg
             ] |> Sg.ofSeq 
 
@@ -697,15 +697,15 @@ module App =
             sgOverlay |> Sg.pass RenderPass.skyPass2
         ]
 
-    let details (m: AdaptiveModel) : DomNode<Message> = 
+    let settingsUi (m: AdaptiveModel) : DomNode<Message> = 
 
         let skyModelCases = FSharpType.GetUnionCases typeof<SkyType>
         let skyModelValues = AMap.ofSeq( skyModelCases |> Seq.map (fun c -> (FSharpValue.MakeUnion(c, [||]) :?> SkyType, text (c.Name))) )
-        let skyOptionMod : IAdaptiveValue<Option<SkyType>> = m.skyInfo.skyType |> AVal.map Some
+        let skyOptionMod : IAdaptiveValue<Option<SkyType>> = m.skyParams.skyType |> AVal.map Some
     
         //let cieModelCases = Enum.GetValues typeof<CIESkyType>
         let cieValues = AMap.ofArray(Array.init 15 (fun i -> (EnumHelpers.GetValue(i), text (Enum.GetName(typeof<CIESkyType>, i))))) // TODO: ToDescription
-        let cieOptionMod : IAdaptiveValue<Option<CIESkyType>> = m.skyInfo.cieType |> AVal.map Some
+        let cieOptionMod : IAdaptiveValue<Option<CIESkyType>> = m.skyParams.cieType |> AVal.map Some
     
         let exposureModeCases = Enum.GetValues typeof<ExposureMode> :?> (ExposureMode [])
         let exposureModeValues = AMap.ofArray( exposureModeCases |> Array.map (fun c -> (c, text (Enum.GetName(typeof<ExposureMode>, c)) )))
@@ -718,16 +718,16 @@ module App =
             h4 [style "color:white"] [text "Sky"]
             Html.table [                    
                 Html.row "Model" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] skyModelValues skyOptionMod SetSkyType ]
-                Html.row "Turbidity" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyInfo.turbidity; update SetTurbidity; step 0.1; largeStep 1.0; min 1.9; max 10.0; }]
+                Html.row "Turbidity" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.turbidity; update SetTurbidity; step 0.1; largeStep 1.0; min 1.9; max 10.0; }]
                 Html.row "Type" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] cieValues cieOptionMod SetCIEType ] 
-                Html.row "Light Pollution" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyInfo.lightPollution; update SetLightPollution; step 5.0; largeStep 50.0; min 0.0; max 10000.0; }]      
+                Html.row "Light Pollution" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.lightPollution; update SetLightPollution; step 5.0; largeStep 50.0; min 0.0; max 10000.0; }]      
                 // Html.row "Sun Position" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] spAlgoValues spOptionMod SetSunPosAlgo ]
                 // Html.row "Resolution" [ text "TODO" ]
-                Html.row "mag Boost" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.starInfo.magBoost; update SetMagBoost; step 0.1; largeStep 1.0; min 0.0; max 10.0; }]
+                Html.row "mag Boost" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.starParams.magBoost; update SetMagBoost; step 0.1; largeStep 1.0; min 0.0; max 10.0; }]
                 Html.row "Planet Scale" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.planetScale; update SetPlanetScale; step 0.1; largeStep 1.0; min 1.0; max 10.0; }]
-                Html.row "Star Signs" [ checkbox [clazz "ui inverted toggle checkbox"] m.starInfo.starSigns ToggleStarSigns "" ]
-                Html.row "Object Names" [ checkbox [clazz "ui inverted toggle checkbox"] m.starInfo.objectNames ToggleObjectNames "" ]
-                Html.row "mag Threshold" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.starInfo.objectNameThreshold; update SetObjectNameThreshold; step 0.1; largeStep 1.0; min -20.0; max 20.0; }]
+                Html.row "Star Signs" [ checkbox [clazz "ui inverted toggle checkbox"] m.starParams.starSigns ToggleStarSigns "" ]
+                Html.row "Object Names" [ checkbox [clazz "ui inverted toggle checkbox"] m.starParams.objectNames ToggleObjectNames "" ]
+                Html.row "mag Threshold" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.starParams.objectNameThreshold; update SetObjectNameThreshold; step 0.1; largeStep 1.0; min -20.0; max 20.0; }]
                     //Simple.labeledFloatInput' "Turbidity" 1.9 10.0 0.1 SetTurbidity m.turbidity (AttributeMap.ofList [ clazz "ui small labeled input"; style "width: 140pt; color : black"]) (AttributeMap.ofList [ clazz "ui label"; style "width: 70pt"]) 
                     //br []
                     //p [] [ text "Model: TODO" ]
@@ -761,7 +761,7 @@ module App =
         require Html.semui (
             body [] [
                 rc
-                details m
+                settingsUi m
             ]
         )
     

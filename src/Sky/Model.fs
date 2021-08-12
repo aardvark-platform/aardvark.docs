@@ -20,7 +20,7 @@ type ExposureMode =
     | Auto=2
     
 [<ModelType>]
-type SkyInfo = 
+type SkyParams = 
     {
         skyType         : SkyType
         turbidity       : float // [1.9, 10]
@@ -30,7 +30,7 @@ type SkyInfo =
     }
 
 [<ModelType>]
-type StarInfo = 
+type StarParams = 
     {
         starSigns       : bool
         magBoost        : float
@@ -75,8 +75,8 @@ type Model =
         //// location & time
         geoInfo       : GeoInfo
 
-        skyInfo         : SkyInfo
-        starInfo        : StarInfo
+        skyParams       : SkyParams
+        starParams      : StarParams
         planetScale     : float
 
         // tonemapping
@@ -95,7 +95,7 @@ type Model =
             // time & location
             geoInfo = GeoInfo.vienna
 
-            skyInfo = {
+            skyParams = {
                 skyType = Preetham
                 turbidity = 1.9
                 cieType = CIESkyType.ClearSky1
@@ -103,7 +103,7 @@ type Model =
                 res = 256
             }
 
-            starInfo = {
+            starParams = {
                 objectNames = false
                 objectNameThreshold = 3.0
                 starSigns = false
