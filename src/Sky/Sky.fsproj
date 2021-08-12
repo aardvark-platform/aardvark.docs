@@ -14,8 +14,8 @@
     <None Include="paket.references" />
     <Compile Include="Hip.fs" />
     <Compile Include="Constellations.fs" />
-    <Compile Include="Shaders.fs" />
     <Compile Include="Model.fs" />
+    <Compile Include="Shaders.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

@@ -5,12 +5,9 @@ open Aardvark.Rendering
 open FShade
 
 module Shaders =
-    open Aardvark.Rendering.Effects
-
-    type ExposureMode = Manual=0 | MiddleGray=1 | Auto=2
-
+    
     type VertexSky = {
-        [<Position>]             pos : V4d
+        [<Position>]            pos : V4d
         [<Semantic("SkyDir")>]  dir : V3d
     }
         
@@ -443,7 +440,7 @@ module Shaders =
         lum / (1.0 + lum)
 
     type UniformScope with
-        member x.ExposureMode : ExposureMode = uniform?ExposureMode
+        member x.ExposureMode : Sky.Model.ExposureMode = uniform?ExposureMode
         //member x.Exposure : float = x?Exposure
         member x.MiddleGray : float = x?MiddleGray
 
@@ -452,12 +449,12 @@ module Shaders =
             let scene = sceneTexture.Sample(v.tc).XYZ
             
             let ev = 
-                if uniform.ExposureMode = ExposureMode.Manual then
+                if uniform.ExposureMode = Sky.Model.ExposureMode.Manual then
                     exp uniform.Exposure
                 else
                     let last = lumTexture.MipMapLevels - 1
                     let avgLum = exp (lumTexture.Read(V2i(0, 0), last).X)
-                    let key = if uniform.ExposureMode = ExposureMode.Auto then
+                    let key = if uniform.ExposureMode = Sky.Model.ExposureMode.Auto then
                                 1.001 - (2.0 / (2.0 + log(avgLum + 1.0) / log(10.0)))
                               else // ExposureMode.MiddleGray
                                 uniform.MiddleGray
@@ -472,3 +469,54 @@ module Shaders =
 
             return V4d(color, 1.0)
         }
+
+    let lumInitEffect = 
+        toEffect  lumInit
+
+    let tonemapEffect = 
+        toEffect tonemap
+
+    let planetEffect = 
+        Effect.compose [
+            toEffect planetSpriteGs
+            toEffect planetSpritePs
+            toEffect magBoost
+        ]
+
+    let starEffect = 
+        Effect.compose [
+            toEffect starTrafo
+            toEffect magBoost   
+        ]
+
+    let starSignEffect = 
+        Effect.compose [
+            toEffect equatorTrafo
+            toEffect DefaultSurfaces.sgColor
+        ]
+        
+    let markerEffect = 
+        Effect.compose [
+            toEffect equatorTrafo
+            toEffect DefaultSurfaces.thickLine
+            toEffect DefaultSurfaces.sgColor
+        ]
+
+    let moonEffect = 
+        Effect.compose [
+            toEffect sunSpriteGs
+            toEffect moonSpritePs
+        ]
+
+    let skyEffect = 
+        Effect.compose [
+            toEffect screenQuad
+            toEffect vsSky
+            toEffect psSky
+        ]
+
+    let sunEffect =
+        Effect.compose [
+            toEffect sunSpriteGs
+            toEffect sunSpritePs
+        ]
