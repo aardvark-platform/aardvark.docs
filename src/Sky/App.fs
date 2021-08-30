@@ -670,7 +670,7 @@ module App =
     
         let lumTex =
             RenderTask.renderTo lumFbo lumInitTask
-            |> AdaptiveResource.map (fun fbo ->
+            |> AdaptiveResource.mapNonAdaptive (fun fbo ->
                 let out = fbo.Attachments.[DefaultSemantic.Colors] :?> ITextureLevel
                 runtime.GenerateMipMaps(out.Texture)
                 out.Texture
