@@ -228,13 +228,13 @@ module App =
                         tr [] [
                             td [] "threshold"
                             td [ clazz "right aligned" ] (m.threshold |> AVal.map (sprintf " %.3f"))
-                            td [] [ slider { min = 0.0; max = 2.8; step = 0.01  }[ clazz "ui inverted red slider"; style "width: 100px"] m.threshold SetThreshold ]
+                            td [] [ slider { min = 0.0; max = 2.8; step = 0.01  } [ clazz "ui inverted red slider"; style "width: 100px"] m.threshold SetThreshold ]
                         ]
                 
                         tr [] [
                             td [] "sigma"
                             td [ clazz "right aligned" ] (m.sigma |> AVal.map (sprintf " %.3f"))
-                            td [] [ slider { min = 0.0; max = 16.0; step = 0.01  }[ clazz "ui inverted red slider"; style "width: 100px"]m.sigma SetSigma ]
+                            td [] [ slider { min = 0.0; max = 16.0; step = 0.01  } [ clazz "ui inverted red slider"; style "width: 100px"]m.sigma SetSigma ]
                         ]
                         
                         tr [] [

@@ -46,10 +46,10 @@ module GuiExtensions =
             div [clazz "ui inverted segment"; style "display:block"] [
                 div [clazz "ui inverted accordion"] [
                     div [clazz title; style "background-color: rgb(40,40,40); min-width: 250px"] [
-                            i [clazz "dropdown icon"][]
+                            i [clazz "dropdown icon"] []
                             text text'                                
                             div[style "float:right"][
-                                i [clazz (sprintf "%s icon" iconName)][]
+                                i [clazz (sprintf "%s icon" iconName)] []
                             ]
                            
                     ]
