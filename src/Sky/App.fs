@@ -2,6 +2,7 @@
 
 open System
 open Aardvark.Base
+open Aardvark.SceneGraph
 open Aardvark.UI
 open Aardvark.UI.Primitives
 open Aardvark.Rendering
@@ -235,7 +236,7 @@ module App =
                     |> Sg.uniform "SunDirection" dir // TODO calculate direction of sun relative to this planet
                     |> Sg.uniform "CameraFov" cameraFov
                     |> Sg.uniform "RealSunDirection" geoInfo.SunDirection 
-                    |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
+                    |> Sg.writeBuffers' (Set.ofList [WriteBuffer.Color DefaultSemantic.Colors])
                     |> Sg.blendMode' { BlendMode.Add with SourceAlphaFactor = BlendFactor.Zero }
                     |> Sg.pass RenderPass.skyPass2
                     |> Sg.onOff spaceVisible
@@ -440,7 +441,7 @@ module App =
                 |> Sg.uniform "CameraFov" cameraFov
                 |> Sg.uniform "RealSunDirection" geoInfo.SunDirection
                 |> Sg.texture' (Symbol.Create "MoonTexture") (FileTexture(Path.combine [ resourcePath; "8k_moon.jpg"], { wantSrgb = true; wantCompressed = false; wantMipMaps = true }) :> ITexture)
-                |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
+                |> Sg.writeBuffers' (Set.ofList [WriteBuffer.Color DefaultSemantic.Colors])
                 |> Sg.blendMode' { BlendMode.Add with SourceAlphaFactor = BlendFactor.Zero }
                 |> Sg.pass RenderPass.skyPass2
                 |> Sg.onOff spaceVisible
@@ -556,7 +557,7 @@ module App =
                 DrawCallInfo(4) |> Sg.render IndexedGeometryMode.TriangleStrip
                 |> Sg.effect [ Shaders.skyEffect ]
                 |> Sg.cullMode' CullMode.None
-                |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
+                |> Sg.writeBuffers' (Set.ofList [WriteBuffer.Color DefaultSemantic.Colors])
                 |> Sg.texture (Symbol.Create "SkyImage") skyImage
                 |> Sg.pass RenderPass.skyPass1
 
@@ -589,7 +590,7 @@ module App =
                 |> Sg.uniform "SunDirection" geoInfo.SunDirection
                 |> Sg.uniform "SunSize" sunDiameter
                 |> Sg.uniform "CameraFov" cameraFov
-                |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
+                |> Sg.writeBuffers' (Set.ofList [WriteBuffer.Color DefaultSemantic.Colors])
                 |> Sg.blendMode' { BlendMode.Add with SourceAlphaFactor = BlendFactor.Zero }
                 |> Sg.pass RenderPass.skyPass2
                 |> Sg.onOff spaceVisible
@@ -635,14 +636,14 @@ module App =
 
         let runtime = clientValues.runtime
                             
-        let hdrColorSig = runtime.CreateFramebufferSignature(1, [
-                DefaultSemantic.Colors, RenderbufferFormat.Rgba32f; 
-                DefaultSemantic.Depth, RenderbufferFormat.Depth24Stencil8
+        let hdrColorSig = runtime.CreateFramebufferSignature([
+                DefaultSemantic.Colors, TextureFormat.Rgba32f; 
+                DefaultSemantic.DepthStencil, TextureFormat.Depth24Stencil8
                 ]
             )       
                                 
-        let lumSig = runtime.CreateFramebufferSignature(1, [
-                DefaultSemantic.Colors, RenderbufferFormat.R32f; 
+        let lumSig = runtime.CreateFramebufferSignature([
+                DefaultSemantic.Colors, TextureFormat.R32f; 
                 ]
             )    
     
@@ -663,7 +664,7 @@ module App =
             let size = clientValues.size
             let levels = size |> AVal.map (Vec.NormMax >> Fun.Log2Int)
             runtime.CreateTextureAttachment(
-                runtime.CreateTexture2D(TextureFormat.R32f, levels, 1, size), 0, 0
+                runtime.CreateTexture2D(size, TextureFormat.R32f, levels, samples = AVal.constant 1), 0, 0
             )
     
         let lumFbo = runtime.CreateFramebuffer(lumSig, [DefaultSemantic.Colors, lumAtt])
@@ -684,7 +685,7 @@ module App =
             |> Sg.uniform "ExposureMode" m.exposureMode
             |> Sg.uniform "MiddleGray" m.key
             |> Sg.uniform "Exposure" m.exposure
-            |> Sg.writeBuffers' (Set.ofList [DefaultSemantic.Colors])
+            |> Sg.writeBuffers' (Set.ofList [WriteBuffer.Color DefaultSemantic.Colors])
             |> Sg.depthTest' DepthTest.None
     
         let sgOverlay =

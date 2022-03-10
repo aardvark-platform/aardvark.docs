@@ -7,25 +7,25 @@ nuget FSharp.Core                           >= 5.0.0 lowest_matching: true
 nuget FSharp.Data.Adaptive                  ~> 1.2.8
 nuget CSharp.Data.Adaptive                  ~> 1.2.8
                                             
-nuget Aardvark.Base                         ~> 5.1.25
-nuget Aardvark.Base.Incremental             ~> 5.1.25
-nuget Aardvark.Base.FSharp                  ~> 5.1.25
+nuget Aardvark.Base                         ~> 5.2.2
+nuget Aardvark.Base.Incremental             ~> 5.2.2
+nuget Aardvark.Base.FSharp                  ~> 5.2.2
                                             
-nuget Aardvark.Rendering                    ~> 5.1.22
-nuget Aardvark.SceneGraph                   ~> 5.1.22
-nuget Aardvark.SceneGraph.IO                ~> 5.1.22
-nuget Aardvark.Rendering.Text               ~> 5.1.22                                
-nuget Aardvark.Application.Slim             ~> 5.1.22
-nuget Aardvark.Application.Slim.GL          ~> 5.1.22
-nuget Aardvark.Application.Slim.Vulkan      ~> 5.1.22
-nuget Aardvark.Application.Utilities        ~> 5.1.22
+nuget Aardvark.Rendering                    ~> 5.2.2
+nuget Aardvark.SceneGraph                   ~> 5.2.2
+nuget Aardvark.SceneGraph.IO                ~> 5.2.2
+nuget Aardvark.Rendering.Text               ~> 5.2.2                                
+nuget Aardvark.Application.Slim             ~> 5.2.2
+nuget Aardvark.Application.Slim.GL          ~> 5.2.2
+nuget Aardvark.Application.Slim.Vulkan      ~> 5.2.2
+nuget Aardvark.Application.Utilities        ~> 5.2.2
                                             
-nuget Aardvark.Service                      ~> 5.1.12
-nuget Aardvark.UI                           ~> 5.1.12
-nuget Aardvark.UI.Primitives                ~> 5.1.12
+nuget Aardvark.Service                      ~> 5.2.1
+nuget Aardvark.UI                           ~> 5.2.1
+nuget Aardvark.UI.Primitives                ~> 5.2.1
 
-nuget Adaptify.MSBuild                      ~> 1.0.8
+nuget Adaptify.MSBuild                      ~> 1.1.1
 
 nuget Aardium                               ~> 2.0.9
 
-nuget Aardvark.Physics.Sky                  ~> 5.1.22
+nuget Aardvark.Physics.Sky                  ~> 5.2.0

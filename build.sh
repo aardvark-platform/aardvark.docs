@@ -1,9 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
-if [ ! -f .paket/paket ]; then
-    dotnet tool install Paket --tool-path .paket
-fi
-
-./.paket/paket restore 
-
-dotnet build Aardvark.Docs.sln
+dotnet tool restore
+dotnet paket restore
+dotnet build src/Aardvark.Docs.sln

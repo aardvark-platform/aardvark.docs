@@ -23,7 +23,7 @@ namespace HelloWorldCSharp
             Aardvark.Base.Aardvark.Init();
             using (var app = /*new VulkanApplication() */ new OpenGlApplication())
             {
-                var win = app.CreateGameWindow(samples: 8);
+                var win = app.CreateGameWindow(samples: 8, physicalSize: false);
                 // build object from indexgeometry primitives
                 var cone = 
                         IndexedGeometryPrimitives.Cone.solidCone(

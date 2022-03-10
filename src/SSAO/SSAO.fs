@@ -190,7 +190,7 @@ module SSAO =
 
         let depth =
             sampler2d {
-                texture uniform?Depth
+                texture uniform?DepthTexture
                 addressU WrapMode.Clamp
                 addressV WrapMode.Clamp
                 filter Filter.MinMagLinear
@@ -198,7 +198,7 @@ module SSAO =
 
         let depthCmp =
             sampler2dShadow {
-                texture uniform?Depth
+                texture uniform?DepthTexture
                 addressU WrapMode.Clamp
                 addressV WrapMode.Clamp
                 comparison ComparisonFunction.Greater
@@ -386,15 +386,15 @@ module SSAO =
         let samples = 1
 
         let signature =
-            runtime.CreateFramebufferSignature [
-                DefaultSemantic.Colors, { format = RenderbufferFormat.Rgba8; samples = samples }
-                DefaultSemantic.Depth, { format = RenderbufferFormat.Depth24Stencil8; samples = samples }
-                DefaultSemantic.Normals, { format = RenderbufferFormat.Rgba32f; samples = samples }
-            ]
+            runtime.CreateFramebufferSignature([
+                DefaultSemantic.Colors, TextureFormat.Rgba8
+                DefaultSemantic.DepthStencil, TextureFormat.Depth24Stencil8
+                DefaultSemantic.Normals, TextureFormat.Rgba32f
+            ], samples)
             
         let ambientSignature =
             runtime.CreateFramebufferSignature [
-                DefaultSemantic.Colors, RenderbufferFormat.Rgba8
+                DefaultSemantic.Colors, TextureFormat.Rgba8
             ]
 
         let randomTex = 
@@ -414,7 +414,7 @@ module SSAO =
             let output =
                 Set.ofList [
                     DefaultSemantic.Colors
-                    DefaultSemantic.Depth
+                    DefaultSemantic.DepthStencil
                     DefaultSemantic.Normals
                 ]
 
@@ -422,7 +422,7 @@ module SSAO =
                 task |> RenderTask.renderSemanticsWithClear output size clear
 
             map |> Map.find DefaultSemantic.Colors,
-            map |> Map.find DefaultSemantic.Depth,
+            map |> Map.find DefaultSemantic.DepthStencil,
             map |> Map.find DefaultSemantic.Normals
 
         let sampleDirections =
@@ -445,7 +445,7 @@ module SSAO =
                 |> Sg.shader {  
                     do! Shader.ambientOcclusion
                 }
-                |> Sg.texture DefaultSemantic.Depth depth
+                |> Sg.texture DefaultSemantic.DepthTexture depth
                 |> Sg.texture DefaultSemantic.Normals normal
                 |> Sg.diffuseTexture color
                 |> Sg.viewTrafo view
@@ -463,7 +463,7 @@ module SSAO =
                 |> Sg.shader {
                     do! Shader.blur                    
                 }
-                |> Sg.texture DefaultSemantic.Depth depth
+                |> Sg.texture DefaultSemantic.DepthTexture depth
                 |> Sg.texture Semantic.Ambient ambient
                 |> Sg.viewTrafo view
                 |> Sg.projTrafo proj
@@ -533,7 +533,7 @@ module SSAO =
         let tex =         
             Sg.fullScreenQuad
                 |> Sg.texture Semantic.Ambient blurredAmbient
-                |> Sg.texture DefaultSemantic.Depth depth
+                |> Sg.texture DefaultSemantic.DepthTexture depth
                 |> Sg.texture DefaultSemantic.Normals normal
                 |> Sg.diffuseTexture color
                 |> Sg.uniform "Visualization" config.visualization
