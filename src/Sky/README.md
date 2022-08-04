@@ -18,4 +18,4 @@ This demo requires the .NET Core 3.1 SDK. It manages Nuget packages using `paket
 
 `dotnet build Sky.fsproj -c Release`
 
-The `Sky.exe` is built to `..\..\bin\Release\netcoreapp3.1\` and can be run from this directory.
+The `Sky.exe` is built to `..\..\bin\Release\net6.0\` and can be run from this directory.

@@ -10,7 +10,7 @@ let main argv =
     Aardvark.Init()
 
     let model =
-        Loader.Assimp.load (Path.combine [__SOURCE_DIRECTORY__; ".."; ".."; "data"; "aardvark"; "aardvark.obj"])
+        Loader.Assimp.load (Path.combine [__SOURCE_DIRECTORY__; ".."; ".."; "data"; "aardvark"; "Aardvark.obj"])
         |> Sg.adapter
         |> Sg.transform (Trafo3d.Scale(1.0,1.0,-1.0))
 

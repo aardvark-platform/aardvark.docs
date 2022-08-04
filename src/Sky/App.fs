@@ -174,7 +174,7 @@ module App =
         | GeoMessage msg -> { m with geoInfo = m.geoInfo |> GeoApp.update msg }
         | Nop -> m
 
-    let resourcePath = "..\\..\\..\\data\\sky"  // Moon-Texture And Star-Map
+    let resourcePath = System.IO.Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "data", "sky")  // Moon-Texture And Star-Map
 
     module Planets = 
         // visible planets Mercury, Venus, Mars, Jupiter and Saturn
@@ -336,7 +336,7 @@ module App =
                     else 
                         None) |> ASet.ofArray))
     
-            let cfg = { font = Font("Arial"); color = C4b(11, 102, 35, 128); align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
+            let cfg = { font = FontSquirrel.Arimo.Regular; color = C4b(11, 102, 35, 128); align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
             
             let objNameSg = 
                 ViewSpaceTrafoApplicator(AVal.constant (Sg.textsWithConfig cfg objNames |> Aardvark.SceneGraph.SgFSharp.Sg.trafo starTrafo))
@@ -382,7 +382,7 @@ module App =
                 |> Sg.uniform' "LineWidth" 2.0
                 |> Sg.uniform' "Color" C4f.Red
     
-            let cfg = { font = Font("Arial"); color = C4b.Red; align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
+            let cfg = { font = FontSquirrel.Arimo.Regular; color = C4b.Red; align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
     
             let markLabelStr = [| "N"; "O"; "S"; "W" |]
 
