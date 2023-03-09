@@ -75,6 +75,8 @@ type Model =
         //// location & time
         geoInfo       : GeoInfo
 
+        detailedTwilightInfo : bool
+
         skyParams       : SkyParams
         starParams      : StarParams
         planetScale     : float
@@ -94,6 +96,8 @@ type Model =
         let initial = {
             // time & location
             geoInfo = GeoInfo.vienna
+
+            detailedTwilightInfo = false
 
             skyParams = {
                 skyType = Preetham

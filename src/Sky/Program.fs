@@ -20,7 +20,7 @@ let main args =
 
     let app = new OpenGlApplication()
 
-    WebPart.startServer 4321 [
+    WebPart.startServerLocalhost 4321 [
         MutableApp.toWebPart' app.Runtime false (App.start App.app)
     ] |> ignore
     

@@ -116,6 +116,7 @@ type Message =
     | SetSkyType of Option<SkyType>
     | SetCIEType of Option<CIESkyType>
     | SetMagBoost of float
+    | SetTwilightInfoDetail of bool
     | GeoMessage of GeoAction
     | Nop
     
@@ -171,6 +172,7 @@ module App =
             let newFov = clamp 0.1 170.0 (m.fov * (pow 1.05 -v.Y))
             let sens = newFov / 70.0 / 100.0
             { m with fov = newFov; cameraState = { m.cameraState with freeFlyConfig = { m.cameraState.freeFlyConfig with lookAtMouseSensitivity = sens } } }
+        | SetTwilightInfoDetail v -> { m with detailedTwilightInfo = v }
         | GeoMessage msg -> { m with geoInfo = m.geoInfo |> GeoApp.update msg }
         | Nop -> m
 
@@ -743,6 +745,54 @@ module App =
             ]
         ]
 
+    let twilightInfo (m: AdaptiveModel) : DomNode<Message> = 
+        Incremental.div (AttributeMap.ofList [ style "position: relative; float: right; margin:5pt; padding: 6pt 10pt 8pt 10pt"; clazz "ui segment" ]) (
+            alist {
+                let! detailed = m.detailedTwilightInfo
+
+                let timesJd = AVal.map3 (fun jd long lat -> SunPosition.GetTwilightTimes(jd, long, lat)) m.geoInfo.JulianDayUTC m.geoInfo.gpsLong m.geoInfo.gpsLat
+                let times = m.geoInfo.timeZone |> AVal.map2 (fun (tt : SunPosition.TwilightTimesJd) (tz : int) -> tt.ToDateTime(float tz)) timesJd
+
+                let timeBorderStyle = "-webkit-border-radius: 5px; padding: 0px 4px 0px 4px;"
+                if detailed then
+                    let earlyNight   = times |> AVal.map (fun tt -> sprintf "00:00 - %s" (tt.AstronomicalDawn.ToString("HH:mm")))
+                    let earlyAstroTw = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.AstronomicalDawn.ToString("HH:mm")) (tt.NauticalDawn.ToString("HH:mm")))
+                    let earlyNautTw  = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.NauticalDawn.ToString("HH:mm")) (tt.CivilDawn.ToString("HH:mm")))
+                    let earlyCivilTw = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.CivilDawn.ToString("HH:mm")) (tt.SunRise.ToString("HH:mm")))
+                    let sunrise      = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunRise.ToString("HH:mm")) (tt.SunRiseEnd.ToString("HH:mm")))
+                    let daylight     = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunRiseEnd.ToString("HH:mm")) (tt.SunSetStart.ToString("HH:mm")))
+                    let sunset       = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunSetStart.ToString("HH:mm")) (tt.SunSet.ToString("HH:mm")))
+                    let lateCivilTw  = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunSet.ToString("HH:mm")) (tt.CivilDusk.ToString("HH:mm")))
+                    let lateNautTw   = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.CivilDusk.ToString("HH:mm")) (tt.NauticalDusk.ToString("HH:mm")))
+                    let lateAstroTw  = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.NauticalDusk.ToString("HH:mm")) (tt.AstronomicalDusk.ToString("HH:mm")))
+                    let lateNight    = times |> AVal.map (fun tt -> sprintf "%s - 00:00" (tt.AstronomicalDusk.ToString("HH:mm")))
+                    span [ style ("background: #bfd5dd;" + timeBorderStyle) ] [ Incremental.text earlyNight ];   text " ― Night"; br []
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text earlyAstroTw ]; text " ― Astronomical Twilight"; br []
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text earlyNautTw ];  text " ― Nautical Twilight"; br []
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text earlyCivilTw ]; text " ― Civil Twilight"; br []
+                    span [ style ("background: #ffed9e;" + timeBorderStyle) ] [ Incremental.text sunrise ];      text " ― Sunrise"; br []
+                    span [ style ("background: #ffdc9c;" + timeBorderStyle) ] [ Incremental.text daylight ];     text " ― Daylight"; br []
+                    span [ style ("background: #ffc3ad;" + timeBorderStyle) ] [ Incremental.text sunset ];       text " ― Sunset"; br []
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text lateCivilTw ];  text " ― Civil Twilight"; br []
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text lateNautTw ];   text " ― Nautical Twilight"; br []
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text lateAstroTw ];  text " ― Astronomical Twilight"; br []
+                    span [ style ("background: #bfd5dd;" + timeBorderStyle) ] [ Incremental.text lateNight ];    text " ― Night"; br []
+                    button [ clazz "ui button"; style "border: none; background: none; text-decoration: underline; color: blue; padding: 0; margin: 5px 0 0 0"; onClick (fun _ -> SetTwilightInfoDetail false) ] [ text "Less Detail" ] 
+                else
+                    let dawn    = times |> AVal.map (fun tt ->  tt.CivilDawn.ToString("HH:mm"))
+                    let sunrise = times |> AVal.map (fun tt ->  tt.SunRise.ToString("HH:mm"))
+                    let noon    = times |> AVal.map (fun tt ->  tt.Noon.ToString("HH:mm"))
+                    let sunset  = times |> AVal.map (fun tt ->  tt.SunSet.ToString("HH:mm"))
+                    let dusk    = times |> AVal.map (fun tt ->  tt.CivilDusk.ToString("HH:mm"))
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text dawn ];    text " ― Dawn"; br []
+                    span [ style ("background: #ffed9e;" + timeBorderStyle) ] [ Incremental.text sunrise ]; text " ― Sunrise"; br []
+                    span [ style ("background: #ffdc9c;" + timeBorderStyle) ] [ Incremental.text noon ];    text " ― Noon"; br []
+                    span [ style ("background: #ffc3ad;" + timeBorderStyle) ] [ Incremental.text sunset ];  text " ― Sunset"; br []
+                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text dusk ];    text " ― Dusk"; br []
+                    button [ clazz "ui button"; style "border: none; background: none; text-decoration: underline; color: blue; padding: 0; margin: 5px 0 0 0"; onClick (fun _ -> SetTwilightInfoDetail true) ] [ text "More Detail" ] 
+            }
+        )
+
     let view (m: AdaptiveModel) = 
         
         let frustum = m.fov |> AVal.map (fun fv -> Frustum.perspective fv 0.1 100.0 1.0)
@@ -763,13 +813,14 @@ module App =
             body [] [
                 rc
                 settingsUi m
+                twilightInfo m
             ]
         )
     
     let threads (model : Model) = 
         FreeFlyController.threads model.cameraState |> ThreadPool.map CameraMessage
 
-    let app =
+    let app : App<Model, AdaptiveModel, Message> =
         {
             initial = Model.initial
             update = update
