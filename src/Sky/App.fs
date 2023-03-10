@@ -753,42 +753,48 @@ module App =
                 let timesJd = AVal.map3 (fun jd long lat -> SunPosition.GetTwilightTimes(jd, long, lat)) m.geoInfo.JulianDayUTC m.geoInfo.gpsLong m.geoInfo.gpsLat
                 let times = m.geoInfo.timeZone |> AVal.map2 (fun (tt : SunPosition.TwilightTimesJd) (tz : int) -> tt.ToDateTime(float tz)) timesJd
 
-                let timeBorderStyle = "-webkit-border-radius: 5px; padding: 0px 4px 0px 4px;"
+                let dateToStr dt = 
+                    if dt = DateTime.MinValue then
+                        "\u00A0\u00A0n/a\u00A0\u00A0" 
+                    else 
+                        dt.ToString("HH:mm")
+
+                let timeStyle = "-webkit-border-radius: 5px; padding: 0px 4px 0px 4px; font-family: Verdana;"
                 if detailed then
-                    let earlyNight   = times |> AVal.map (fun tt -> sprintf "00:00 - %s" (tt.AstronomicalDawn.ToString("HH:mm")))
-                    let earlyAstroTw = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.AstronomicalDawn.ToString("HH:mm")) (tt.NauticalDawn.ToString("HH:mm")))
-                    let earlyNautTw  = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.NauticalDawn.ToString("HH:mm")) (tt.CivilDawn.ToString("HH:mm")))
-                    let earlyCivilTw = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.CivilDawn.ToString("HH:mm")) (tt.SunRise.ToString("HH:mm")))
-                    let sunrise      = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunRise.ToString("HH:mm")) (tt.SunRiseEnd.ToString("HH:mm")))
-                    let daylight     = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunRiseEnd.ToString("HH:mm")) (tt.SunSetStart.ToString("HH:mm")))
-                    let sunset       = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunSetStart.ToString("HH:mm")) (tt.SunSet.ToString("HH:mm")))
-                    let lateCivilTw  = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.SunSet.ToString("HH:mm")) (tt.CivilDusk.ToString("HH:mm")))
-                    let lateNautTw   = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.CivilDusk.ToString("HH:mm")) (tt.NauticalDusk.ToString("HH:mm")))
-                    let lateAstroTw  = times |> AVal.map (fun tt -> sprintf "%s - %s" (tt.NauticalDusk.ToString("HH:mm")) (tt.AstronomicalDusk.ToString("HH:mm")))
-                    let lateNight    = times |> AVal.map (fun tt -> sprintf "%s - 00:00" (tt.AstronomicalDusk.ToString("HH:mm")))
-                    span [ style ("background: #bfd5dd;" + timeBorderStyle) ] [ Incremental.text earlyNight ];   text " ― Night"; br []
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text earlyAstroTw ]; text " ― Astronomical Twilight"; br []
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text earlyNautTw ];  text " ― Nautical Twilight"; br []
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text earlyCivilTw ]; text " ― Civil Twilight"; br []
-                    span [ style ("background: #ffed9e;" + timeBorderStyle) ] [ Incremental.text sunrise ];      text " ― Sunrise"; br []
-                    span [ style ("background: #ffdc9c;" + timeBorderStyle) ] [ Incremental.text daylight ];     text " ― Daylight"; br []
-                    span [ style ("background: #ffc3ad;" + timeBorderStyle) ] [ Incremental.text sunset ];       text " ― Sunset"; br []
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text lateCivilTw ];  text " ― Civil Twilight"; br []
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text lateNautTw ];   text " ― Nautical Twilight"; br []
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text lateAstroTw ];  text " ― Astronomical Twilight"; br []
-                    span [ style ("background: #bfd5dd;" + timeBorderStyle) ] [ Incremental.text lateNight ];    text " ― Night"; br []
+                    let earlyNight   = times |> AVal.map (fun tt -> sprintf "00:00 - %s" (dateToStr tt.AstronomicalDawn))
+                    let earlyAstroTw = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.AstronomicalDawn) (dateToStr tt.NauticalDawn))
+                    let earlyNautTw  = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.NauticalDawn)     (dateToStr tt.CivilDawn))
+                    let earlyCivilTw = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.CivilDawn)        (dateToStr tt.SunRise))
+                    let sunrise      = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.SunRise)          (dateToStr tt.SunRiseEnd))
+                    let daylight     = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.SunRiseEnd)       (dateToStr tt.SunSetStart))
+                    let sunset       = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.SunSetStart)      (dateToStr tt.SunSet))
+                    let lateCivilTw  = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.SunSet)           (dateToStr tt.CivilDusk))
+                    let lateNautTw   = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.CivilDusk)        (dateToStr tt.NauticalDusk))
+                    let lateAstroTw  = times |> AVal.map (fun tt -> sprintf "%s - %s"    (dateToStr tt.NauticalDusk)     (dateToStr tt.AstronomicalDusk))
+                    let lateNight    = times |> AVal.map (fun tt -> sprintf "%s - 00:00" (dateToStr tt.AstronomicalDusk))
+                    span [ style ("background: #bfd5dd;" + timeStyle) ] [ Incremental.text earlyNight ];   span [ style "font-family: Verdana" ] [ text " ― Night" ];                 br []
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text earlyAstroTw ]; span [ style "font-family: Verdana" ] [ text " ― Astronomical Twilight" ]; br []
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text earlyNautTw ];  span [ style "font-family: Verdana" ] [ text " ― Nautical Twilight" ];     br []
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text earlyCivilTw ]; span [ style "font-family: Verdana" ] [ text " ― Civil Twilight" ];        br []
+                    span [ style ("background: #ffed9e;" + timeStyle) ] [ Incremental.text sunrise ];      span [ style "font-family: Verdana" ] [ text " ― Sunrise" ];               br []
+                    span [ style ("background: #ffdc9c;" + timeStyle) ] [ Incremental.text daylight ];     span [ style "font-family: Verdana" ] [ text " ― Daylight" ];              br []
+                    span [ style ("background: #ffc3ad;" + timeStyle) ] [ Incremental.text sunset ];       span [ style "font-family: Verdana" ] [ text " ― Sunset" ];                br []
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text lateCivilTw ];  span [ style "font-family: Verdana" ] [ text " ― Civil Twilight" ];        br []
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text lateNautTw ];   span [ style "font-family: Verdana" ] [ text " ― Nautical Twilight" ];     br []
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text lateAstroTw ];  span [ style "font-family: Verdana" ] [ text " ― Astronomical Twilight" ]; br []
+                    span [ style ("background: #bfd5dd;" + timeStyle) ] [ Incremental.text lateNight ];    span [ style "font-family: Verdana" ] [ text " ― Night" ];                 br []
                     button [ clazz "ui button"; style "border: none; background: none; text-decoration: underline; color: blue; padding: 0; margin: 5px 0 0 0"; onClick (fun _ -> SetTwilightInfoDetail false) ] [ text "Less Detail" ] 
                 else
-                    let dawn    = times |> AVal.map (fun tt ->  tt.CivilDawn.ToString("HH:mm"))
-                    let sunrise = times |> AVal.map (fun tt ->  tt.SunRise.ToString("HH:mm"))
-                    let noon    = times |> AVal.map (fun tt ->  tt.Noon.ToString("HH:mm"))
-                    let sunset  = times |> AVal.map (fun tt ->  tt.SunSet.ToString("HH:mm"))
-                    let dusk    = times |> AVal.map (fun tt ->  tt.CivilDusk.ToString("HH:mm"))
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text dawn ];    text " ― Dawn"; br []
-                    span [ style ("background: #ffed9e;" + timeBorderStyle) ] [ Incremental.text sunrise ]; text " ― Sunrise"; br []
-                    span [ style ("background: #ffdc9c;" + timeBorderStyle) ] [ Incremental.text noon ];    text " ― Noon"; br []
-                    span [ style ("background: #ffc3ad;" + timeBorderStyle) ] [ Incremental.text sunset ];  text " ― Sunset"; br []
-                    span [ style ("background: #d0e5ff;" + timeBorderStyle) ] [ Incremental.text dusk ];    text " ― Dusk"; br []
+                    let dawn    = times |> AVal.map (fun tt -> dateToStr tt.CivilDawn)
+                    let sunrise = times |> AVal.map (fun tt -> dateToStr tt.SunRise)
+                    let noon    = times |> AVal.map (fun tt -> dateToStr tt.Noon)
+                    let sunset  = times |> AVal.map (fun tt -> dateToStr tt.SunSet)
+                    let dusk    = times |> AVal.map (fun tt -> dateToStr tt.CivilDusk)
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text dawn ];    span [ style "font-family: Verdana" ] [ text " ― Dawn" ];    br []
+                    span [ style ("background: #ffed9e;" + timeStyle) ] [ Incremental.text sunrise ]; span [ style "font-family: Verdana" ] [ text " ― Sunrise" ]; br []
+                    span [ style ("background: #ffdc9c;" + timeStyle) ] [ Incremental.text noon ];    span [ style "font-family: Verdana" ] [ text " ― Noon" ];    br []
+                    span [ style ("background: #ffc3ad;" + timeStyle) ] [ Incremental.text sunset ];  span [ style "font-family: Verdana" ] [ text " ― Sunset" ];  br []
+                    span [ style ("background: #d0e5ff;" + timeStyle) ] [ Incremental.text dusk ];    span [ style "font-family: Verdana" ] [ text " ― Dusk" ];    br []
                     button [ clazz "ui button"; style "border: none; background: none; text-decoration: underline; color: blue; padding: 0; margin: 5px 0 0 0"; onClick (fun _ -> SetTwilightInfoDetail true) ] [ text "More Detail" ] 
             }
         )
