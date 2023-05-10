@@ -769,7 +769,7 @@ module App =
     let threads (model : Model) = 
         FreeFlyController.threads model.cameraState |> ThreadPool.map CameraMessage
 
-    let app =
+    let app : App<_,_,_> =
         {
             initial = Model.initial
             update = update
