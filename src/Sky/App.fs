@@ -106,15 +106,15 @@ type Message =
     | SetResolution of int
     | SetExposure of float
     | SetKey of float
-    | SetExposureMode of Option<ExposureMode>
+    | SetExposureMode of ExposureMode
     | AdjustFoV of V2d
     | SetObjectNames of bool
     | ToggleObjectNames 
     | SetObjectNameThreshold of float
     | SetStarSigns of bool
     | ToggleStarSigns
-    | SetSkyType of Option<SkyType>
-    | SetCIEType of Option<CIESkyType>
+    | SetSkyType of SkyType
+    | SetCIEType of CIESkyType
     | SetMagBoost of float
     | GeoMessage of GeoAction
     | Nop
@@ -155,12 +155,12 @@ module App =
         | SetTurbidity v -> { m with skyParams = { m.skyParams with turbidity = v }}
         | SetLightPollution v -> { m with skyParams = { m.skyParams with lightPollution = v }}
         | SetResolution v -> { m with skyParams = { m.skyParams with res = v }}
-        | SetSkyType o ->  match o with | Some v -> { m with skyParams = { m.skyParams with skyType = v }} | None -> m
-        | SetCIEType o -> match o with | Some v -> { m with skyParams = { m.skyParams with cieType = v }} | None -> m
+        | SetSkyType o ->  { m with skyParams = { m.skyParams with skyType = o }}
+        | SetCIEType o -> { m with skyParams = { m.skyParams with cieType = o }}
         | SetPlanetScale v -> { m with planetScale = v }
         | SetExposure v -> { m with exposure = v }
         | SetKey v -> { m with key = v }
-        | SetExposureMode o -> match o with | Some v -> { m with exposureMode = v } | None -> m
+        | SetExposureMode o -> { m with exposureMode = o }
         | SetMagBoost v -> { m with starParams = { m.starParams with magBoost = v }}
         | SetStarSigns v -> { m with starParams = { m.starParams with starSigns = v }}
         | ToggleStarSigns -> { m with starParams = { m.starParams with starSigns = not m.starParams.starSigns }}
@@ -702,15 +702,12 @@ module App =
 
         let skyModelCases = FSharpType.GetUnionCases typeof<SkyType>
         let skyModelValues = AMap.ofSeq( skyModelCases |> Seq.map (fun c -> (FSharpValue.MakeUnion(c, [||]) :?> SkyType, text (c.Name))) )
-        let skyOptionMod : IAdaptiveValue<Option<SkyType>> = m.skyParams.skyType |> AVal.map Some
     
         //let cieModelCases = Enum.GetValues typeof<CIESkyType>
-        let cieValues = AMap.ofArray(Array.init 15 (fun i -> (EnumHelpers.GetValue(i), text (Enum.GetName(typeof<CIESkyType>, i))))) // TODO: ToDescription
-        let cieOptionMod : IAdaptiveValue<Option<CIESkyType>> = m.skyParams.cieType |> AVal.map Some
+        let cieValues = AMap.ofArray(Array.init 15 (fun i -> (EnumHelpers.GetValue<CIESkyType>(i), text (Enum.GetName(typeof<CIESkyType>, i))))) // TODO: ToDescription
     
         let exposureModeCases = Enum.GetValues typeof<ExposureMode> :?> (ExposureMode [])
         let exposureModeValues = AMap.ofArray( exposureModeCases |> Array.map (fun c -> (c, text (Enum.GetName(typeof<ExposureMode>, c)) )))
-        let exposureModeOptionMod : IAdaptiveValue<Option<ExposureMode>> = m.exposureMode |> AVal.map Some
         
         div [style "position: fixed; width:260pt; margin:0px; border-radius:10px; padding:12px; background:DarkSlateGray; color: white"] [ // sidebar 
             
@@ -718,9 +715,9 @@ module App =
             
             h4 [style "color:white"] [text "Sky"]
             Html.table [                    
-                Html.row "Model" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] skyModelValues skyOptionMod SetSkyType ]
+                Html.row "Model" [ dropdownUnClearable [ clazz "ui inverted selection dropdown" ] skyModelValues m.skyParams.skyType SetSkyType ]
                 Html.row "Turbidity" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.turbidity; update SetTurbidity; step 0.1; largeStep 1.0; min 1.9; max 10.0; }]
-                Html.row "Type" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] cieValues cieOptionMod SetCIEType ] 
+                Html.row "Type" [ dropdownUnClearable [ clazz "ui inverted selection dropdown" ] cieValues m.skyParams.cieType SetCIEType ] 
                 Html.row "Light Pollution" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.lightPollution; update SetLightPollution; step 5.0; largeStep 50.0; min 0.0; max 10000.0; }]      
                 // Html.row "Sun Position" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] spAlgoValues spOptionMod SetSunPosAlgo ]
                 // Html.row "Resolution" [ text "TODO" ]
@@ -737,7 +734,7 @@ module App =
     
             h4 [style "color:white"] [text "Tonemapping"]
             Html.table [
-                Html.row "Mode" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] exposureModeValues exposureModeOptionMod SetExposureMode ]
+                Html.row "Mode" [ dropdownUnClearable [ clazz "ui inverted selection dropdown" ] exposureModeValues m.exposureMode SetExposureMode ]
                 Html.row "Exposure" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.exposure; update SetExposure; step 0.1; largeStep 1.0; min -20.0; max 10.0; }]
                 Html.row "Middle Gray" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.key; update SetKey; step 0.001; largeStep 0.01; min 0.001; max 1.0; }]
             ]

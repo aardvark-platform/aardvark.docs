@@ -42,7 +42,13 @@ module Utilities =
             { kind = ReferenceKind.Stylesheet; url = "https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.css"; name = "semui-range"}
         ]
 
-    let inline slider (att : list<string * AttributeValue<'msg>>) (min : float) (max : float) (step : float) (value : aval<float>) (onChange : float -> 'msg) =
+    let private newId =
+        let mutable curr = 0
+        fun () ->
+            inc &curr
+            curr
+
+    let slider (att : list<string * AttributeValue<'msg>>) (min : float) (max : float) (step : float) (value : aval<float>) (onChange : float -> 'msg) =
         
         let channelName = sprintf "channel%d" (newId())
         
