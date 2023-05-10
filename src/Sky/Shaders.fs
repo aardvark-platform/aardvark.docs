@@ -311,8 +311,9 @@ module Shaders =
 
     type VertexStar = {
 
-        [<Position>] p : V4d
-        [<Color>]    c : V4d
+        [<Position>]  p : V4d
+        [<Color>]     c : V4d
+        [<PointSize>] s : float
     }
 
     let starTrafo (v : VertexStar) =
@@ -334,7 +335,7 @@ module Shaders =
             let sunPixels = sunRadPx * sunRadPx * Constant.Pi
             let c = V4d(v.c.XYZ * sunPixels, 1.0)
 
-            return { p = V4d(pp.X, pp.Y, 1.0, 1.0); c = c }
+            return { p = V4d(pp.X, pp.Y, 1.0, 1.0); c = c; s = 1.0 }
 
             }
 
