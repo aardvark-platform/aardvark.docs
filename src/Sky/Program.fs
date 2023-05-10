@@ -26,7 +26,7 @@ let main args =
 
     use __ = disposable
 
-    WebPart.startServer 4321 [
+    WebPart.startServerLocalhost 4321 [
         MutableApp.toWebPart' runtime false (App.start App.app)
     ] |> ignore
 
