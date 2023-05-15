@@ -664,7 +664,7 @@ module App =
     
         let lumAtt =
             let size = clientValues.size
-            let levels = size |> AVal.map (Vec.NormMax >> Fun.Log2Int)
+            let levels = size |> AVal.map Fun.MipmapLevels
             runtime.CreateTextureAttachment(
                 runtime.CreateTexture2D(size, TextureFormat.R32f, levels, samples = AVal.constant 1), 0, 0
             )
