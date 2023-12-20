@@ -7,9 +7,7 @@
 [Gallery](https://github.com/aardvarkplatform/aardvark.docs/wiki/Gallery) | 
 [Status](https://github.com/aardvarkplatform/aardvark.docs/wiki/Status)
 
-Aardvark.Docs is part of [The Aardvark Platform](https://github.com/aardvark-platform/aardvark.docs/wiki) for visual computing, real-time graphics and visualization. The examples in this repository combine multiple packages from different repositories.
-
-Each platform repository contains self-contained standalone examples (e.g. [rendering examples](https://github.com/aardvark-platform/aardvark.rendering/tree/master/src/Examples%20(netcore))). The examples presented here combine multiple packages.
+Aardvark.Docs is part of [The Aardvark Platform](https://github.com/aardvark-platform/aardvark.docs/wiki) for visual computing, real-time graphics and visualization. The examples in this repository combine multiple packages from different repositories. Other repositories of The Aardvark Platform contain self-contained standalone examples (e.g. [rendering examples](https://github.com/aardvark-platform/aardvark.rendering/tree/master/src/Examples%20(netcore))). 
 
 # Build and Run
 
