@@ -21,3 +21,5 @@ Aardium
 FShade.Core
 
 Aardvark.Physics.Sky
+
+SixLabors.ImageSharp

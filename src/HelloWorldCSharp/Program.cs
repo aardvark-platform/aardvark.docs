@@ -21,6 +21,7 @@ namespace HelloWorldCSharp
         public static void Main(string[] args)
         {
             Aardvark.Base.Aardvark.Init();
+
             using (var app = /*new VulkanApplication() */ new OpenGlApplication())
             {
                 var win = app.CreateGameWindow(samples: 8, physicalSize: false);

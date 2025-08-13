@@ -24,17 +24,17 @@ let main argv =
         let sw = Stopwatch()
         sw.Start()
 
-        let g = 0.01f           // "gravitational constant"
+        let g = 0.001f           // "gravitational constant"
         let mutable t = 0.0     // time
-        let mutable ps = [| for i in 1..n do yield 35.0f * (V3f(r.NextDouble(), r.NextDouble(), r.NextDouble()) - V3f(0.5, 0.5, 0.5)) |]
+        let mutable ps = [| for i in 1..n do yield 20.0f * (V3f(r.NextDouble(), r.NextDouble(), r.NextDouble()) - V3f(0.5, 0.5, 0.5)) |]
         let mutable ps' = Array.create<V3f> (n*2) V3f.Zero
         let mutable cs = [| for i in 1..n do yield C4b(r.NextDouble(), r.NextDouble(), r.NextDouble()) |]
         let mutable cs' = cs |> Array.collect (fun c -> [| c; C4b.Black |])
     
         let vs = Array.create<V3f> n V3f.Zero                           // velocities
-        let ms = [| for i in 1..n do yield float32(r.NextDouble()) |]   // masses
+        let ms = [| for i in 1..n do yield 1.0f (*float32(r.NextDouble())*) |]   // masses
 
-        do! Async.Sleep 8000
+        //do! Async.Sleep 8000
         while true do
             for i in 0..ps.Length-1 do
                 let p = ps.[i]
@@ -44,11 +44,11 @@ let main argv =
                     vs.[i] <- vs.[i] + v * ms.[j] * f
                     vs.[j] <- vs.[j] - v * ms.[i] * f
                 
-            let dt = sw.Elapsed.TotalSeconds - t
+            let dt = (sw.Elapsed.TotalSeconds - t) * 0.01
             t <- sw.Elapsed.TotalSeconds
 
             ps <- ps |> Array.mapi (fun i p -> p + vs.[i] * float32(dt))
-            ps' <- ps |> Array.mapi (fun i p -> [| p; p - 0.5f * vs.[i] |]) |> Array.concat
+            ps' <- ps |> Array.mapi (fun i p -> [| p; p - 0.01f * 0.5f * vs.[i] |]) |> Array.concat
 
             transact (fun () ->
                 positions.Value <- ps

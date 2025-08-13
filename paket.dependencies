@@ -29,3 +29,5 @@ nuget Adaptify.MSBuild                      ~> 1.1.9
 nuget Aardium                               ~> 2.0.9
 
 nuget Aardvark.Physics.Sky                  ~> 5.2.0
+
+nuget SixLabors.ImageSharp                  >= 2.1.11

@@ -2,3 +2,4 @@ FSharp.Core
 Aardvark.SceneGraph
 FSharp.Data.Adaptive
 Aardvark.Base.Incremental
+SixLabors.ImageSharp

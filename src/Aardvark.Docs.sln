@@ -24,6 +24,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Refactoring", "Refactoring"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Sky", "Sky\Sky.fsproj", "{8DEF59B8-3EF0-4D20-A977-76FEA537E3AF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_", "_", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\build.cmd = ..\build.cmd
+		..\build.sh = ..\build.sh
+		..\LICENSE = ..\LICENSE
+		..\paket.dependencies = ..\paket.dependencies
+		..\paket.lock = ..\paket.lock
+		..\README.md = ..\README.md
+		..\restore.cmd = ..\restore.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
