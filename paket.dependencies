@@ -7,27 +7,30 @@ nuget FSharp.Core                           >= 5.0.1 lowest_matching: true
 nuget FSharp.Data.Adaptive                  ~> 1.2.8
 nuget CSharp.Data.Adaptive                  ~> 1.2.8
                                             
-nuget Aardvark.Base                         ~> 5.2.2
-nuget Aardvark.Base.Incremental             ~> 5.2.2
-nuget Aardvark.Base.FSharp                  ~> 5.2.2
+nuget Aardvark.Base                         ~> 5.3.0
+nuget Aardvark.Base.Incremental             ~> 5.3.0
+nuget Aardvark.Base.FSharp                  ~> 5.3.0
                                             
-nuget Aardvark.Rendering                    ~> 5.4.0-prerelease0003
-nuget Aardvark.SceneGraph                   ~> 5.4.0-prerelease0003
-nuget Aardvark.SceneGraph.IO                ~> 5.4.0-prerelease0003
-nuget Aardvark.Rendering.Text               ~> 5.4.0-prerelease0003                                
-nuget Aardvark.Application.Slim             ~> 5.4.0-prerelease0003
-nuget Aardvark.Application.Slim.GL          ~> 5.4.0-prerelease0003
-nuget Aardvark.Application.Slim.Vulkan      ~> 5.4.0-prerelease0003
-nuget Aardvark.Application.Utilities        ~> 5.4.0-prerelease0003
+nuget Aardvark.Rendering                    ~> 5.5.0
+nuget Aardvark.SceneGraph                   ~> 5.5.0
+nuget Aardvark.SceneGraph.Assimp                ~> 5.5.0
+nuget Aardvark.Rendering.Text               ~> 5.5.0                               
+nuget Aardvark.Application.Slim             ~> 5.5.0
+nuget Aardvark.Application.Slim.GL          ~> 5.5.0
+nuget Aardvark.Application.Slim.Vulkan      ~> 5.5.0
+nuget Aardvark.Application.Utilities        ~> 5.5.0
                                             
-nuget Aardvark.Service                      ~> 5.4.0-prerelease0007
-nuget Aardvark.UI                           ~> 5.4.0-prerelease0007
-nuget Aardvark.UI.Primitives                ~> 5.4.0-prerelease0007
+nuget Aardvark.Service                      ~> 5.5.0
+nuget Aardvark.UI                           ~> 5.5.0
+nuget Aardvark.UI.Primitives                ~> 5.5.0
 
 nuget Adaptify.MSBuild                      ~> 1.1.9
 
 nuget Aardium                               ~> 2.0.9
 
-nuget Aardvark.Physics.Sky                  ~> 5.2.0
+nuget Aardvark.Physics.Sky                  ~> 5.5.0
 
 nuget SixLabors.ImageSharp                  >= 2.1.11
+
+nuget Aardvark.Data.Wavefront ~> 5.3.0
+nuget Aardvark.PixImage.ImageSharp ~> 3.0.0

@@ -3,7 +3,7 @@ Aardvark.UI
 Aardvark.UI.Primitives
 Adaptify.MSBuild
 Aardium
-Aardvark.SceneGraph.IO
+Aardvark.SceneGraph.Assimp
 Aardvark.Rendering.Text
 Aardvark.Application.Utilities
 SixLabors.ImageSharp

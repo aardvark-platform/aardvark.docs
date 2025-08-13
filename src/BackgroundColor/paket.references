@@ -1,6 +1,6 @@
 FSharp.Core
 Aardvark.Application.Slim.GL
 Aardvark.SceneGraph
-Aardvark.SceneGraph.IO
+Aardvark.SceneGraph.Assimp
 FSharp.Data.Adaptive
 SixLabors.ImageSharp

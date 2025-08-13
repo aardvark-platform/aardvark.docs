@@ -9,7 +9,7 @@ Aardvark.Application.Slim
 Aardvark.Application.Slim.GL
 Aardvark.Application.Slim.Vulkan
 Aardvark.SceneGraph
-Aardvark.SceneGraph.IO
+Aardvark.SceneGraph.Assimp
 Aardvark.Rendering.Text
 
 Aardvark.Service
