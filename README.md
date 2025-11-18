@@ -1,12 +1,11 @@
-
-[![Discord](https://badgen.net/discord/online-members/UyecnhM)](https://discord.gg/UyecnhM)
-[![license](https://img.shields.io/github/license/aardvark-platform/aardvark.docs.svg)](https://github.com/aardvark-platform/aardvark.docs/blob/master/LICENSE)
+[![Discord](https://img.shields.io/discord/611129394764840960?label=Discord)](https://discord.gg/UyecnhM)
+[![License](https://img.shields.io/github/license/aardvark-platform/aardvark.docs.svg?label=License)](https://github.com/aardvark-platform/aardvark.docs/blob/master/LICENSE)
 
 [The Aardvark Platform](https://aardvarkians.com/) |
 [Gallery](https://github.com/aardvark-platform/aardvark.docs/wiki/Gallery) | 
-[Packages&Repositories](https://github.com/aardvark-platform/aardvark.docs/wiki/Packages-and-Repositories)
+[Packages & Repositories](https://github.com/aardvark-platform/aardvark.docs/wiki/Packages-and-Repositories)
 
-Aardvark.Docs is part of [The Aardvark Platform](https://github.com/aardvark-platform/aardvark.docs/wiki) for visual computing, real-time graphics and visualization. The examples in this repository combine multiple packages from different repositories. You can find the other Aardvark Platform repositories in the Gallery and Packages&Repositories links above. For more information, please refer to the [aardvark.docs wiki](https://github.com/aardvark-platform/aardvark.docs/wiki).
+Aardvark.Docs is part of [The Aardvark Platform](https://github.com/aardvark-platform/aardvark.docs/wiki) for visual computing, real-time graphics and visualization. The examples in this repository combine multiple packages from different repositories. You can find the other Aardvark Platform repositories in the [Gallery](https://github.com/aardvark-platform/aardvark.docs/wiki/Gallery) and [Packages & Repositories](https://github.com/aardvark-platform/aardvark.docs/wiki/Packages-and-Repositories). For more information, please refer to the [aardvark.docs wiki](https://github.com/aardvark-platform/aardvark.docs/wiki).
 
 # Build and Run
 
