@@ -7,13 +7,13 @@ open Aardvark.SceneGraph
 open FSharp.Data.Adaptive
 
 [<EntryPoint>]
-let main argv =
+let main _argv =
     // initialize runtime system
     Aardvark.Init()
 
     // create simple render window
     use app = new OpenGlApplication()
-    let win = app.CreateGameWindow(8)
+    use win = app.CreateGameWindow(8)
     win.Title <- "Background Color (aardvark.docs)"
 
     // view, projection and default camera controllers
@@ -39,7 +39,7 @@ let main argv =
     let bgColorAnimation = async {
         let r = Random()
         while true do
-            do! Async.Sleep 100
+            do! Async.Sleep 2000
             let randomColor = C4f(r.NextDouble(), r.NextDouble(), r.NextDouble())
             transact ( fun () -> bgColor.Value <- randomColor )
     }

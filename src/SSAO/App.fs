@@ -6,7 +6,7 @@ open FSharp.Data.Adaptive.Operators
 open Aardvark.UI
 open Aardvark.UI.Generic
 open Aardvark.SceneGraph
-open Aardvark.SceneGraph.IO
+open Aardvark.SceneGraph.Assimp
 open Aardvark.Rendering
 open Aardvark.Service
 open Aardvark.UI.Primitives
@@ -15,12 +15,12 @@ module PointShader =
     open FShade
     type SizeVertex = 
         {
-            [<PointSize>] s : float
+            [<PointSize>] s : float32
         }
 
     let sizeShader (v : SizeVertex) =
         vertex {
-            return { v with s = 50.0 }
+            return { v with s = 50.0f }
         }
 
 module App =
@@ -264,15 +264,15 @@ module App =
                         tr [] [
                             td [] "display"
                             td [ attribute "colspan" "2"] [
-                                dropDown [] m.visualization SetVisualization (
-                                    Map.ofList [
-                                        SSAOVisualization.Composed, "composed"
-                                        SSAOVisualization.Color, "color"
-                                        SSAOVisualization.Normal, "normal"
-                                        SSAOVisualization.Ambient, "ambient"
-                                        SSAOVisualization.Depth, "depth"
-                                        SSAOVisualization.Diffuse, "diffuse"
-                                        SSAOVisualization.AmbientAndDiffuse, "ambient & diffuse"
+                                Dropdown.dropdown SetVisualization false None m.visualization AttributeMap.empty (
+                                    [
+                                        SSAOVisualization.Composed, text "composed"
+                                        SSAOVisualization.Color, text "color"
+                                        SSAOVisualization.Normal, text "normal"
+                                        SSAOVisualization.Ambient, text "ambient"
+                                        SSAOVisualization.Depth, text "depth"
+                                        SSAOVisualization.Diffuse, text "diffuse"
+                                        SSAOVisualization.AmbientAndDiffuse, text "ambient & diffuse"
                                     ]
                                 )
                             ]

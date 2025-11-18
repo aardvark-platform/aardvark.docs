@@ -2,10 +2,10 @@
 open Aardvark.Base
 open Aardvark.Rendering
 open Aardvark.SceneGraph
-open Aardvark.SceneGraph.IO
+open Aardvark.SceneGraph.Assimp
 
 [<EntryPoint>]
-let main argv =
+let main _argv =
     // initialize runtime system
     Aardvark.Init()
 

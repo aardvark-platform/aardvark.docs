@@ -1,8 +1,7 @@
 ﻿namespace SSAO
 
 open Aardvark.Base
-open FSharp.Data.Adaptive
-open Aardvark.SceneGraph.IO
+open Aardvark.SceneGraph.Assimp
 open Adaptify
 
 type Scene =

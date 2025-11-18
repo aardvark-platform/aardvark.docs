@@ -2,12 +2,10 @@
 
 open Aardvark.Base
 open FSharp.Data.Adaptive
-open FSharp.Data.Adaptive.Operators
 open Aardvark.UI
 open Aardvark.UI.Primitives
 open Aardvark.UI.Generic
 open Aardvark.SceneGraph
-open Aardvark.SceneGraph.IO
 open Aardvark.Rendering
 
 [<AutoOpen>]

@@ -2,10 +2,9 @@
 open Aardvark.Base
 open Aardvark.Rendering
 open Aardvark.SceneGraph
-open FSharp.Data.Adaptive
 
 [<EntryPoint>]
-let main argv =
+let main _argv =
     // initialize runtime system
     Aardvark.Init()
 

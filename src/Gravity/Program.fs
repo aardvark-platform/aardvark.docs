@@ -7,7 +7,7 @@ open Aardvark.SceneGraph
 open FSharp.Data.Adaptive
 
 [<EntryPoint>]
-let main argv = 
+let main _argv =
     // initialize runtime system
     Aardvark.Init()
 
@@ -26,13 +26,13 @@ let main argv =
 
         let g = 0.01f           // "gravitational constant"
         let mutable t = 0.0     // time
-        let mutable ps = [| for i in 1..n do yield 35.0f * (V3f(r.NextDouble(), r.NextDouble(), r.NextDouble()) - V3f(0.5, 0.5, 0.5)) |]
+        let mutable ps = [| for _ in 1..n do yield 35.0f * (V3f(r.NextDouble(), r.NextDouble(), r.NextDouble()) - V3f(0.5, 0.5, 0.5)) |]
         let mutable ps' = Array.create<V3f> (n*2) V3f.Zero
-        let mutable cs = [| for i in 1..n do yield C4b(r.NextDouble(), r.NextDouble(), r.NextDouble()) |]
+        let mutable cs = [| for _ in 1..n do yield C4b(r.NextDouble(), r.NextDouble(), r.NextDouble()) |]
         let mutable cs' = cs |> Array.collect (fun c -> [| c; C4b.Black |])
     
         let vs = Array.create<V3f> n V3f.Zero                           // velocities
-        let ms = [| for i in 1..n do yield float32(r.NextDouble()) |]   // masses
+        let ms = [| for _ in 1..n do yield float32(r.NextDouble()) |]   // masses
 
         do! Async.Sleep 8000
         while true do
@@ -125,7 +125,7 @@ let main argv =
                 DefaultSurfaces.vertexColor |> toEffect
                ]
             |> Sg.blendMode (AVal.constant BlendMode.Blend)
-            |> Sg.pass (transparentPlaneRenderPass)
+            |> Sg.pass transparentPlaneRenderPass
 
     
 

@@ -30,6 +30,7 @@ let main argv =
     // start a minimal suave server serving our app on port 4321
     use stopServer = 
         WebPart.startServerLocalhost 4321 [
+            Aardvark.UI.Primitives.Resources.WebPart
             MutableApp.toWebPart app.Runtime running
         ]
 
@@ -38,6 +39,7 @@ let main argv =
         width 1380
         height 768
         url "http://localhost:4321/"
+        debug true
     }
 
     0

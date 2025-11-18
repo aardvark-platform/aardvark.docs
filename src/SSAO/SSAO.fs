@@ -65,27 +65,29 @@ module SSAO =
     
     module Semantic =
         let Ambient = Symbol.Create "Ambient"
+        let DepthTexture = Symbol.Create "DepthTexture"
 
     [<ReflectedDefinition>]
     module Shader =
         open FShade
 
-        let private reduceMin =  (1.0/ 128.0)
-        let private reduceMul =  (1.0 / 8.0)
-        let private spanMax   =  8.0
+        let private reduceMin =  (1.0f/ 128.0f)
+        let private reduceMul =  (1.0f / 8.0f)
+        let private spanMax   =  8.0f
+
         [<AbstractClass; Sealed; Extension>]
         type Sampler2dExtensions private() =
 
             [<Extension>]
-            static member SampleLevelFXAA(x : Sampler2d, fragCoord : V2d, level : float) =
-                let inverseVP = 1.0 / V2d (x.GetSize (int level))
+            static member SampleLevelFXAA(x : Sampler2d, fragCoord : V2f, level : float32) =
+                let inverseVP = 1.0f / V2f (x.GetSize (int level))
 
-                let rgbNW = x.SampleLevel(fragCoord + V2d(-1.0, -1.0) * inverseVP, level)
-                let rgbNE = x.SampleLevel(fragCoord + V2d( 1.0, -1.0) * inverseVP, level)
-                let rgbSW = x.SampleLevel(fragCoord + V2d(-1.0,  1.0) * inverseVP, level)
-                let rgbSE = x.SampleLevel(fragCoord + V2d( 1.0,  1.0) * inverseVP, level)
-                let rgbM = x.SampleLevel(fragCoord, 0.0)
-                let luma = V3d(0.299, 0.587, 0.114)
+                let rgbNW = x.SampleLevel(fragCoord + V2f(-1.0f, -1.0f) * inverseVP, level)
+                let rgbNE = x.SampleLevel(fragCoord + V2f( 1.0f, -1.0f) * inverseVP, level)
+                let rgbSW = x.SampleLevel(fragCoord + V2f(-1.0f,  1.0f) * inverseVP, level)
+                let rgbSE = x.SampleLevel(fragCoord + V2f( 1.0f,  1.0f) * inverseVP, level)
+                let rgbM = x.SampleLevel(fragCoord, 0.0f)
+                let luma = V3f(0.299f, 0.587f, 0.114f)
                 let lumaNW = Vec.dot rgbNW.XYZ luma
                 let lumaNE = Vec.dot rgbNE.XYZ luma
                 let lumaSW = Vec.dot rgbSW.XYZ luma
@@ -96,54 +98,54 @@ module SSAO =
                 let lumaMax = max lumaM (max (max lumaNW lumaNE) (max lumaSW lumaSE))
 
                 let dir =
-                    V2d(
+                    V2f(
                         -((lumaNW + lumaNE) - (lumaSW + lumaSE)),
                         ((lumaNW + lumaSW) - (lumaNE + lumaSE))
                     )
 
-                let dirReduce = max ((lumaNW + lumaNE + lumaSW + lumaSE) * (0.25 * reduceMul)) reduceMin
-                let rcpDirMin = 1.0 / ((min (abs dir.X) (abs dir.Y)) + dirReduce) 
+                let dirReduce = max ((lumaNW + lumaNE + lumaSW + lumaSE) * (0.25f * reduceMul)) reduceMin
+                let rcpDirMin = 1.0f / ((min (abs dir.X) (abs dir.Y)) + dirReduce) 
 
-                let dir = min (V2d(spanMax, spanMax))
+                let dir = min (V2f(spanMax, spanMax))
                               (max 
-                                (V2d(-spanMax, -spanMax))
+                                (V2f(-spanMax, -spanMax))
                                 (dir * rcpDirMin)
                               ) * inverseVP           
 
                 let rgbA = 
-                    0.5 * (
-                        x.SampleLevel(fragCoord + dir * (1.0 / 3.0 - 0.5), level).XYZ + 
-                        x.SampleLevel(fragCoord + dir * (2.0 / 3.0 - 0.5), level).XYZ 
+                    0.5f * (
+                        x.SampleLevel(fragCoord + dir * (1.0f / 3.0f - 0.5f), level).XYZ + 
+                        x.SampleLevel(fragCoord + dir * (2.0f / 3.0f - 0.5f), level).XYZ 
                     )
 
                 let rgbB =
-                    rgbA * 0.5 + 0.25 * (
-                        x.SampleLevel(fragCoord - 0.5 * dir, level).XYZ + 
-                        x.SampleLevel(fragCoord + 0.5 * dir, level).XYZ 
+                    rgbA * 0.5f + 0.25f * (
+                        x.SampleLevel(fragCoord - 0.5f * dir, level).XYZ + 
+                        x.SampleLevel(fragCoord + 0.5f * dir, level).XYZ 
                     )  
 
                 let lumaB = Vec.dot rgbB luma                                          
                 if ((lumaB < lumaMin) || (lumaB > lumaMax)) then
-                    V4d(rgbA, 1.0)
+                    V4f(rgbA, 1.0f)
                 else
-                    V4d(rgbB, 1.0)        
+                    V4f(rgbB, 1.0f)        
 
         type UniformScope with
             member x.Visualization : SSAOVisualization = uniform?Visualization
-            member x.Radius : float = uniform?Radius
-            member x.Threshold : float = uniform?Threshold
-            member x.Sigma : float = uniform?Sigma
-            member x.Sharpness : float = uniform?Sharpness
-            member x.Gamma : float = uniform?Gamma
+            member x.Radius : float32 = uniform?Radius
+            member x.Threshold : float32 = uniform?Threshold
+            member x.Sigma : float32 = uniform?Sigma
+            member x.Sharpness : float32 = uniform?Sharpness
+            member x.Gamma : float32 = uniform?Gamma
             member x.Samples : int = uniform?Samples
-            member x.Light : V3d = uniform?Light
-            member x.SampleDirections : Arr<N<512>,V3d> = uniform?SampleDirections
+            member x.Light : V3f = uniform?Light
+            member x.SampleDirections : Arr<N<512>,V3f> = uniform?SampleDirections
 
         [<ReflectedDefinition>]
-        let project (vp : V3d) =
+        let project (vp : V3f) =
             let mutable vp = vp
-            vp.Z <- min -0.01 vp.Z
-            let pp = uniform.ProjTrafo * V4d(vp, 1.0)
+            vp.Z <- min -0.01f vp.Z
+            let pp = uniform.ProjTrafo * V4f(vp, 1.0f)
             pp.XYZ / pp.W
 
 
@@ -166,9 +168,9 @@ module SSAO =
             }
          
         [<ReflectedDefinition>]
-        let getAmbient (ndc : V2d) =
-            let tc = 0.5 * (ndc + V2d.II)
-            ambient.SampleLevel(tc, 0.0)
+        let getAmbient (ndc : V2f) =
+            let tc = 0.5f * (ndc + V2f.II)
+            ambient.SampleLevel(tc, 0.0f)
 
 
 
@@ -208,15 +210,15 @@ module SSAO =
             fragment {
                 let ndc = v.pos.XY / v.pos.W
                 let wn = normal.Sample(v.tc).XYZ.Normalized
-                let z = 2.0 * depth.Sample(v.tc).X - 1.0
-                let pp = V4d(ndc.X, ndc.Y, z, 1.0)
+                let z = 2.0f * depth.Sample(v.tc).X - 1.0f
+                let pp = V4f(ndc.X, ndc.Y, z, 1.0f)
 
                 let vp = 
                     let temp = uniform.ProjTrafoInv * pp
                     temp.XYZ / temp.W
 
                 let vn = 
-                    uniform.ViewTrafo * V4d(wn, 0.0) |> Vec.xyz |> Vec.normalize
+                    uniform.ViewTrafo * V4f(wn, 0.0f) |> Vec.xyz |> Vec.normalize
 
 
                 let x = random.Sample(pp.XY).XYZ |> Vec.normalize
@@ -224,49 +226,49 @@ module SSAO =
                 let y = Vec.cross z x |> Vec.normalize
                 let x = Vec.cross y z |> Vec.normalize
                     
-                let mutable occlusion = 0.0
+                let mutable occlusion = 0.0f
                 for si in 0 .. uniform.Samples - 1 do
 
                     let dir = uniform.SampleDirections.[si] * uniform.Radius
                     let p = vp + x * dir.X + y * dir.Y + z * dir.Z
               
-                    let f = 1.0 - uniform.Threshold / -p.Z
-                    let ppo = 0.5 * (project (p * f) + V3d.III)
-                    let pp = 0.5 * (project p + V3d.III)
-                    if depthCmp.Sample(pp.XY, ppo.Z) < 0.5 then
+                    let f = 1.0f - uniform.Threshold / -p.Z
+                    let ppo = 0.5f * (project (p * f) + V3f.III)
+                    let pp = 0.5f * (project p + V3f.III)
+                    if depthCmp.Sample(pp.XY, ppo.Z) < 0.5f then
                         occlusion <- occlusion + depthCmp.Sample(pp.XY, pp.Z)
                     
 
-                let occlusion = occlusion / float uniform.Samples
-                let ambient = 1.0 - occlusion
+                let occlusion = occlusion / float32 uniform.Samples
+                let ambient = 1.0f - occlusion
                 
-                return V4d(ambient, ambient, ambient, 1.0)
+                return V4f(ambient, ambient, ambient, 1.0f)
             }
 
             
         
         //[<ReflectedDefinition>]
-        //let blurFunction (ndc : V2d) (r : float) (centerC : V4d) (centerD : V4d) (w : float) =
+        //let blurFunction (ndc : V2f) (r : float32) (centerC : V4f) (centerD : V4f) (w : float32) =
             
 
         [<ReflectedDefinition>]
-        let getLinearDepth (ndc : V2d) =
-            let tc = 0.5 * (ndc + V2d.II)
-            let z = 2.0 * depth.SampleLevel(tc, 0.0).X - 1.0
+        let getLinearDepth (ndc : V2f) =
+            let tc = 0.5f * (ndc + V2f.II)
+            let z = 2.0f * depth.SampleLevel(tc, 0.0f).X - 1.0f
 
-            let pp = V4d(ndc.X, ndc.Y, z, 1.0) 
+            let pp = V4f(ndc.X, ndc.Y, z, 1.0f) 
             let temp = uniform.ProjTrafoInv * pp
             temp.Z / temp.W
             
 
         let blur (v : Effects.Vertex) =
             fragment {
-                let s = 2.0 / V2d ambient.Size
+                let s = 2.0f / V2f ambient.Size
                 let ndc = v.pos.XY / v.pos.W
                 
 
                 let sigmaPos = uniform.Sigma
-                if sigmaPos <= 0.0 then
+                if sigmaPos <= 0.0f then
                     return getAmbient ndc
                 else
                     let sigmaPos2 = sigmaPos * sigmaPos
@@ -274,17 +276,17 @@ module SSAO =
                     let sharpness2 = sharpness * sharpness
                     let r = 4
                     let d0 = getLinearDepth ndc
-                    let mutable sum = V4d.Zero
-                    let mutable wsum = 0.0
+                    let mutable sum = V4f.Zero
+                    let mutable wsum = 0.0f
                     for x in -r .. r do
                         for y in -r .. r do
-                            let deltaPos = V2d(x,y) * s
+                            let deltaPos = V2f(x,y) * s
                             let pos = ndc + deltaPos
 
                             let deltaDepth = getLinearDepth pos - d0
                             let value = getAmbient pos
 
-                            let wp = exp (-V2d(x,y).LengthSquared / sigmaPos2)
+                            let wp = exp (-V2f(x,y).LengthSquared / sigmaPos2)
                             let wd = exp (-deltaDepth*deltaDepth * sharpness2)
 
                             let w = wp * wd
@@ -302,37 +304,37 @@ module SSAO =
                 match uniform.Visualization with
                     | SSAOVisualization.Depth -> 
                         let d = depth.Sample(v.tc).X
-                        let v = d ** (128.0)
-                        return V4d(v, v, v, 1.0)
+                        let v = d ** 128.0f
+                        return V4f(v, v, v, 1.0f)
 
                     | SSAOVisualization.Color ->
                         return color.Sample(v.tc)
                         
                     | SSAOVisualization.Normal -> 
-                        let d = (normal.Sample(v.tc).XYZ.Normalized + V3d.III) * 0.5
-                        return V4d(d, 1.0)
+                        let d = (normal.Sample(v.tc).XYZ.Normalized + V3f.III) * 0.5f
+                        return V4f(d, 1.0f)
             
                     | SSAOVisualization.Ambient ->
                         let a = ambient.Sample(v.tc)
                         return a
 
                     | SSAOVisualization.Diffuse ->
-                        let d = depth.Sample(v.tc).X * 2.0 - 1.0
-                        let pp = V4d(v.pos.X, v.pos.Y, d, 1.0)
+                        let d = depth.Sample(v.tc).X * 2.0f - 1.0f
+                        let pp = V4f(v.pos.X, v.pos.Y, d, 1.0f)
                         let a = uniform.ViewProjTrafoInv * pp
                         let wp = a.XYZ / a.W
                         let n = normal.Sample(v.tc).XYZ.Normalized
                         let lp = uniform.Light
 
                         let ld = Vec.normalize (lp - wp)
-                        let diffuse = Vec.dot ld n |> clamp 0.0 1.0
+                        let diffuse = Vec.dot ld n |> clamp 0.0f 1.0f
                         
                         let c = color.Sample(v.tc).XYZ
-                        return V4d(diffuse * c, 1.0)
+                        return V4f(diffuse * c, 1.0f)
                         
                     | SSAOVisualization.AmbientAndDiffuse ->
-                        let d = depth.Sample(v.tc).X * 2.0 - 1.0
-                        let pp = V4d(v.pos.X, v.pos.Y, d, 1.0)
+                        let d = depth.Sample(v.tc).X * 2.0f - 1.0f
+                        let pp = V4f(v.pos.X, v.pos.Y, d, 1.0f)
                         let vo = uniform.ViewProjTrafoInv * pp
                         let wp = vo.XYZ / vo.W
 
@@ -341,12 +343,12 @@ module SSAO =
                         let lp = uniform.Light
 
                         let ld = Vec.normalize (lp - wp)
-                        let diffuse = Vec.dot ld n |> clamp 0.0 1.0
+                        let diffuse = Vec.dot ld n |> clamp 0.0f 1.0f
 
-                        return V4d((a * diffuse) * V3d.III, 1.0)
+                        return V4f((a * diffuse) * V3f.III, 1.0f)
                     | _ ->
-                        let d = depth.Sample(v.tc).X * 2.0 - 1.0
-                        let pp = V4d(v.pos.X, v.pos.Y, d, 1.0)
+                        let d = depth.Sample(v.tc).X * 2.0f - 1.0f
+                        let pp = V4f(v.pos.X, v.pos.Y, d, 1.0f)
                         let vo = uniform.ViewProjTrafoInv * pp
                         let wp = vo.XYZ / vo.W
 
@@ -355,17 +357,17 @@ module SSAO =
                         let lp = uniform.Light
 
                         let ld = Vec.normalize (lp - wp)
-                        let diffuse = Vec.dot ld n |> clamp 0.0 1.0
+                        let diffuse = Vec.dot ld n |> clamp 0.0f 1.0f
 
                         let c = color.Sample(v.tc)
-                        return V4d((a * diffuse) * c.XYZ, c.W)
+                        return V4f((a * diffuse) * c.XYZ, c.W)
                          
 
             }
 
         let fxaa (v : Effects.Vertex) =
             fragment {
-                return color.SampleLevelFXAA(v.tc, 0.0)
+                return color.SampleLevelFXAA(v.tc, 0.0f)
             }
 
 
@@ -405,7 +407,7 @@ module SSAO =
                 rand.UniformV3dDirection().ToC3d().ToC3f()
             ) |> ignore
 
-            runtime.PrepareTexture(PixTexture2d(PixImageMipMap [| img :> PixImage |], TextureParams.empty))
+            PixTexture2d(img, wantMipMaps = false)
 
         let clear = clear { color C4f.Zero; depth 1.0 }
         let task = runtime.CompileRender(signature, sg)
@@ -445,12 +447,12 @@ module SSAO =
                 |> Sg.shader {  
                     do! Shader.ambientOcclusion
                 }
-                |> Sg.texture DefaultSemantic.DepthTexture depth
+                |> Sg.texture Semantic.DepthTexture depth
                 |> Sg.texture DefaultSemantic.Normals normal
                 |> Sg.diffuseTexture color
                 |> Sg.viewTrafo view
                 |> Sg.projTrafo proj
-                |> Sg.uniform "Random" (AVal.constant (randomTex :> ITexture))              
+                |> Sg.texture' "Random" randomTex
                 |> Sg.uniform "Radius" config.radius
                 |> Sg.uniform "Threshold" config.threshold
                 |> Sg.uniform "Samples" config.samples
@@ -463,7 +465,7 @@ module SSAO =
                 |> Sg.shader {
                     do! Shader.blur                    
                 }
-                |> Sg.texture DefaultSemantic.DepthTexture depth
+                |> Sg.texture Semantic.DepthTexture depth
                 |> Sg.texture Semantic.Ambient ambient
                 |> Sg.viewTrafo view
                 |> Sg.projTrafo proj
@@ -479,7 +481,7 @@ module SSAO =
         let current =
             let textConfig =
                 {
-                    font = FontSquirrel.Hack.Regular
+                    font = DefaultFonts.Hack.Regular
                     color = C4b.White
                     align = TextAlignment.Left
                     flipViewDependent = false
@@ -533,7 +535,7 @@ module SSAO =
         let tex =         
             Sg.fullScreenQuad
                 |> Sg.texture Semantic.Ambient blurredAmbient
-                |> Sg.texture DefaultSemantic.DepthTexture depth
+                |> Sg.texture Semantic.DepthTexture depth
                 |> Sg.texture DefaultSemantic.Normals normal
                 |> Sg.diffuseTexture color
                 |> Sg.uniform "Visualization" config.visualization
@@ -563,14 +565,6 @@ module SSAO =
                 sg 
                 |> Sg.viewTrafo values.viewTrafo
                 |> Sg.projTrafo values.projTrafo
-                
 
             compileWithSSAO values.signature config values.viewTrafo values.projTrafo values.size sg
         )
-
-
-
-
-
-
-

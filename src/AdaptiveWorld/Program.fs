@@ -5,7 +5,7 @@ open Aardvark.Application
 open FSharp.Data.Adaptive
 
 [<EntryPoint>]
-let main argv = 
+let main _argv =
     // initialize runtime system
     Aardvark.Init()
 

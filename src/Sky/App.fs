@@ -49,7 +49,7 @@ module GuiExtensions =
                     div [clazz title; style "background-color: rgb(40,40,40); min-width: 250px"] [
                             i [clazz "dropdown icon"] []
                             text text'                                
-                            div[style "float:right"][
+                            div [style "float:right"] [
                                 i [clazz (sprintf "%s icon" iconName)] []
                             ]
                            
@@ -220,7 +220,7 @@ module App =
                     let sr = Constant.PiTimesTwo * (1.0 - cos a)
                     let i = sunLuminance * sr / Constant.PiTimesTwo
     
-                    let colorLum = c.ToV3d().Dot(lumVector)
+                    let colorLum = c.ToV3d().Dot(V3d lumVector)
                     let colorNorm = c / colorLum
                     let albedo = colorNorm.RGB * c.A
                     let lum = i * albedo // lum if planet is 1px -> the actual cover depending on viewport resolution and fov
@@ -356,15 +356,15 @@ module App =
             // closing circle / line strip
             let circle = 
                 Array.init 13 (fun i -> 
-                    let a = (float)i / 12.0 * Constant.PiTimesTwo
+                    let a = float i / 12.0 * Constant.PiTimesTwo
                     V3f(cos a, sin a, 0.0)
                 )
     
             // north, east, south, west markings / line list
             let marks = 
                 Array.init 8 (fun i ->
-                    let a = (float)(i/2) / 4.0 * Constant.PiTimesTwo
-                    let u = ((float)(i%2) - 0.5) * 2.0 * Constant.RadiansPerDegree
+                    let a = float (i / 2) / 4.0 * Constant.PiTimesTwo
+                    let u = (float (i % 2) - 0.5) * 2.0 * Constant.RadiansPerDegree
                     V3f(cos a, sin a, u)
                 )
     
@@ -429,6 +429,10 @@ module App =
                     let i = srSun * 1.6e9
                     let lum = i * 0.12 / Constant.PiTimesTwo
                     moonLuminance)
+
+            let moonTexture =
+                let path = Path.combine [ resourcePath; "8k_moon.jpg"]
+                FileTexture(path, TextureParams.WantMipMaps ||| TextureParams.PreferSrgb)
     
             let sgMoon =
                 DrawCallInfo(1) 
@@ -442,7 +446,7 @@ module App =
                 |> Sg.uniform "SunSize" moonDiameter // this is the fake sun size for the sunSpriteGS
                 |> Sg.uniform "CameraFov" cameraFov
                 |> Sg.uniform "RealSunDirection" geoInfo.SunDirection
-                |> Sg.texture' (Symbol.Create "MoonTexture") (FileTexture(Path.combine [ resourcePath; "8k_moon.jpg"], { wantSrgb = true; wantCompressed = false; wantMipMaps = true }) :> ITexture)
+                |> Sg.texture' "MoonTexture" moonTexture
                 |> Sg.writeBuffers' (Set.ofList [WriteBuffer.Color DefaultSemantic.Colors])
                 |> Sg.blendMode' { BlendMode.Add with SourceAlphaFactor = BlendFactor.Zero }
                 |> Sg.pass RenderPass.skyPass2
@@ -491,22 +495,22 @@ module App =
             let moonPos, sunDist = geoInfo.MoonPosition
             
             let skyImage = adaptive {
-                let! (phi, theta) = sunPos |> AVal.map (fun x -> x.Phi, x.Theta)
+                let! phi, theta = sunPos |> AVal.map (fun x -> x.Phi, x.Theta)
                 let! turb = skyParams.turbidity
                 let! res = skyParams.res
                 let! moonRefl = moonRefl
                 let! pol = lightPol
                 let! cie = skyParams.cieType
                 let! skyType = skyParams.skyType
-                let! (phiMoon, thetaMoon) = moonPos |> AVal.map (fun x -> x.Phi, x.Theta)
+                let! phiMoon, thetaMoon = moonPos |> AVal.map (fun x -> x.Phi, x.Theta)
     
                 //Log.line "sun theta: %d" (90 - int (theta.DegreesFromRadians()))
                     
                 let createSky p t =
                     match skyType with
-                    | Preetham -> new PreethamSky(p, t, clamp 1.7 10.0 turb) :> IPhysicalSky
-                    | CIE -> new CIESky(p, t, cie, -1.0, -1.0) :> IPhysicalSky
-                    | HosekWilkie -> new HosekSky(p, t, clamp 1.0 10.0 turb, C3f.Gray50, Col.Format.CieXYZ) :> IPhysicalSky
+                    | Preetham -> PreethamSky(p, t, clamp 1.7 10.0 turb) :> IPhysicalSky
+                    | CIE -> CIESky(p, t, cie, -1.0, -1.0) :> IPhysicalSky
+                    | HosekWilkie -> HosekSky(p, t, clamp 1.0 10.0 turb, C3f.Gray50, Col.Format.CieXYZ) :> IPhysicalSky
     
                 let skySun = createSky phi theta
                 let skyMoon = createSky phiMoon thetaMoon
@@ -518,7 +522,7 @@ module App =
                     //let polCol = C3b(255uy, 209uy, 163uy).ToC3f() // 4000k sRGB
                     //let polCol = C3b(255uy, 228uy, 206uy).ToC3f() // 5000k sRGB
                     let polCol = C3b(64uy, 64uy, 96uy).ToC3f()
-                    let polColLum = Vec.dot (polCol.ToV3d()) lumVector
+                    let polColLum = Vec.dot (polCol.ToV3d()) (V3d lumVector)
                     pol * polCol.SRGBToXYZinC3f().ToC3d() / polColLum
     
                 let sunFadeout = nightTimeFadeout theta
@@ -527,11 +531,11 @@ module App =
                 let cubeFaces = Array.init 6 (fun i -> 
                     PixImage.CreateCubeMapSide<float32, C4f>(i, res, 4, 
                         fun v ->
-                            let mutable xyz = C3f.Black
+                            let mutable xyz = C3d.Black
                             xyz <- xyz + skySun.GetRadiance(v).ToC3d() * sunFadeout
                             xyz <- xyz + skyMoon.GetRadiance(v).ToC3d() * 2.5e3 / 1.6e9 * moonRefl * moonFadeout // TODO: actual amount of reflected light
                             xyz <- xyz + (lightPolFun v) * pol
-                            let rgb = xyz.XYZinC3fToLinearSRGB().Clamped(0.0f, Single.MaxValue)
+                            let rgb = xyz.ToC3f().XYZinC3fToLinearSRGB().Clamped(0.0f, Single.MaxValue)
                             if rgb.ToV3f().AnyNaN then 
                                 C4f.Black
                             else
@@ -541,7 +545,7 @@ module App =
     
                 // NOTE: magic face swap
                 let cubeImg = 
-                    PixImageCube.Create ([
+                    PixCube.Create ([
                         CubeSide.PositiveX, cubeFaces.[2]
                         CubeSide.NegativeX, cubeFaces.[0]
                         CubeSide.PositiveY, cubeFaces.[5]
@@ -549,10 +553,8 @@ module App =
                         CubeSide.PositiveZ, cubeFaces.[1]
                         CubeSide.NegativeZ, cubeFaces.[3]
                     ] |> Map.ofList)
-                                    
-                let tex = cubeImg |> PixImageCube.toTexture true
-    
-                return tex
+
+                return PixTextureCube(cubeImg)
             }
                 
             let sgBkg = 
@@ -665,9 +667,7 @@ module App =
         let lumAtt =
             let size = clientValues.size
             let levels = size |> AVal.map Fun.MipmapLevels
-            runtime.CreateTextureAttachment(
-                runtime.CreateTexture2D(size, TextureFormat.R32f, levels, samples = AVal.constant 1), 0, 0
-            )
+            runtime.CreateTexture2D(size, TextureFormat.R32f, levels, samples = AVal.constant 1).GetOutputView()
     
         let lumFbo = runtime.CreateFramebuffer(lumSig, [DefaultSemantic.Colors, lumAtt])
     
@@ -703,12 +703,12 @@ module App =
     let settingsUi (m: AdaptiveModel) : DomNode<Message> = 
 
         let skyModelCases = FSharpType.GetUnionCases typeof<SkyType>
-        let skyModelValues = AMap.ofSeq( skyModelCases |> Seq.map (fun c -> (FSharpValue.MakeUnion(c, [||]) :?> SkyType, text (c.Name))) )
+        let skyModelValues = AMap.ofSeq( skyModelCases |> Seq.map (fun c -> (FSharpValue.MakeUnion(c, [||]) :?> SkyType, text c.Name)) )
     
         //let cieModelCases = Enum.GetValues typeof<CIESkyType>
         let cieValues = AMap.ofArray(Array.init 15 (fun i -> (EnumHelpers.GetValue<CIESkyType>(i), text (Enum.GetName(typeof<CIESkyType>, i))))) // TODO: ToDescription
     
-        let exposureModeCases = Enum.GetValues typeof<ExposureMode> :?> (ExposureMode [])
+        let exposureModeCases = Enum.GetValues typeof<ExposureMode> :?> ExposureMode[]
         let exposureModeValues = AMap.ofArray( exposureModeCases |> Array.map (fun c -> (c, text (Enum.GetName(typeof<ExposureMode>, c)) )))
         
         div [style "position: fixed; width:260pt; margin:0px; border-radius:10px; padding:12px; background:DarkSlateGray; color: white"] [ // sidebar 
@@ -716,10 +716,10 @@ module App =
             GeoApp.viewDetail m.geoInfo |> UI.map GeoMessage
             
             h4 [style "color:white"] [text "Sky"]
-            Html.table [                    
-                Html.row "Model" [ dropdownUnClearable [ clazz "ui inverted selection dropdown" ] skyModelValues m.skyParams.skyType SetSkyType ]
+            Html.table [
+                Html.row "Model" [ Dropdown.dropdown SetSkyType false None m.skyParams.skyType [ clazz "ui inverted selection dropdown" ] skyModelValues ]
                 Html.row "Turbidity" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.turbidity; update SetTurbidity; step 0.1; largeStep 1.0; min 1.9; max 10.0; }]
-                Html.row "Type" [ dropdownUnClearable [ clazz "ui inverted selection dropdown" ] cieValues m.skyParams.cieType SetCIEType ] 
+                Html.row "Type" [ Dropdown.dropdown SetCIEType false None m.skyParams.cieType [ clazz "ui inverted selection dropdown" ] cieValues ]
                 Html.row "Light Pollution" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.lightPollution; update SetLightPollution; step 5.0; largeStep 50.0; min 0.0; max 10000.0; }]      
                 // Html.row "Sun Position" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] spAlgoValues spOptionMod SetSunPosAlgo ]
                 // Html.row "Resolution" [ text "TODO" ]
@@ -736,7 +736,7 @@ module App =
     
             h4 [style "color:white"] [text "Tonemapping"]
             Html.table [
-                Html.row "Mode" [ dropdownUnClearable [ clazz "ui inverted selection dropdown" ] exposureModeValues m.exposureMode SetExposureMode ]
+                Html.row "Mode" [ Dropdown.dropdown SetExposureMode false None m.exposureMode [ clazz "ui inverted selection dropdown" ] exposureModeValues ]
                 Html.row "Exposure" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.exposure; update SetExposure; step 0.1; largeStep 1.0; min -20.0; max 10.0; }]
                 Html.row "Middle Gray" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.key; update SetKey; step 0.001; largeStep 0.01; min 0.001; max 1.0; }]
             ]

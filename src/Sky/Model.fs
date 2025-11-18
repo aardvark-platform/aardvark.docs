@@ -41,20 +41,20 @@ type StarParams =
 [<ModelType>]
 type GeoInfo = 
     {
-        gpsLat            : float // phi    [ °deg ] | from northpole (-90.0) over equator (0.0) to southpole (90.0)
-        gpsLong           : float // lambda [ °deg ] | from east (-180.0) over greenwich (0.0 to west (180.0)
+        gpsLat            : float // phi    [ deg ] | from northpole (-90.0) over equator (0.0) to southpole (90.0)
+        gpsLong           : float // lambda [ deg ] | from east (-180.0) over greenwich (0.0 to west (180.0)
         timeZone          : int   // UTC + timeZone
         time              : DateTime // int64 // Ticks
     } with 
         member x.SunPosition : struct(SphericalCoordinate * float) =
             SunPosition.Compute(x.time, x.timeZone, x.gpsLong, x.gpsLat)
         member x.SunDirection : V3d = // direction to sun
-            let struct(sunPos, distance) = x.SunPosition
+            let sunPos = fstv x.SunPosition
             Sky.V3dFromPhiTheta(sunPos.Phi, sunPos.Theta)
         member x.MoonPosition : struct(SphericalCoordinate * float) = 
             MoonPosition.Compute(x.time, x.timeZone, x.gpsLong, x.gpsLat)
         member x.MoonDirection : V3d =
-            let struct(moonPos, distance) = x.MoonPosition
+            let moonPos = fstv x.MoonPosition
             Sky.V3dFromPhiTheta(moonPos.Phi, moonPos.Theta)
         member x.JulianDayUTC : float = 
             x.time.ComputeJulianDayUTC(float x.timeZone)
@@ -91,39 +91,39 @@ type Model =
         fov             : float
     }
 
-    module Model = 
+module Model =
 
-        let initial = {
-            // time & location
-            geoInfo = GeoInfo.vienna
+    let initial = {
+        // time & location
+        geoInfo = GeoInfo.vienna
 
-            detailedTwilightInfo = false
+        detailedTwilightInfo = false
 
-            skyParams = {
-                skyType = Preetham
-                turbidity = 1.9
-                cieType = CIESkyType.ClearSky1
-                lightPollution = 50.0
-                res = 256
-            }
-
-            starParams = {
-                objectNames = false
-                objectNameThreshold = 3.0
-                starSigns = false
-                magBoost = 0.0
-            }
-
-            planetScale = 1.0
-
-            // exposure
-            exposureMode = ExposureMode.Auto
-            exposure = -5.0
-            key = 0.12
-
-            cameraState = { FreeFlyController.initial with
-                                // look north
-                                view = CameraView.lookAt V3d.OOO V3d.OIO V3d.OOI
-                          }
-            fov = 70.0
+        skyParams = {
+            skyType = Preetham
+            turbidity = 1.9
+            cieType = CIESkyType.ClearSky1
+            lightPollution = 50.0
+            res = 256
         }
+
+        starParams = {
+            objectNames = false
+            objectNameThreshold = 3.0
+            starSigns = false
+            magBoost = 0.0
+        }
+
+        planetScale = 1.0
+
+        // exposure
+        exposureMode = ExposureMode.Auto
+        exposure = -5.0
+        key = 0.12
+
+        cameraState = { FreeFlyController.initial with
+                            // look north
+                            view = CameraView.lookAt V3d.OOO V3d.OIO V3d.OOI
+                      }
+        fov = 70.0
+    }

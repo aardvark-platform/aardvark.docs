@@ -1,23 +1,15 @@
 FSharp.Core
 
-Aardvark.Base
-Aardvark.Base.Incremental
-Aardvark.Base.FSharp
-
-Aardvark.Rendering
 Aardvark.Application.Slim
 Aardvark.Application.Slim.GL
 Aardvark.Application.Slim.Vulkan
-Aardvark.SceneGraph
-Aardvark.SceneGraph.IO
+Aardvark.SceneGraph.Assimp
 Aardvark.Rendering.Text
 
-Aardvark.Service
 Aardvark.UI
 Aardvark.UI.Primitives
 Adaptify.MSBuild
 Aardium
 
-FShade.Core
-
 Aardvark.Physics.Sky
+Aardvark.PixImage.ImageSharp

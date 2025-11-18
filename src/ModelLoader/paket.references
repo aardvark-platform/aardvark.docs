@@ -1,5 +1,6 @@
 FSharp.Core
 Aardvark.Application.Utilities
 Aardvark.SceneGraph
-Aardvark.SceneGraph.IO
+Aardvark.SceneGraph.Assimp
 FSharp.Data.Adaptive
+Aardvark.PixImage.ImageSharp

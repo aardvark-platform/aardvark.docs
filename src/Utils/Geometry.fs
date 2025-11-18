@@ -11,12 +11,12 @@ module Geometry =
     let private r = Random()
     
     let points n pointsize (bounds : Box2d) =
-        let positions = AVal.constant [| for x in 1..n do yield bounds.Min.XYO + bounds.Size.XYO * V3d(r.NextDouble(), r.NextDouble(), 0.0) |]
-        let colors = AVal.constant [| for x in 1..n do yield C4b(r.Next(256), r.Next(256), r.Next(256)) |]
+        let positions = [| for _ in 1..n do yield bounds.Min.XYO + bounds.Size.XYO * V3d(r.NextDouble(), r.NextDouble(), 0.0) |]
+        let colors = [| for _ in 1..n do yield C4b(r.Next(256), r.Next(256), r.Next(256)) |]
         DrawCallInfo(FaceVertexCount = n, InstanceCount = 1)
             |> Sg.render IndexedGeometryMode.PointList 
-            |> Sg.vertexAttribute DefaultSemantic.Positions positions
-            |> Sg.vertexAttribute DefaultSemantic.Colors colors
+            |> Sg.vertexAttribute' DefaultSemantic.Positions positions
+            |> Sg.vertexAttribute' DefaultSemantic.Colors colors
             |> Sg.effect [
                 DefaultSurfaces.trafo |> toEffect
                 DefaultSurfaces.vertexColor |> toEffect

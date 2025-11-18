@@ -1,4 +1,4 @@
-open Sky
+module Program
 
 open Aardium
 open Aardvark.UI
@@ -10,7 +10,7 @@ open Aardvark.Application.Slim
 open System
 
 [<EntryPoint>]
-let main args =
+let main _args =
     Aardvark.Init()
     Aardium.init()
 
@@ -27,7 +27,8 @@ let main args =
     use __ = disposable
 
     WebPart.startServerLocalhost 4321 [
-        MutableApp.toWebPart' runtime false (App.start App.app)
+        Aardvark.UI.Primitives.Resources.WebPart
+        MutableApp.toWebPart' runtime false (App.start Sky.App.app)
     ] |> ignore
 
     Aardium.run {
@@ -35,6 +36,7 @@ let main args =
         width 1024
         height 768
         url "http://localhost:4321/"
+        debug true
     }
 
     0

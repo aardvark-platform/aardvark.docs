@@ -41,7 +41,7 @@ namespace HelloWorldCSharp
                         win.Time, initialViewTrafo);
                 var frustum = 
                     win.Sizes.Map(size => 
-                        FrustumModule.perspective(60.0, 0.1, 10.0, size.X / (float)size.Y)
+                        FrustumModule.perspective(60.0, 0.1, 100.0, size.X / (float)size.Y)
                     );
 
                 // of course constructing scene graph nodes manually is tedious. therefore we use 
@@ -51,7 +51,7 @@ namespace HelloWorldCSharp
                     cube
                     // next, we apply the shaders (this way, the shader becomes the root node -> all children now use
                     // this so called effect (a pipeline shader which combines all shader stages into one object)
-                    .WithEffects(new[] { 
+                    .WithEffects(new[] {
                             Effects.Trafo.Effect,
                             Effects.VertexColor.Effect,
                             Effects.SimpleLighting.Effect
