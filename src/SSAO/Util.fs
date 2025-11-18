@@ -1,10 +1,8 @@
 ﻿namespace SSAO
 
-open Aardvark.Base
 open FSharp.Data.Adaptive
 open Aardvark.UI
 open Aardvark.UI.Primitives
-open Aardvark.UI.Generic
 open Aardvark.SceneGraph
 open Aardvark.Rendering
 
@@ -33,36 +31,3 @@ module Utilities =
             (fun _ _ -> Seq.empty)
             []
             app
-
-    let semuirange =
-        [
-            { kind = ReferenceKind.Script; url = "https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.js"; name = "semui-range"}
-            { kind = ReferenceKind.Stylesheet; url = "https://cdn.jsdelivr.net/npm/semantic-ui-range@1.0.1/range.css"; name = "semui-range"}
-        ]
-
-    let private newId =
-        let mutable curr = 0
-        fun () ->
-            inc &curr
-            curr
-
-    let slider (att : list<string * AttributeValue<'msg>>) (min : float) (max : float) (step : float) (value : aval<float>) (onChange : float -> 'msg) =
-        
-        let channelName = sprintf "channel%d" (newId())
-        
-        let boot = 
-            String.concat ";" [
-                sprintf "$('#__ID__').range({ min: %f, max: %f, step: %f, start: %f, onChange: function(value, meta) { if(meta.triggeredByUser) aardvark.processEvent('__ID__', 'onchange', value); } });" min max step (AVal.force value)
-                sprintf "%s.onmessage = function(value) {$('#__ID__').range('set value', value); };" channelName
-            ]
-            
-        let changeAtt = 
-            onEvent "onchange" [] (fun vs ->
-                System.Double.Parse(List.head vs, System.Globalization.CultureInfo.InvariantCulture) |> onChange
-            )
-            
-        require semuirange (
-            onBoot' [channelName, AVal.channel value] boot (div (changeAtt :: att) [])
-        )
-
-
