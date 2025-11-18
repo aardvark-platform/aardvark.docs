@@ -1,3 +1,5 @@
+![Build](https://github.com/aardvark-platform/aardvark.docs/workflows/Build/badge.svg)
+
 [![Discord](https://img.shields.io/discord/611129394764840960?label=Discord)](https://discord.gg/UyecnhM)
 [![License](https://img.shields.io/github/license/aardvark-platform/aardvark.docs.svg?label=License)](https://github.com/aardvark-platform/aardvark.docs/blob/master/LICENSE)
 
