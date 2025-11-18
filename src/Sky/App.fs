@@ -32,37 +32,22 @@ module GuiExtensions =
     let dateTimePicker (time: aval<DateTime>) (setDateTime: DateTime -> 'msg) : DomNode<'msg> = 
         Incremental.input <| AttributeMap.ofListCond [
             always <| attribute "type" "datetime-local"
+            always <| attribute "required" "true"
             ("value", (time |> AVal.map (fun t -> Some (AttributeValue.String (t.ToString("yyyy-MM-ddTHH:mm"))))))
             always <| onChange (fun str -> setDateTime (DateTime.Parse str))
         ]
 
-    let tableStriped (rows : list<DomNode<'a>>) : DomNode<'a> = 
-        table [clazz "ui inverted striped small unstackable table"] [ tbody [] rows ]
+    module Incremental =
 
-    let accordionStrechted text' iconName active content' =
-        let title = if active then "title active inverted" else "title inverted"
-        let content = if active then "content active" else "content"
-                               
-        onBoot "$('#__ID__').accordion();" (
-            div [clazz "ui inverted segment"; style "display:block"] [
-                div [clazz "ui inverted accordion"] [
-                    div [clazz title; style "background-color: rgb(40,40,40); min-width: 250px"] [
-                            i [clazz "dropdown icon"] []
-                            text text'                                
-                            div [style "float:right"] [
-                                i [clazz (sprintf "%s icon" iconName)] []
-                            ]
-                           
-                    ]
-                    div [clazz content;  style "overflow-y: visible"] content'
-                ]
-            ]
-        )
+        module Html =
+
+            let table (rows : alist<DomNode<'a>>) : DomNode<'a> = 
+                table [clazz "ui inverted striped small unstackable table"] [ Incremental.tbody AttributeMap.empty rows ]
 
 type GeoAction = 
     | SetLat of float
     | SetLong of float
-    | SetTimeZone of float
+    | SetTimeZone of int
     | SetTime of DateTime
     | SetDate of DateTime
     | SetDateTime of DateTime
@@ -74,29 +59,58 @@ module GeoApp =
         match msg with 
         | SetLat lat -> { m with gpsLat = lat }
         | SetLong long -> { m with gpsLong = long }
-        | SetTimeZone zone -> { m with timeZone = int zone }
+        | SetTimeZone zone -> { m with timeZone = zone }
         | SetTime hhmm -> { m with time = DateTime(m.time.Year, m.time.Month, m.time.Day, hhmm.Hour, hhmm.Minute, 0) }
         | SetDate yyyymmdd -> { m with time = DateTime(yyyymmdd.Year, yyyymmdd.Month, yyyymmdd.Day, m.time.Hour, m.time.Minute, 0) }
         | SetDateTime time -> { m with time = time }
         | SetNow -> { m with time = DateTime.Now }
 
     let viewDetail' (m: AdaptiveGeoInfo) : list<DomNode<GeoAction>> =
+
+        let buttonNow =
+            button [
+                clazz "ui mini compact button"
+                style "margin-left: 5px; vertical-align: middle"
+                onClick (fun _ -> SetNow)
+            ] [ text "Now" ]
+
+        let sunData =
+            m.SunPosition ||> AVal.map2 (fun coord distance ->
+                let azimuth  = degrees coord.Phi
+                let zenith   = degrees coord.Theta
+                let distance = distance / 1000000000.0
+                struct {| Azimuth = $"%.2f{azimuth}\u00B0"; Zenith = $"%.2f{zenith}\u00B0"; Distance = $"%.2f{distance} million km" |}
+            )
+
+        //let sunDirection =
+        //    m.SunDirection |> AVal.map (fun dir ->
+        //        struct {| X = $"%.4f{dir.X}"; Y = $"%.4f{dir.Y}"; Z = $"%.4f{dir.Z}" |}
+        //    )
+
         [
-            Html.row "Latitude" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.gpsLat; update SetLat; step 0.1; largeStep 1.0; min -90.0; max 90.0; }]
-            Html.row "Longitude" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.gpsLong; update SetLong; step 0.1; largeStep 1.0; min -180.0; max 180.0; }]
-            Html.row "TimeZone" [ simplenumeric { attributes [clazz "ui inverted input"]; value (m.timeZone |> AVal.map float); update SetTimeZone; step 0.1; largeStep 1.0; min -12.0; max 12.0; }]
-            Html.row "Time" [ timePicker m.time SetTime ]
-            Html.row "Date" [ datePicker m.time SetDate ]
-            Html.row "DateTime" [dateTimePicker m.time SetDateTime]
-            Html.row "" [ button [clazz "ui button"; onClick (fun _ -> SetNow)] [text "Now"] ]
-            Html.row "SunPos" [ Incremental.text (m.SunPosition ||> AVal.map2 (fun coord d -> sprintf "azimuth: %.2f° zenith: %.2f° dist: %.2f million km" (coord.Phi.DegreesFromRadians()) (coord.Theta.DegreesFromRadians()) (d / 1000000000.0))) ]
-            Html.row "SunDir" [ Incremental.text (m.SunDirection |> AVal.map (sprintf "%A")) ]
+            Html.row "Latitude" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.gpsLat; update SetLat; step 0.1; largeStep 1.0; min -90.0; max 90.0; labelRight "inverted" "\u00B0" }]
+            Html.row "Longitude" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.gpsLong; update SetLong; step 0.1; largeStep 1.0; min -180.0; max 180.0; labelRight "inverted" "\u00B0" }]
+            Html.row "Date" [dateTimePicker m.time SetDateTime; buttonNow ]
+            Html.row "Time zone" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.timeZone; update SetTimeZone; min -12; max 12; }]
+
+            Html.row "Sun" [
+                Html.table [
+                    Html.row "Azimuth"   [ Incremental.text (sunData |> AVal.map _.Azimuth) ]
+                    Html.row "Zenith"    [ Incremental.text (sunData |> AVal.map _.Zenith) ]
+                    Html.row "Distance"  [ Incremental.text (sunData |> AVal.map _.Distance) ]
+                    //Html.row "Direction" [
+                    //    Html.table [
+                    //        Html.row "X" [ Incremental.text (sunDirection |> AVal.map _.X) ]
+                    //        Html.row "Y" [ Incremental.text (sunDirection |> AVal.map _.Y) ]
+                    //        Html.row "Z" [ Incremental.text (sunDirection |> AVal.map _.Z) ]
+                    //    ]
+                    //]
+                ]   
+            ]
         ]
 
     let viewDetail (m: AdaptiveGeoInfo) : DomNode<GeoAction> =
-        accordionStrechted "Time & Location" "Content" true [ 
-            tableStriped <| (viewDetail' m)
-        ]
+        Html.table (viewDetail' m)
         
 type Message =
     | CameraMessage of FreeFlyController.Message
@@ -338,7 +352,7 @@ module App =
                     else 
                         None) |> ASet.ofArray))
     
-            let cfg = { font = Font("Arial"); color = C4b(11, 102, 35, 128); align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
+            let cfg = { font = DefaultFonts.NotoSans.Regular; color = C4b(11, 102, 35, 128); align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
             
             let objNameSg = 
                 ViewSpaceTrafoApplicator(AVal.constant (Sg.textsWithConfig cfg objNames |> Aardvark.SceneGraph.SgFSharp.Sg.trafo starTrafo))
@@ -384,7 +398,7 @@ module App =
                 |> Sg.uniform' "LineWidth" 2.0
                 |> Sg.uniform' "Color" C4f.Red
     
-            let cfg = { font = Font("Arial"); color = C4b.Red; align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
+            let cfg = { font = DefaultFonts.NotoSans.Regular; color = C4b.Red; align = TextAlignment.Center; flipViewDependent = false; renderStyle = RenderStyle.Billboard }
     
             let markLabelStr = [| "N"; "O"; "S"; "W" |]
 
@@ -711,34 +725,62 @@ module App =
         let exposureModeCases = Enum.GetValues typeof<ExposureMode> :?> ExposureMode[]
         let exposureModeValues = AMap.ofArray( exposureModeCases |> Array.map (fun c -> (c, text (Enum.GetName(typeof<ExposureMode>, c)) )))
         
-        div [style "position: fixed; width:260pt; margin:0px; border-radius:10px; padding:12px; background:DarkSlateGray; color: white"] [ // sidebar 
-            
-            GeoApp.viewDetail m.geoInfo |> UI.map GeoMessage
-            
-            h4 [style "color:white"] [text "Sky"]
-            Html.table [
-                Html.row "Model" [ Dropdown.dropdown SetSkyType false None m.skyParams.skyType [ clazz "ui inverted selection dropdown" ] skyModelValues ]
-                Html.row "Turbidity" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.turbidity; update SetTurbidity; step 0.1; largeStep 1.0; min 1.9; max 10.0; }]
-                Html.row "Type" [ Dropdown.dropdown SetCIEType false None m.skyParams.cieType [ clazz "ui inverted selection dropdown" ] cieValues ]
-                Html.row "Light Pollution" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.lightPollution; update SetLightPollution; step 5.0; largeStep 50.0; min 0.0; max 10000.0; }]      
-                // Html.row "Sun Position" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] spAlgoValues spOptionMod SetSunPosAlgo ]
-                // Html.row "Resolution" [ text "TODO" ]
-                Html.row "mag Boost" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.starParams.magBoost; update SetMagBoost; step 0.1; largeStep 1.0; min 0.0; max 10.0; }]
-                Html.row "Planet Scale" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.planetScale; update SetPlanetScale; step 0.1; largeStep 1.0; min 1.0; max 10.0; }]
-                Html.row "Star Signs" [ checkbox [clazz "ui inverted toggle checkbox"] m.starParams.starSigns ToggleStarSigns "" ]
-                Html.row "Object Names" [ checkbox [clazz "ui inverted toggle checkbox"] m.starParams.objectNames ToggleObjectNames "" ]
-                Html.row "mag Threshold" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.starParams.objectNameThreshold; update SetObjectNameThreshold; step 0.1; largeStep 1.0; min -20.0; max 20.0; }]
-                    //Simple.labeledFloatInput' "Turbidity" 1.9 10.0 0.1 SetTurbidity m.turbidity (AttributeMap.ofList [ clazz "ui small labeled input"; style "width: 140pt; color : black"]) (AttributeMap.ofList [ clazz "ui label"; style "width: 70pt"]) 
-                    //br []
-                    //p [] [ text "Model: TODO" ]
-                    //Simple.labeledIntegerInput "Resolution" 16 4096 SetResolution m.res
-            ]
-    
-            h4 [style "color:white"] [text "Tonemapping"]
-            Html.table [
-                Html.row "Mode" [ Dropdown.dropdown SetExposureMode false None m.exposureMode [ clazz "ui inverted selection dropdown" ] exposureModeValues ]
-                Html.row "Exposure" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.exposure; update SetExposure; step 0.1; largeStep 1.0; min -20.0; max 10.0; }]
-                Html.row "Middle Gray" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.key; update SetKey; step 0.001; largeStep 0.01; min 0.001; max 1.0; }]
+        div [style "position: fixed; width: 300pt; margin: 5pt; border-radius: 10px; padding: 12px; background: DarkSlateGray"] [ // sidebar
+
+            let header title icon =
+                span [] [
+                    text title
+                    i [clazz $"{icon} icon"; style "float: right"] []
+                ]
+
+            let geo =
+                GeoApp.viewDetail m.geoInfo |> UI.map GeoMessage
+
+            let sky =
+                Incremental.Html.table <| alist {
+                    Html.row "Model" [ Dropdown.dropdown SetSkyType false None m.skyParams.skyType [ clazz "ui inverted selection dropdown" ] skyModelValues ]
+
+                    match! m.skyParams.skyType with
+                    | SkyType.CIE -> Html.row "Type" [ Dropdown.dropdown SetCIEType false None m.skyParams.cieType [ clazz "ui inverted selection dropdown" ] cieValues ]
+                    | _           -> Html.row "Turbidity" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.turbidity; update SetTurbidity; step 0.1; largeStep 1.0; min 1.9; max 10.0; }]
+
+                    Html.row "Light pollution" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.skyParams.lightPollution; update SetLightPollution; step 5.0; largeStep 50.0; min 0.0; max 10000.0; }]      
+                    // Html.row "Sun Position" [ dropdown { allowEmpty = false; placeholder = "" } [ clazz "ui inverted selection dropdown" ] spAlgoValues spOptionMod SetSunPosAlgo ]
+                    // Html.row "Resolution" [ text "TODO" ]
+                    Html.row "Magnitude boost" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.starParams.magBoost; update SetMagBoost; step 0.1; largeStep 1.0; min 0.0; max 10.0; }]
+                    Html.row "Planet scale" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.planetScale; update SetPlanetScale; step 0.1; largeStep 1.0; min 1.0; max 10.0; }]
+                    Html.row "Star signs" [ checkbox [clazz "ui inverted toggle checkbox"] m.starParams.starSigns ToggleStarSigns "" ]
+                    Html.row "Object names" [ checkbox [clazz "ui inverted toggle checkbox"] m.starParams.objectNames ToggleObjectNames "" ]
+
+                    let! objectNames =  m.starParams.objectNames
+                    if objectNames then
+                        Html.row "Magnitude threshold" [
+                            simplenumeric { attributes [clazz "ui inverted input"]; value m.starParams.objectNameThreshold; update SetObjectNameThreshold; step 0.1; largeStep 1.0; min -20.0; max 20.0; }
+                        ]
+                        //Simple.labeledFloatInput' "Turbidity" 1.9 10.0 0.1 SetTurbidity m.turbidity (AttributeMap.ofList [ clazz "ui small labeled input"; style "width: 140pt; color : black"]) (AttributeMap.ofList [ clazz "ui label"; style "width: 70pt"]) 
+                        //br []
+                        //p [] [ text "Model: TODO" ]
+                        //Simple.labeledIntegerInput "Resolution" 16 4096 SetResolution m.res
+                }
+
+            let tonemapping =
+                Incremental.Html.table <| alist {
+                    Html.row "Mode" [ Dropdown.dropdown SetExposureMode false None m.exposureMode [ clazz "ui inverted selection dropdown" ] exposureModeValues ]
+
+                    match! m.exposureMode with
+                    | ExposureMode.Manual ->
+                        Html.row "Exposure" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.exposure; update SetExposure; step 0.1; largeStep 1.0; min -20.0; max 10.0; }]
+
+                    | ExposureMode.MiddleGray ->
+                        Html.row "Middle Gray" [ simplenumeric { attributes [clazz "ui inverted input"]; value m.key; update SetKey; step 0.001; largeStep 0.01; min 0.001; max 1.0; }]
+
+                    | _ -> ()
+                }
+
+            Accordion.accordionSimple true [ clazz "inverted" ] [
+                header "Time & Location" "clock", geo
+                header "Sky" "cloud sun", sky
+                header "Tonemapping" "palette", tonemapping
             ]
         ]
 
