@@ -7,9 +7,10 @@ Aardvark.SceneGraph.Assimp
 Aardvark.Rendering.Text
 
 Aardvark.UI
+Aardvark.UI.Giraffe
 Aardvark.UI.Primitives
 Adaptify.MSBuild
 Aardium
 
 Aardvark.Physics.Sky
-Aardvark.PixImage.ImageSharp
+Aardvark.PixImage.PixCodec

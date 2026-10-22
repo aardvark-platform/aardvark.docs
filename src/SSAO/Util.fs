@@ -14,7 +14,7 @@ module Utilities =
         let view (s : AdaptiveCameraControllerState) =
             let scene = SSAO.getScene cfg sg
             let cam : aval<Camera> = AVal.map (fun v -> { cameraView = v; frustum = frustum }) s.view 
-            DomNode.RenderControl(AttributeMap.ofList att, cam, scene, None)
+            DomNode.RenderControl(AttributeMap.ofList att, cam, scene)
                 |> FreeFlyController.withControls s id (AVal.constant frustum)
             
         let app =
@@ -29,5 +29,4 @@ module Utilities =
         subApp'
             (fun _ msg -> mapping msg)
             (fun _ _ -> Seq.empty)
-            []
             app

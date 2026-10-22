@@ -2,7 +2,7 @@ module Program
 
 open Aardium
 open Aardvark.UI
-open Suave
+open Aardvark.UI.Giraffe
 open Aardvark.Rendering
 open Aardvark.Rendering.Vulkan
 open Aardvark.Base
@@ -12,7 +12,7 @@ open System
 [<EntryPoint>]
 let main _args =
     Aardvark.Init()
-    Aardium.init()
+    Aardium.Init()
 
     let useVulkan = false
 
@@ -24,11 +24,13 @@ let main _args =
             let app = new OpenGlApplication(debug = DebugLevel.Minimal)
             app.Runtime, app :> IDisposable
 
-    use __ = disposable
+    use _ = disposable
 
-    WebPart.startServerLocalhost 4321 [
-        Aardvark.UI.Primitives.Resources.WebPart
-        MutableApp.toWebPart' runtime false (App.start Sky.App.app)
+    use mapp = App.start Sky.App.app
+
+    Server.startLocalhost 4321 mapp.CancellationToken [
+        WebPart.ofType<Primitives.EmbeddedResources>
+        MutableApp.toWebPart' runtime false mapp
     ] |> ignore
 
     Aardium.run {
@@ -36,7 +38,12 @@ let main _args =
         width 1024
         height 768
         url "http://localhost:4321/"
+#if DEBUG
         debug true
+        log (fun msg -> Report.Line(2, $"[Aardium] {msg}"))
+#else
+        debug false
+#endif
     }
 
     0

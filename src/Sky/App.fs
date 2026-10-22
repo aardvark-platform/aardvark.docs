@@ -615,7 +615,7 @@ module App =
 
             sgSun
     
-    let skySGs (m: AdaptiveModel) (clientValues: Aardvark.Service.ClientValues) : ISg<_> = 
+    let skySGs (m: AdaptiveModel) (clientValues: RenderClientValues) : ISg<_> = 
            
         let spaceVisible = 
             (m.skyParams.skyType, m.skyParams.cieType) ||> AVal.map2 (fun model cie ->

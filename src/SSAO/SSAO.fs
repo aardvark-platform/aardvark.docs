@@ -560,7 +560,7 @@ module SSAO =
             |> Sg.compile runtime outputSignature
 
     let getScene (config : SSAOConfig) (sg : ISg) =
-        Aardvark.Service.Scene.custom (fun values ->
+        Aardvark.UI.Scene.custom (fun values ->
             let sg =
                 sg 
                 |> Sg.viewTrafo values.viewTrafo

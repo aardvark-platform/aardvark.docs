@@ -8,7 +8,6 @@ open Aardvark.UI.Generic
 open Aardvark.SceneGraph
 open Aardvark.SceneGraph.Assimp
 open Aardvark.Rendering
-open Aardvark.Service
 open Aardvark.UI.Primitives
 
 module PointShader =
@@ -280,7 +279,7 @@ module App =
                         tr [] [
                             td [ attribute "colspan" "3"; clazz "right aligned"] [
                                 button [ clazz "ui yellow basic button"; onClick (fun () -> Reset) ] "Reset"
-                                openDialogButton OpenDialogConfig.file [ clazz "ui green basic button"; onChooseFiles LoadFiles ] [ text "Load Scene" ]
+                                Dialog.openFilesButton LoadFiles DialogConfig.Default [ clazz "ui green basic button" ] [ text "Load Scene" ]
                             ]
                         ]
                     ]

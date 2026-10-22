@@ -1,45 +1,45 @@
 ﻿open System.Threading
 open Aardvark.Base
-open Suave
 open Aardium
 open Aardvark.UI
+open Aardvark.UI.Giraffe
 open SSAO
 open Aardvark.Application.Slim
 
 
 [<EntryPoint>]
 let main argv =
-    // setting the min threads to 24 helps avoiding stutters due to IO completion ports.
-    ThreadPool.SetMinThreads(24,24) |> ignore
-
     // initialize aardvark's runtime systems (native dependency loader, etc.)
     Aardvark.Init()
 
     // ensure that aardium (our custom electron build) exists locally.
     // in case no proper aardium is found it's downloaded from nuget.org
-    Aardium.init()
+    Aardium.Init()
 
     // create an OpenGlApplication for interacting with the GPU.
     // we could also use a VulkanApplication here, but GL has broader support across platforms atm.
-    let app = new OpenGlApplication()
+    use app = new OpenGlApplication()
 
     // create and start our SSAO app
-    let ssao = App.app app.Runtime
-    let running = App.start ssao
+    use mapp = App.app app.Runtime |> App.start
 
-    // start a minimal suave server serving our app on port 4321
-    use stopServer = 
-        WebPart.startServerLocalhost 4321 [
-            Aardvark.UI.Primitives.Resources.WebPart
-            MutableApp.toWebPart app.Runtime running
-        ]
+    // start a minimal Giraffe server serving our app on port 4321
+    Server.startLocalhost 4321 mapp.CancellationToken [
+        WebPart.ofType<Primitives.EmbeddedResources>
+        MutableApp.toWebPart app.Runtime mapp
+    ] |> ignore
 
     // open aardium and show our served app.
     Aardium.run {
         width 1380
         height 768
         url "http://localhost:4321/"
+#if DEBUG
         debug true
+        log (fun msg -> Report.Line(2, $"[Aardium] {msg}"))
+#else
+        debug false
+#endif
     }
 
     0

@@ -1,5 +1,6 @@
 FSharp.Data.Adaptive
-Aardvark.UI 
+Aardvark.UI
+Aardvark.UI.Giraffe
 Aardvark.UI.Primitives
 Adaptify.MSBuild
 Aardium
